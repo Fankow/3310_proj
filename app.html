@@ -1,0 +1,1954 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wanderlust - Trip Planning App</title>
+    <style>
+      :root {
+        --primary: #4a6fa5;
+        --primary-light: rgba(74, 111, 165, 0.1);
+        --secondary: #f9f7f3;
+        --text: #333333;
+        --text-light: #777777;
+        --background: #f5f7fa;
+        --card: #ffffff;
+        --border: #eeeeee;
+        --shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      }
+
+      [data-theme="dark"] {
+        --primary: #5a8dd6;
+        --primary-light: rgba(90, 141, 214, 0.15);
+        --secondary: #2c2c34;
+        --text: #f5f7fa;
+        --text-light: #b3b3b3;
+        --background: #1a1a22;
+        --card: #2c2c34;
+        --border: #3d4052;
+        --shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Oxygen, Ubuntu, Cantarell, sans-serif;
+      }
+
+      body {
+        background-color: var(--background);
+        color: var(--text);
+        font-size: 14px;
+        line-height: 1.4;
+        padding-bottom: 70px;
+      }
+
+      .page {
+        display: none;
+        padding-bottom: 20px;
+      }
+
+      .page.active {
+        display: block;
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px;
+        border-bottom: 1px solid var(--border);
+        background-color: var(--card);
+        position: sticky;
+        top: 0;
+        z-index: 10;
+      }
+
+      .header h1 {
+        font-size: 18px;
+        font-weight: 600;
+        margin: 0;
+      }
+
+      .header .close {
+        font-size: 22px;
+        cursor: pointer;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .header .profile {
+        width: 32px;
+        height: 32px;
+        border-radius: 16px;
+        background-color: var(--primary);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 500;
+        cursor: pointer;
+      }
+
+      .search-bar {
+        background-color: var(--card);
+        margin: 15px;
+        padding: 10px 15px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        box-shadow: var(--shadow);
+      }
+
+      .search-bar input {
+        border: none;
+        outline: none;
+        background: transparent;
+        margin-left: 10px;
+        flex: 1;
+        font-size: 14px;
+        color: var(--text);
+      }
+
+      .search-bar input::placeholder {
+        color: var(--text-light);
+      }
+
+      .categories {
+        display: flex;
+        gap: 8px;
+        padding: 0 15px 15px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .category {
+        background-color: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 15px;
+        padding: 8px 15px;
+        white-space: nowrap;
+        font-size: 13px;
+      }
+
+      .category.active {
+        background-color: var(--primary);
+        color: white;
+        border-color: var(--primary);
+      }
+
+      .section-title {
+        padding: 5px 15px;
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 10px;
+      }
+
+      .card {
+        background-color: var(--card);
+        margin: 0 15px 15px;
+        border-radius: 12px;
+        padding: 15px;
+        box-shadow: var(--shadow);
+      }
+
+      .card-row {
+        display: flex;
+        gap: 10px;
+        margin: 0 15px 15px;
+      }
+
+      .card-small {
+        flex: 1;
+        background-color: var(--card);
+        border-radius: 12px;
+        padding: 12px;
+        box-shadow: var(--shadow);
+      }
+
+      .card-small.highlight {
+        background-color: var(--primary-light);
+      }
+
+      .card-small .emoji {
+        font-size: 24px;
+        margin-bottom: 5px;
+      }
+
+      .card-small h3 {
+        font-size: 14px;
+        margin-bottom: 2px;
+      }
+
+      .card-small p {
+        font-size: 12px;
+        color: var(--text-light);
+      }
+
+      .trip-card {
+        cursor: pointer;
+      }
+
+      .trip-date {
+        color: var(--primary);
+        font-size: 12px;
+        margin-bottom: 3px;
+      }
+
+      .trip-title {
+        font-weight: 600;
+        margin-bottom: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .trip-meta {
+        display: flex;
+        gap: 8px;
+        font-size: 12px;
+        color: var(--text-light);
+      }
+
+      .badge {
+        font-size: 10px;
+        padding: 2px 6px;
+        border-radius: 10px;
+        background-color: var(--primary-light);
+        color: var(--primary);
+      }
+
+      .button {
+        background-color: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        padding: 12px;
+        font-size: 14px;
+        font-weight: 500;
+        text-align: center;
+        margin: 10px 15px;
+        cursor: pointer;
+      }
+
+      .tab-bar {
+        display: flex;
+        justify-content: space-between;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: var(--card);
+        border-top: 1px solid var(--border);
+        padding: 8px 0 5px;
+        z-index: 20;
+      }
+
+      .tab {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0 5px;
+        cursor: pointer;
+      }
+
+      .tab .icon {
+        font-size: 20px;
+        margin-bottom: 2px;
+        color: var(--text-light);
+      }
+
+      .tab .label {
+        font-size: 10px;
+        color: var(--text-light);
+      }
+
+      .tab.active .icon,
+      .tab.active .label {
+        color: var(--primary);
+      }
+
+      /* Trip Details Page */
+      .trip-info {
+        padding: 12px 15px;
+        background-color: var(--card);
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 10px;
+      }
+
+      .trip-info-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 5px;
+      }
+
+      .trip-meta {
+        display: flex;
+        gap: 10px;
+        color: var(--text-light);
+        font-size: 12px;
+      }
+
+      .date-nav {
+        display: flex;
+        overflow-x: auto;
+        padding: 0 5px;
+        margin-bottom: 15px;
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .date-btn {
+        min-width: 56px;
+        padding: 10px 0;
+        text-align: center;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        margin: 0 3px;
+        background-color: var(--card);
+      }
+
+      .date-btn.active {
+        background-color: var(--primary);
+        color: white;
+        border-color: var(--primary);
+      }
+
+      .date-number {
+        font-size: 18px;
+        font-weight: 600;
+      }
+
+      .date-day {
+        font-size: 12px;
+        color: var(--text-light);
+      }
+
+      .date-btn.active .date-day {
+        color: rgba(255, 255, 255, 0.8);
+      }
+
+      .day-header {
+        padding: 0 15px;
+        margin-bottom: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .day-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--primary);
+      }
+
+      .day-date {
+        font-size: 12px;
+        color: var(--text-light);
+      }
+
+      .badges {
+        display: flex;
+        gap: 5px;
+      }
+
+      .badge {
+        font-size: 10px;
+        padding: 2px 6px;
+        border-radius: 12px;
+        display: inline-flex;
+        align-items: center;
+      }
+
+      .badge-primary {
+        background-color: var(--primary-light);
+        color: var(--primary);
+      }
+
+      .badge-light {
+        background-color: var(--secondary);
+        color: var(--text);
+      }
+
+      .mini-map {
+        height: 120px;
+        background-color: var(--secondary);
+        margin: 0 15px 15px;
+        border-radius: 8px;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .mini-map img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .timeline {
+        padding: 0 15px;
+        margin-bottom: 20px;
+      }
+
+      .time-entry {
+        position: relative;
+        padding-left: 25px;
+        padding-bottom: 15px;
+        border-left: 2px solid var(--border);
+      }
+
+      .time-entry:last-child {
+        border-left: 2px solid transparent;
+      }
+
+      .time-entry::before {
+        content: "";
+        position: absolute;
+        left: -6px;
+        top: 6px;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: var(--primary);
+      }
+
+      .time-label {
+        font-weight: 600;
+        font-size: 12px;
+        color: var(--primary);
+        margin-bottom: 3px;
+      }
+
+      .location-name {
+        font-weight: 600;
+        margin-bottom: 3px;
+      }
+
+      .location-desc {
+        font-size: 12px;
+        color: var(--text-light);
+        margin-bottom: 5px;
+      }
+
+      .budget-card {
+        background-color: var(--card);
+        margin: 0 15px 15px;
+        border-radius: 12px;
+        padding: 15px;
+        box-shadow: var(--shadow);
+      }
+
+      .budget-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+      }
+
+      .budget-title {
+        font-weight: 600;
+        font-size: 14px;
+      }
+
+      .budget-overview {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+
+      .budget-chart {
+        width: 40px;
+        height: 40px;
+        border-radius: 20px;
+        background: conic-gradient(
+          var(--primary) 0%,
+          var(--primary) 65%,
+          var(--secondary) 65%,
+          var(--secondary) 100%
+        );
+        margin-right: 12px;
+        position: relative;
+        flex-shrink: 0;
+      }
+
+      .budget-chart::after {
+        content: "";
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        right: 8px;
+        bottom: 8px;
+        background-color: var(--card);
+        border-radius: 50%;
+      }
+
+      .budget-info {
+        flex: 1;
+      }
+
+      .budget-amount {
+        font-weight: 600;
+        margin-bottom: 2px;
+      }
+
+      .budget-percent {
+        font-size: 12px;
+        color: var(--text-light);
+      }
+
+      .category {
+        display: flex;
+        align-items: center;
+        margin-bottom: 5px;
+      }
+
+      .category-color {
+        width: 10px;
+        height: 10px;
+        border-radius: 2px;
+        margin-right: 8px;
+      }
+
+      .category-name {
+        flex: 1;
+        font-size: 12px;
+      }
+
+      .category-amount {
+        font-size: 12px;
+        font-weight: 500;
+      }
+
+      .notes-card {
+        background-color: var(--card);
+        margin: 0 15px 20px;
+        border-radius: 12px;
+        padding: 15px;
+        box-shadow: var(--shadow);
+      }
+
+      .notes-title {
+        font-weight: 600;
+        margin-bottom: 8px;
+      }
+
+      .note-text {
+        font-size: 12px;
+        color: var(--text-light);
+        margin-bottom: 5px;
+      }
+
+      .swipe-container {
+        overflow: hidden;
+        position: relative;
+      }
+
+      .swipe-wrapper {
+        display: flex;
+        transition: transform 0.3s ease;
+      }
+
+      .swipe-slide {
+        min-width: 100%;
+        flex-shrink: 0;
+      }
+
+      .nav-arrows {
+        position: fixed;
+        bottom: 70px;
+        right: 15px;
+        display: flex;
+        gap: 5px;
+        z-index: 15;
+      }
+
+      .nav-arrow {
+        width: 40px;
+        height: 40px;
+        border-radius: 20px;
+        background-color: var(--primary);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .indicator {
+        display: flex;
+        justify-content: center;
+        gap: 3px;
+        margin: 10px 0;
+      }
+
+      .dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 3px;
+        background-color: var(--border);
+      }
+
+      .dot.active {
+        width: 20px;
+        background-color: var(--primary);
+      }
+
+      /* Currency Page */
+      .currency-card {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 15px;
+        background-color: var(--card);
+        border-radius: 12px;
+        margin: 0 15px 10px;
+        box-shadow: var(--shadow);
+      }
+
+      .currency-flag {
+        width: 32px;
+        height: 32px;
+        border-radius: 16px;
+        background-color: var(--primary-light);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 10px;
+      }
+
+      .currency-info {
+        display: flex;
+        align-items: center;
+      }
+
+      .currency-details {
+        flex: 1;
+      }
+
+      .currency-name {
+        font-weight: 500;
+        margin-bottom: 2px;
+      }
+
+      .currency-code {
+        font-size: 12px;
+        color: var(--text-light);
+      }
+
+      .currency-rate {
+        font-weight: 600;
+      }
+
+      /* Weather Page */
+      .weather-top {
+        background-color: var(--card);
+        padding: 15px;
+        margin-bottom: 15px;
+        border-radius: 0 0 12px 12px;
+      }
+
+      .weather-city {
+        font-size: 20px;
+        font-weight: 600;
+        margin-bottom: 5px;
+      }
+
+      .weather-date {
+        font-size: 12px;
+        color: var(--text-light);
+        margin-bottom: 15px;
+      }
+
+      .weather-main {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+      }
+
+      .weather-temp {
+        font-size: 48px;
+        font-weight: 300;
+      }
+
+      .weather-icon {
+        font-size: 48px;
+      }
+
+      .weather-details {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .weather-detail {
+        text-align: center;
+      }
+
+      .weather-detail-icon {
+        font-size: 20px;
+        color: var(--primary);
+        margin-bottom: 5px;
+      }
+
+      .weather-detail-value {
+        font-weight: 500;
+        margin-bottom: 2px;
+      }
+
+      .weather-detail-label {
+        font-size: 10px;
+        color: var(--text-light);
+      }
+
+      .forecast-days {
+        display: flex;
+        overflow-x: auto;
+        padding: 5px 0;
+        margin: 0 15px;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .forecast-day {
+        min-width: 60px;
+        text-align: center;
+        padding: 10px 5px;
+        background-color: var(--card);
+        border-radius: 12px;
+        margin-right: 8px;
+      }
+
+      .forecast-day-name {
+        font-size: 12px;
+        margin-bottom: 5px;
+      }
+
+      .forecast-day-icon {
+        font-size: 20px;
+        margin-bottom: 5px;
+      }
+
+      .forecast-day-temp {
+        font-weight: 500;
+        font-size: 12px;
+      }
+
+      /* Trip Planning Page */
+      .form-group {
+        margin-bottom: 15px;
+      }
+
+      .form-label {
+        display: block;
+        font-size: 12px;
+        font-weight: 500;
+        margin-bottom: 5px;
+      }
+
+      .form-control {
+        width: 100%;
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        background-color: var(--background);
+        color: var(--text);
+        font-size: 14px;
+      }
+
+      .form-row {
+        display: flex;
+        gap: 10px;
+      }
+
+      .form-row .form-group {
+        flex: 1;
+      }
+
+      .form-section {
+        margin-top: 20px;
+      }
+
+      .location-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        background-color: var(--background);
+        border-radius: 8px;
+        margin-bottom: 8px;
+      }
+
+      .location-actions {
+        display: flex;
+        gap: 5px;
+      }
+
+      .action-btn {
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 4px;
+        background-color: var(--background);
+        border: 1px solid var(--border);
+      }
+
+      .add-location {
+        padding: 10px;
+        border: 1px dashed var(--primary);
+        border-radius: 8px;
+        color: var(--primary);
+        background-color: var(--primary-light);
+        text-align: center;
+        font-size: 12px;
+        margin-top: 10px;
+        cursor: pointer;
+      }
+
+      /* Preferences Page */
+      .settings-list {
+        background-color: var(--card);
+        border-radius: 12px;
+        margin: 0 15px 20px;
+        overflow: hidden;
+      }
+
+      .settings-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .settings-item:last-child {
+        border-bottom: none;
+      }
+
+      .settings-label {
+        font-size: 14px;
+      }
+
+      .settings-value {
+        font-size: 14px;
+        color: var(--text-light);
+        display: flex;
+        align-items: center;
+      }
+
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 40px;
+        height: 24px;
+      }
+
+      .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: 0.4s;
+        border-radius: 24px;
+      }
+
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 18px;
+        width: 18px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: 0.4s;
+        border-radius: 50%;
+      }
+
+      input:checked + .slider {
+        background-color: var(--primary);
+      }
+
+      input:checked + .slider:before {
+        transform: translateX(16px);
+      }
+
+      .profile-header {
+        display: flex;
+        align-items: center;
+        padding: 15px;
+      }
+
+      .profile-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 25px;
+        background-color: var(--primary);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        margin-right: 15px;
+      }
+
+      .profile-name {
+        font-weight: 600;
+        margin-bottom: 2px;
+      }
+
+      .profile-email {
+        font-size: 12px;
+        color: var(--text-light);
+      }
+
+      .button-outline {
+        background-color: transparent;
+        border: 1px solid var(--primary);
+        color: var(--primary);
+      }
+
+      .section-header {
+        padding: 15px 15px 5px;
+        font-weight: 600;
+        font-size: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Home Page -->
+    <div id="home-page" class="page active">
+      <div class="header">
+        <h1>Wanderlust</h1>
+        <div class="profile" onclick="showPage('preferences-page')">JD</div>
+      </div>
+
+      <div class="search-bar">
+        <span>🔍</span>
+        <input type="text" placeholder="Search your trips" />
+      </div>
+
+      <div class="categories">
+        <div class="category active">All Trips</div>
+        <div class="category">Upcoming</div>
+        <div class="category">Past</div>
+        <div class="category">Drafts</div>
+      </div>
+
+      <div class="section-title">Your Trips</div>
+
+      <div class="card trip-card" onclick="showPage('trip-detail-page')">
+        <div class="trip-date">May 15 - May 20, 2025</div>
+        <div class="trip-title">
+          Tokyo Adventure
+          <span class="badge">Upcoming</span>
+        </div>
+        <div class="trip-meta">
+          <div>Flight JL513</div>
+          <div>•</div>
+          <div>12 places</div>
+        </div>
+      </div>
+
+      <div class="card trip-card">
+        <div class="trip-date">June 7 - June 12, 2025</div>
+        <div class="trip-title">
+          Paris Getaway
+          <span class="badge">Draft</span>
+        </div>
+        <div class="trip-meta">
+          <div>Flight AF1234</div>
+          <div>•</div>
+          <div>8 places</div>
+        </div>
+      </div>
+
+      <div class="card trip-card">
+        <div class="trip-date">February 10 - February 15, 2025</div>
+        <div class="trip-title">Bali Relaxation</div>
+        <div class="trip-meta">
+          <div>Flight GA421</div>
+          <div>•</div>
+          <div>5 places</div>
+        </div>
+      </div>
+
+      <div class="section-title">Quick Actions</div>
+
+      <div class="card-row">
+        <div class="card-small highlight" onclick="showPage('currency-page')">
+          <div class="emoji">💱</div>
+          <h3>Currency</h3>
+          <p>Check rates</p>
+        </div>
+        <div class="card-small highlight" onclick="showPage('weather-page')">
+          <div class="emoji">🌤️</div>
+          <h3>Weather</h3>
+          <p>Forecasts</p>
+        </div>
+      </div>
+
+      <div class="button" onclick="showPage('trip-planning-page')">
+        Plan New Trip
+      </div>
+    </div>
+
+    <!-- Trip Detail Page -->
+    <div id="trip-detail-page" class="page">
+      <div class="header">
+        <h1>Tokyo Adventure</h1>
+        <div class="close" onclick="showPage('home-page')">×</div>
+      </div>
+
+      <div class="trip-info">
+        <div class="trip-info-row">
+          <div>May 15 - May 20, 2025</div>
+          <div>Flight JL513</div>
+        </div>
+        <div class="trip-meta">
+          <div>5 days</div>
+          <div>•</div>
+          <div>12 places</div>
+          <div>•</div>
+          <div>$3000 budget</div>
+        </div>
+      </div>
+
+      <div class="date-nav" id="date-nav">
+        <div class="date-btn active" data-index="0">
+          <div class="date-number">15</div>
+          <div class="date-day">Mon</div>
+        </div>
+        <div class="date-btn" data-index="1">
+          <div class="date-number">16</div>
+          <div class="date-day">Tue</div>
+        </div>
+        <div class="date-btn" data-index="2">
+          <div class="date-number">17</div>
+          <div class="date-day">Wed</div>
+        </div>
+        <div class="date-btn" data-index="3">
+          <div class="date-number">18</div>
+          <div class="date-day">Thu</div>
+        </div>
+        <div class="date-btn" data-index="4">
+          <div class="date-number">19</div>
+          <div class="date-day">Fri</div>
+        </div>
+        <div class="date-btn" data-index="5">
+          <div class="date-number">20</div>
+          <div class="date-day">Sat</div>
+        </div>
+      </div>
+
+      <div class="swipe-container">
+        <div class="swipe-wrapper" id="day-swiper">
+          <!-- Day 1 -->
+          <div class="swipe-slide">
+            <div class="day-header">
+              <div>
+                <div class="day-title">Day 1</div>
+                <div class="day-date">Monday, May 15, 2025</div>
+              </div>
+              <div class="badges">
+                <div class="badge badge-primary">📍 4 Places</div>
+                <div class="badge badge-light">☀️ 22°</div>
+              </div>
+            </div>
+
+            <div class="mini-map">
+              <img
+                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 500 120'%3E%3Crect fill='%23eef2f7' width='500' height='120'/%3E%3Cpath d='M50,20 L450,20 L450,100 L50,100 Z' fill='%23ffffff' stroke='%23cccccc' stroke-width='1'/%3E%3Ccircle cx='150' cy='60' r='5' fill='%234a6fa5'/%3E%3Ccircle cx='250' cy='40' r='5' fill='%234a6fa5'/%3E%3Ccircle cx='350' cy='70' r='5' fill='%234a6fa5'/%3E%3Ccircle cx='400' cy='50' r='5' fill='%234a6fa5'/%3E%3Cpath d='M150,60 L250,40 L350,70 L400,50' stroke='%234a6fa5' stroke-width='2' fill='none' stroke-dasharray='4'/%3E%3Ctext x='150' y='50' text-anchor='middle' font-family='sans-serif' font-size='10' fill='%234a6fa5'%3EMeiji%3C/text%3E%3Ctext x='250' y='30' text-anchor='middle' font-family='sans-serif' font-size='10' fill='%234a6fa5'%3EHarajuku%3C/text%3E%3Ctext x='350' y='60' text-anchor='middle' font-family='sans-serif' font-size='10' fill='%234a6fa5'%3EShibuya%3C/text%3E%3Ctext x='400' y='40' text-anchor='middle' font-family='sans-serif' font-size='10' fill='%234a6fa5'%3ERamen%3C/text%3E%3C/svg%3E"
+                width="100%"
+                height="100%"
+              />
+            </div>
+
+            <div class="timeline">
+              <div class="time-entry">
+                <div class="time-label">09:00 AM - 11:00 AM</div>
+                <div class="location-name">Meiji Shrine</div>
+                <div class="location-desc">
+                  Beautiful shrine in a forest setting within the city. Don't
+                  miss the sake barrel display.
+                </div>
+              </div>
+              <div class="time-entry">
+                <div class="time-label">12:00 PM - 02:00 PM</div>
+                <div class="location-name">Harajuku & Lunch</div>
+                <div class="location-desc">
+                  Explore Takeshita Street and grab lunch at a trendy cafe. Try
+                  the rainbow cotton candy!
+                </div>
+              </div>
+              <div class="time-entry">
+                <div class="time-label">03:00 PM - 05:00 PM</div>
+                <div class="location-name">Shibuya Crossing</div>
+                <div class="location-desc">
+                  Experience the famous crossing and enjoy the area. Great spot
+                  for photos.
+                </div>
+              </div>
+              <div class="time-entry">
+                <div class="time-label">06:00 PM - 08:00 PM</div>
+                <div class="location-name">Dinner in Shibuya</div>
+                <div class="location-desc">
+                  Try local ramen at Ichiran or Afuri. The vending machine
+                  ordering system is fun!
+                </div>
+              </div>
+            </div>
+
+            <div class="section-title">Budget</div>
+            <div class="budget-card">
+              <div class="budget-overview">
+                <div class="budget-chart"></div>
+                <div class="budget-info">
+                  <div class="budget-amount">$250 / $300</div>
+                  <div class="budget-percent">83% of day budget used</div>
+                </div>
+              </div>
+
+              <div class="categories">
+                <div class="category">
+                  <div
+                    class="category-color"
+                    style="background-color: var(--primary)"
+                  ></div>
+                  <div class="category-name">Food & Drinks</div>
+                  <div class="category-amount">$120</div>
+                </div>
+                <div class="category">
+                  <div
+                    class="category-color"
+                    style="background-color: #8aabca"
+                  ></div>
+                  <div class="category-name">Transportation</div>
+                  <div class="category-amount">$40</div>
+                </div>
+                <div class="category">
+                  <div
+                    class="category-color"
+                    style="background-color: #c0d5e8"
+                  ></div>
+                  <div class="category-name">Attractions</div>
+                  <div class="category-amount">$90</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="section-title">Notes</div>
+            <div class="notes-card">
+              <div class="note-text">
+                Remember to purchase a 24-hour Tokyo Metro pass at the airport
+                for easier travel.
+              </div>
+              <div class="note-text">
+                Bring comfortable walking shoes as we'll be walking a lot today.
+                Shibuya is very crowded in the afternoon.
+              </div>
+            </div>
+          </div>
+
+          <!-- Day 2 -->
+          <div class="swipe-slide">
+            <div class="day-header">
+              <div>
+                <div class="day-title">Day 2</div>
+                <div class="day-date">Tuesday, May 16, 2025</div>
+              </div>
+              <div class="badges">
+                <div class="badge badge-primary">📍 4 Places</div>
+                <div class="badge badge-light">🌤️ 23°</div>
+              </div>
+            </div>
+
+            <div class="mini-map">
+              <img
+                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 500 120'%3E%3Crect fill='%23eef2f7' width='500' height='120'/%3E%3Cpath d='M50,20 L450,20 L450,100 L50,100 Z' fill='%23ffffff' stroke='%23cccccc' stroke-width='1'/%3E%3Ccircle cx='120' cy='60' r='5' fill='%234a6fa5'/%3E%3Ccircle cx='240' cy='40' r='5' fill='%234a6fa5'/%3E%3Ccircle cx='320' cy='70' r='5' fill='%234a6fa5'/%3E%3Ccircle cx='400' cy='50' r='5' fill='%234a6fa5'/%3E%3Cpath d='M120,60 L240,40 L320,70 L400,50' stroke='%234a6fa5' stroke-width='2' fill='none' stroke-dasharray='4'/%3E%3Ctext x='120' y='50' text-anchor='middle' font-family='sans-serif' font-size='10' fill='%234a6fa5'%3ETsukiji%3C/text%3E%3Ctext x='240' y='30' text-anchor='middle' font-family='sans-serif' font-size='10' fill='%234a6fa5'%3EPalace%3C/text%3E%3Ctext x='320' y='60' text-anchor='middle' font-family='sans-serif' font-size='10' fill='%234a6fa5'%3ESensoji%3C/text%3E%3Ctext x='400' y='40' text-anchor='middle' font-family='sans-serif' font-size='10' fill='%234a6fa5'%3ESkytree%3C/text%3E%3C/svg%3E"
+                width="100%"
+                height="100%"
+              />
+            </div>
+
+            <div class="timeline">
+              <div class="time-entry">
+                <div class="time-label">08:30 AM - 10:30 AM</div>
+                <div class="location-name">Tsukiji Outer Market</div>
+                <div class="location-desc">
+                  Try fresh sushi for breakfast. Don't miss the tamagoyaki
+                  (sweet omelet).
+                </div>
+              </div>
+              <div class="time-entry">
+                <div class="time-label">11:00 AM - 01:00 PM</div>
+                <div class="location-name">Imperial Palace Gardens</div>
+                <div class="location-desc">
+                  Peaceful gardens surrounding the Imperial Palace. Great for a
+                  relaxing stroll.
+                </div>
+              </div>
+              <div class="time-entry">
+                <div class="time-label">02:00 PM - 04:00 PM</div>
+                <div class="location-name">Asakusa & Sensoji Temple</div>
+                <div class="location-desc">
+                  Tokyo's oldest temple and traditional shopping street. Try
+                  street food.
+                </div>
+              </div>
+              <div class="time-entry">
+                <div class="time-label">05:00 PM - 07:00 PM</div>
+                <div class="location-name">Tokyo Skytree</div>
+                <div class="location-desc">
+                  Sunset views from one of the world's tallest towers.
+                </div>
+              </div>
+            </div>
+
+            <div class="section-title">Budget</div>
+            <div class="budget-card">
+              <div class="budget-overview">
+                <div
+                  class="budget-chart"
+                  style="
+                    background: conic-gradient(
+                      var(--primary) 0%,
+                      var(--primary) 75%,
+                      var(--secondary) 75%,
+                      var(--secondary) 100%
+                    );
+                  "
+                ></div>
+                <div class="budget-info">
+                  <div class="budget-amount">$270 / $350</div>
+                  <div class="budget-percent">77% of day budget used</div>
+                </div>
+              </div>
+
+              <div class="categories">
+                <div class="category">
+                  <div
+                    class="category-color"
+                    style="background-color: var(--primary)"
+                  ></div>
+                  <div class="category-name">Food & Drinks</div>
+                  <div class="category-amount">$110</div>
+                </div>
+                <div class="category">
+                  <div
+                    class="category-color"
+                    style="background-color: #8aabca"
+                  ></div>
+                  <div class="category-name">Transportation</div>
+                  <div class="category-amount">$50</div>
+                </div>
+                <div class="category">
+                  <div
+                    class="category-color"
+                    style="background-color: #c0d5e8"
+                  ></div>
+                  <div class="category-name">Attractions</div>
+                  <div class="category-amount">$110</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="section-title">Notes</div>
+            <div class="notes-card">
+              <div class="note-text">
+                Book Skytree tickets in advance to avoid lines. Consider getting
+                a taiyaki near Sensoji.
+              </div>
+              <div class="note-text">
+                Go to Tsukiji early for the freshest fish. Many shops start
+                closing around 1-2pm.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="indicator" id="day-indicator">
+        <div class="dot active"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-bottom: 10px; font-size: 15px">Trip Overview</h3>
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+          "
+        >
+          <div>Total Budget</div>
+          <div>$3,000</div>
+        </div>
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+          "
+        >
+          <div>Spent So Far</div>
+          <div>$900</div>
+        </div>
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+          "
+        >
+          <div>Places to Visit</div>
+          <div>12</div>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 10px; margin: 0 15px 20px">
+        <div
+          class="button button-outline"
+          style="margin: 0; flex: 1"
+          onclick="showPage('trip-planning-page')"
+        >
+          Edit Trip
+        </div>
+        <div class="button" style="margin: 0; flex: 1">Share Trip</div>
+      </div>
+
+      <div class="nav-arrows">
+        <div class="nav-arrow" id="prev-day" style="display: none">←</div>
+        <div class="nav-arrow" id="next-day">→</div>
+      </div>
+    </div>
+
+    <!-- Currency Page -->
+    <div id="currency-page" class="page">
+      <div class="header">
+        <h1>Currency</h1>
+        <div class="close" onclick="showPage('home-page')">×</div>
+      </div>
+
+      <div class="search-bar">
+        <span>🔍</span>
+        <input type="text" placeholder="Search currencies" />
+      </div>
+
+      <div class="section-title">Your Base Currency</div>
+      <div class="currency-card">
+        <div class="currency-info">
+          <div class="currency-flag">$</div>
+          <div class="currency-details">
+            <div class="currency-name">US Dollar</div>
+            <div class="currency-code">USD</div>
+          </div>
+        </div>
+        <div class="currency-rate">1.00</div>
+      </div>
+
+      <div class="section-title">Monitored Currencies</div>
+      <div class="currency-card">
+        <div class="currency-info">
+          <div class="currency-flag">€</div>
+          <div class="currency-details">
+            <div class="currency-name">Euro</div>
+            <div class="currency-code">EUR</div>
+          </div>
+        </div>
+        <div class="currency-rate">0.92</div>
+      </div>
+
+      <div class="currency-card">
+        <div class="currency-info">
+          <div class="currency-flag">¥</div>
+          <div class="currency-details">
+            <div class="currency-name">Japanese Yen</div>
+            <div class="currency-code">JPY</div>
+          </div>
+        </div>
+        <div class="currency-rate">153.27</div>
+      </div>
+
+      <div class="currency-card">
+        <div class="currency-info">
+          <div class="currency-flag">£</div>
+          <div class="currency-details">
+            <div class="currency-name">British Pound</div>
+            <div class="currency-code">GBP</div>
+          </div>
+        </div>
+        <div class="currency-rate">0.79</div>
+      </div>
+
+      <div class="section-title">Add Currency</div>
+      <div class="currency-card">
+        <div class="currency-info">
+          <div class="currency-flag">₩</div>
+          <div class="currency-details">
+            <div class="currency-name">South Korean Won</div>
+            <div class="currency-code">KRW</div>
+          </div>
+        </div>
+        <div class="currency-rate">+</div>
+      </div>
+
+      <div class="currency-card">
+        <div class="currency-info">
+          <div class="currency-flag">C$</div>
+          <div class="currency-details">
+            <div class="currency-name">Canadian Dollar</div>
+            <div class="currency-code">CAD</div>
+          </div>
+        </div>
+        <div class="currency-rate">+</div>
+      </div>
+    </div>
+
+    <!-- Weather Page -->
+    <div id="weather-page" class="page">
+      <div class="header">
+        <h1>Weather</h1>
+        <div class="close" onclick="showPage('home-page')">×</div>
+      </div>
+
+      <div class="search-bar">
+        <span>🔍</span>
+        <input type="text" placeholder="Search location" />
+      </div>
+
+      <div class="weather-top">
+        <div class="weather-city">Tokyo, Japan</div>
+        <div class="weather-date">Today, March 28, 2025</div>
+
+        <div class="weather-main">
+          <div class="weather-temp">22°</div>
+          <div class="weather-icon">☀️</div>
+        </div>
+
+        <div class="weather-details">
+          <div class="weather-detail">
+            <div class="weather-detail-icon">💧</div>
+            <div class="weather-detail-value">10%</div>
+            <div class="weather-detail-label">Humidity</div>
+          </div>
+          <div class="weather-detail">
+            <div class="weather-detail-icon">💨</div>
+            <div class="weather-detail-value">5 mph</div>
+            <div class="weather-detail-label">Wind</div>
+          </div>
+          <div class="weather-detail">
+            <div class="weather-detail-icon">🌡️</div>
+            <div class="weather-detail-value">26°/18°</div>
+            <div class="weather-detail-label">High/Low</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-title">5-Day Forecast</div>
+      <div class="forecast-days">
+        <div class="forecast-day">
+          <div class="forecast-day-name">Fri</div>
+          <div class="forecast-day-icon">☀️</div>
+          <div class="forecast-day-temp">24°</div>
+        </div>
+        <div class="forecast-day">
+          <div class="forecast-day-name">Sat</div>
+          <div class="forecast-day-icon">🌤️</div>
+          <div class="forecast-day-temp">23°</div>
+        </div>
+        <div class="forecast-day">
+          <div class="forecast-day-name">Sun</div>
+          <div class="forecast-day-icon">🌧️</div>
+          <div class="forecast-day-temp">19°</div>
+        </div>
+        <div class="forecast-day">
+          <div class="forecast-day-name">Mon</div>
+          <div class="forecast-day-icon">⛅</div>
+          <div class="forecast-day-temp">20°</div>
+        </div>
+        <div class="forecast-day">
+          <div class="forecast-day-name">Tue</div>
+          <div class="forecast-day-icon">☀️</div>
+          <div class="forecast-day-temp">22°</div>
+        </div>
+      </div>
+
+      <div class="section-title">Your Trip Destinations</div>
+      <div class="card">
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+          "
+        >
+          <div>Tokyo, Japan</div>
+          <div>22° ☀️</div>
+        </div>
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+          "
+        >
+          <div>Paris, France</div>
+          <div>16° ⛅</div>
+        </div>
+        <div
+          style="display: flex; justify-content: space-between; padding: 8px 0"
+        >
+          <div>Bali, Indonesia</div>
+          <div>32° ☀️</div>
+        </div>
+      </div>
+
+      <div class="section-title">Recent Searches</div>
+      <div class="card">
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+          "
+        >
+          <div>London, UK</div>
+          <div>14° 🌧️</div>
+        </div>
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+          "
+        >
+          <div>New York, USA</div>
+          <div>12° 🌧️</div>
+        </div>
+        <div
+          style="display: flex; justify-content: space-between; padding: 8px 0"
+        >
+          <div>Sydney, Australia</div>
+          <div>28° ☀️</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Trip Planning Page -->
+    <div id="trip-planning-page" class="page">
+      <div class="header">
+        <h1>Plan a Trip</h1>
+        <div class="close" onclick="showPage('home-page')">×</div>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-bottom: 15px; font-size: 15px">Trip Details</h3>
+
+        <div class="form-group">
+          <label class="form-label">Trip Name</label>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="e.g. Tokyo Adventure"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Destination</label>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="e.g. Tokyo, Japan"
+          />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Start Date</label>
+            <input type="date" class="form-control" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">End Date</label>
+            <input type="date" class="form-control" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Flight Number</label>
+          <input type="text" class="form-control" placeholder="e.g. JL513" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Total Budget</label>
+          <input type="number" class="form-control" placeholder="e.g. 3000" />
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-bottom: 15px; font-size: 15px">
+          Locations for Day 1
+        </h3>
+
+        <div class="location-item">
+          <div>
+            <div style="font-weight: 500; margin-bottom: 2px">Meiji Shrine</div>
+            <div style="font-size: 12px; color: var(--text-light)">
+              09:00 - 11:00
+            </div>
+          </div>
+          <div class="location-actions">
+            <div class="action-btn">✏️</div>
+            <div class="action-btn">🗑️</div>
+          </div>
+        </div>
+
+        <div class="location-item">
+          <div>
+            <div style="font-weight: 500; margin-bottom: 2px">Harajuku</div>
+            <div style="font-size: 12px; color: var(--text-light)">
+              12:00 - 14:00
+            </div>
+          </div>
+          <div class="location-actions">
+            <div class="action-btn">✏️</div>
+            <div class="action-btn">🗑️</div>
+          </div>
+        </div>
+
+        <div class="add-location">+ Add Location</div>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-bottom: 15px; font-size: 15px">
+          Locations for Day 2
+        </h3>
+
+        <div class="location-item">
+          <div>
+            <div style="font-weight: 500; margin-bottom: 2px">
+              Tsukiji Outer Market
+            </div>
+            <div style="font-size: 12px; color: var(--text-light)">
+              08:30 - 10:30
+            </div>
+          </div>
+          <div class="location-actions">
+            <div class="action-btn">✏️</div>
+            <div class="action-btn">🗑️</div>
+          </div>
+        </div>
+
+        <div class="location-item">
+          <div>
+            <div style="font-weight: 500; margin-bottom: 2px">
+              Imperial Palace Gardens
+            </div>
+            <div style="font-size: 12px; color: var(--text-light)">
+              11:00 - 13:00
+            </div>
+          </div>
+          <div class="location-actions">
+            <div class="action-btn">✏️</div>
+            <div class="action-btn">🗑️</div>
+          </div>
+        </div>
+
+        <div class="add-location">+ Add Location</div>
+      </div>
+
+      <div
+        class="button"
+        style="background-color: var(--primary-light); color: var(--primary)"
+      >
+        Add Another Day
+      </div>
+
+      <div class="button" style="margin-top: 10px">Save Trip</div>
+    </div>
+
+    <!-- Preferences Page -->
+    <div id="preferences-page" class="page">
+      <div class="header">
+        <h1>Preferences</h1>
+        <div class="close" onclick="showPage('home-page')">×</div>
+      </div>
+
+      <div class="card" style="margin-bottom: 20px">
+        <div class="profile-header">
+          <div class="profile-avatar">JD</div>
+          <div>
+            <div class="profile-name">John Doe</div>
+            <div class="profile-email">john.doe@example.com</div>
+          </div>
+        </div>
+        <button class="button" style="margin: 5px 0 0; padding: 8px">
+          Edit Profile
+        </button>
+      </div>
+
+      <div class="section-header">App Settings</div>
+      <div class="settings-list">
+        <div class="settings-item">
+          <div class="settings-label">Dark Mode</div>
+          <label class="switch">
+            <input type="checkbox" id="dark-mode-toggle" />
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="settings-item">
+          <div class="settings-label">Notifications</div>
+          <label class="switch">
+            <input type="checkbox" checked />
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="settings-item">
+          <div class="settings-label">Base Currency</div>
+          <div class="settings-value">USD ›</div>
+        </div>
+        <div class="settings-item">
+          <div class="settings-label">Distance Unit</div>
+          <div class="settings-value">Miles ›</div>
+        </div>
+        <div class="settings-item">
+          <div class="settings-label">Temperature Unit</div>
+          <div class="settings-value">Celsius ›</div>
+        </div>
+        <div class="settings-item">
+          <div class="settings-label">Language</div>
+          <div class="settings-value">English ›</div>
+        </div>
+      </div>
+
+      <div class="section-header">Trip Preferences</div>
+      <div class="settings-list">
+        <div class="settings-item">
+          <div class="settings-label">Default Trip View</div>
+          <div class="settings-value">Timeline ›</div>
+        </div>
+        <div class="settings-item">
+          <div class="settings-label">Auto-fetch Weather</div>
+          <label class="switch">
+            <input type="checkbox" checked />
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="settings-item">
+          <div class="settings-label">Trip Reminders</div>
+          <label class="switch">
+            <input type="checkbox" checked />
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="settings-item">
+          <div class="settings-label">Budget Tracking</div>
+          <label class="switch">
+            <input type="checkbox" checked />
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="section-header">About</div>
+      <div class="settings-list">
+        <div class="settings-item">
+          <div class="settings-label">Version</div>
+          <div class="settings-value">1.0.4</div>
+        </div>
+        <div class="settings-item">
+          <div class="settings-label">Terms of Service</div>
+          <div class="settings-value">›</div>
+        </div>
+        <div class="settings-item">
+          <div class="settings-label">Privacy Policy</div>
+          <div class="settings-value">›</div>
+        </div>
+      </div>
+
+      <div class="button button-outline" style="margin-top: 20px">Sign Out</div>
+    </div>
+
+    <!-- Tab Bar -->
+    <div class="tab-bar">
+      <div class="tab active" onclick="showPage('home-page')">
+        <div class="icon">🏠</div>
+        <div class="label">Home</div>
+      </div>
+      <div class="tab" onclick="showPage('trip-planning-page')">
+        <div class="icon">✈️</div>
+        <div class="label">Plan</div>
+      </div>
+      <div class="tab" onclick="showPage('currency-page')">
+        <div class="icon">💱</div>
+        <div class="label">Currency</div>
+      </div>
+      <div class="tab" onclick="showPage('weather-page')">
+        <div class="icon">🌤️</div>
+        <div class="label">Weather</div>
+      </div>
+      <div class="tab" onclick="showPage('preferences-page')">
+        <div class="icon">⚙️</div>
+        <div class="label">Settings</div>
+      </div>
+    </div>
+
+    <script>
+      // Page navigation
+      function showPage(pageId) {
+        // Hide all pages
+        document.querySelectorAll(".page").forEach((page) => {
+          page.classList.remove("active");
+        });
+
+        // Show selected page
+        document.getElementById(pageId).classList.add("active");
+
+        // Update active tab
+        document.querySelectorAll(".tab").forEach((tab) => {
+          tab.classList.remove("active");
+        });
+
+        // Map page to tab index
+        const tabMapping = {
+          "home-page": 0,
+          "trip-planning-page": 1,
+          "currency-page": 2,
+          "weather-page": 3,
+          "preferences-page": 4,
+        };
+
+        const tabIndex = tabMapping[pageId];
+        if (tabIndex !== undefined) {
+          document.querySelectorAll(".tab")[tabIndex].classList.add("active");
+        }
+      }
+
+      // Dark mode toggle
+      const darkModeToggle = document.getElementById("dark-mode-toggle");
+      darkModeToggle.addEventListener("change", () => {
+        if (darkModeToggle.checked) {
+          document.documentElement.setAttribute("data-theme", "dark");
+        } else {
+          document.documentElement.removeAttribute("data-theme");
+        }
+      });
+
+      // Trip detail day navigation
+      const dateButtons = document.querySelectorAll(".date-btn");
+      const daySwiper = document.getElementById("day-swiper");
+      const dayIndicator = document
+        .getElementById("day-indicator")
+        .querySelectorAll(".dot");
+      const prevDayBtn = document.getElementById("prev-day");
+      const nextDayBtn = document.getElementById("next-day");
+
+      let currentDayIndex = 0;
+      const totalDays = 6;
+
+      function goToDay(index) {
+        if (index < 0 || index >= totalDays) return;
+
+        currentDayIndex = index;
+
+        // Update date buttons
+        dateButtons.forEach((btn, i) => {
+          btn.classList.toggle("active", i === index);
+        });
+
+        // Update dots
+        dayIndicator.forEach((dot, i) => {
+          dot.classList.toggle("active", i === index);
+        });
+
+        // Update swiper position
+        daySwiper.style.transform = `translateX(-${index * 100}%)`;
+
+        // Update navigation buttons
+        prevDayBtn.style.display = index > 0 ? "flex" : "none";
+        nextDayBtn.style.display = index < totalDays - 1 ? "flex" : "none";
+
+        // Scroll date into view
+        if (dateButtons[index]) {
+          dateButtons[index].scrollIntoView({
+            behavior: "smooth",
+            inline: "center",
+          });
+        }
+      }
+
+      // Add click events to date buttons
+      dateButtons.forEach((btn, index) => {
+        btn.addEventListener("click", () => {
+          goToDay(index);
+        });
+      });
+
+      // Add click events to indicator dots
+      dayIndicator.forEach((dot, index) => {
+        dot.addEventListener("click", () => {
+          goToDay(index);
+        });
+      });
+
+      // Navigation arrow buttons
+      prevDayBtn.addEventListener("click", () => {
+        goToDay(currentDayIndex - 1);
+      });
+
+      nextDayBtn.addEventListener("click", () => {
+        goToDay(currentDayIndex + 1);
+      });
+
+      // Swipe handling for trip details
+      let touchStartX = 0;
+      let touchEndX = 0;
+
+      daySwiper.parentElement.addEventListener("touchstart", (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+      });
+
+      daySwiper.parentElement.addEventListener("touchend", (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+      });
+
+      function handleSwipe() {
+        const minSwipeDistance = 50;
+        if (touchEndX < touchStartX - minSwipeDistance) {
+          // Swipe left - next day
+          goToDay(currentDayIndex + 1);
+        } else if (touchEndX > touchStartX + minSwipeDistance) {
+          // Swipe right - previous day
+          goToDay(currentDayIndex - 1);
+        }
+      }
+
+      // Initialize day navigation
+      goToDay(0);
+    </script>
+  </body>
+</html>

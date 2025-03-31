@@ -1,0 +1,83 @@
+# Wanderlust Trip Planning App - Project Checklist
+
+## Core Functionality
+- [x] Project structure setup
+- [x] MainActivity with bottom navigation
+- [ ] Home screen with trip list
+- [ ] Trip detail screen
+- [ ] Trip planning/creation screen
+- [ ] Currency converter functionality
+- [ ] Weather forecast functionality
+- [ ] User preferences/settings screen
+
+## Models & Data
+- [x] Trip model
+- [x] Location model
+- [ ] Weather model
+- [ ] Currency model
+- [ ] Database implementation (Firebase Firestore)
+- [ ] API integration for weather
+- [ ] API integration for currency rates
+
+## Firebase Integration
+- [ ] Create Firebase project
+- [x] Add Firebase SDK to Android project
+- [ ] Set up Firebase Authentication
+- [ ] Configure Firestore database schema
+- [ ] Implement user authentication (register/login)
+- [ ] Implement trips data CRUD operations
+- [ ] Implement user preferences storage
+- [ ] Set up Firebase Storage for trip images
+- [ ] Implement error handling and edge cases
+
+## UI Components
+- [x] Bottom navigation
+- [x] Home fragment layout
+- [x] Trip item layout
+- [ ] Trip details fragment layout
+- [ ] Trip planning fragment layout
+- [ ] Currency fragment layout
+- [ ] Weather fragment layout
+- [ ] Settings fragment layout
+- [ ] Custom views if needed
+
+## Adapters
+- [ ] Trip adapter
+- [ ] Location adapter
+- [ ] Currency adapter
+- [ ] Weather adapter
+
+## Additional Features
+- [ ] Trip sharing functionality
+- [ ] Notifications for trip reminders
+- [ ] Dark/light theme
+- [ ] Multiple language support
+- [ ] Data backup & restore
+- [ ] Google Maps integration for locations
+- [ ] Flight tracking
+- [ ] Photo gallery for trips
+
+## Testing
+- [ ] Unit tests for models
+- [ ] UI tests for main flows
+- [ ] Integration tests for API calls
+
+## Deployment & Documentation
+- [ ] Code documentation
+- [ ] User guide
+- [ ] App icon and branding
+- [ ] Play Store listing preparation
+- [ ] Privacy policy
+- [ ] Terms of service
+
+## Next Steps
+1. Complete the basic UI layouts for all fragments
+2. Implement Firebase authentication (login/register)
+3. Set up Firestore database schema and CRUD operations
+4. Implement user preferences storage
+5. Integrate APIs for weather and currency
+6. Implement trip management functionality
+7. Add image upload/download with Firebase Storage
+8. Enhance UI with animations and polish
+9. Add error handling and edge cases
+10. Test all functionality

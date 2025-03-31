@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="background">#F5F5F5</color>
+    <color name="card">#FFFFFF</color>
+    <color name="primary">#6200EE</color>
+    <color name="secondary">#03DAC6</color>
+    <color name="location_background">#F9F9F9</color>
+    <color name="primary_light">#E8E0FF</color>
+    <color name="text_secondary">#757575</color>
+    <!-- Add more colors as needed -->
+</resources>

@@ -1,0 +1,5 @@
+# Build outputs specific to the app module
+build/
+
+# Keep google-services.json in app for now
+google-services.json

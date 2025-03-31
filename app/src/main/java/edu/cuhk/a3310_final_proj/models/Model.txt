@@ -1,0 +1,10 @@
+one user can have one or many trip could have one or many image documents 
+
+MODEL USER(email STRING,username STRING, password STRING, base currency STRING, monitor currency LIST OF STRING)
+MODEL TRIP(trip name STRING. 
+            days for visit INT, 
+            flight number STRING, 
+            (location STRING, latitude DOUBLE, longitude, time INT), 
+            (budget DOUBLE, expense with image ), 
+            note STRING, 
+            document IMAGE)
