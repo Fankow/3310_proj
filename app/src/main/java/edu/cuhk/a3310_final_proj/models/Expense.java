@@ -15,6 +15,8 @@ public class Expense {
     @PropertyName("receipt_image_url")
     private String receiptImageUrl;
 
+    private String trip_id;
+
     // Required empty constructor for Firestore
     public Expense() {
     }
@@ -76,5 +78,15 @@ public class Expense {
     @PropertyName("receipt_image_url")
     public void setReceiptImageUrl(String receiptImageUrl) {
         this.receiptImageUrl = receiptImageUrl;
+    }
+
+    @PropertyName("trip_id")
+    public String getTripId() {
+        return trip_id;
+    }
+
+    @PropertyName("trip_id")
+    public void setTripId(String tripId) {
+        this.trip_id = tripId;
     }
 }

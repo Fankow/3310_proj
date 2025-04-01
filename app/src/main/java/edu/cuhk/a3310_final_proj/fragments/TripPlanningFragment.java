@@ -17,8 +17,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -31,8 +29,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
@@ -40,7 +36,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageException;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -57,7 +52,7 @@ import edu.cuhk.a3310_final_proj.R;
 import edu.cuhk.a3310_final_proj.adapters.DocumentAdapter;
 import edu.cuhk.a3310_final_proj.adapters.LocationAdapter;
 import edu.cuhk.a3310_final_proj.adapters.PlacesAutocompleteAdapter;
-import edu.cuhk.a3310_final_proj.firebase.FirestoreManager;
+import edu.cuhk.firebase.FirestoreManager;
 import edu.cuhk.a3310_final_proj.firebase.StorageManager;
 import edu.cuhk.a3310_final_proj.models.Document;
 import edu.cuhk.a3310_final_proj.models.Location;
@@ -92,6 +87,7 @@ public class TripPlanningFragment extends Fragment implements PlacesAutocomplete
     private Trip currentTrip = null;
     private String tripId = null; // Will be set if editing an existing trip
     private PlacesAutocompleteAdapter placesAdapter;
+    private PlacesAutocompleteAdapter destinationAdapter;
     private double selectedLat = 0.0;
     private double selectedLng = 0.0;
     private Map<Integer, List<Location>> locationsByDay = new HashMap<>();
@@ -133,6 +129,17 @@ public class TripPlanningFragment extends Fragment implements PlacesAutocomplete
         // Load existing trip data if editing
         if (tripId != null) {
             loadTripData(tripId);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        // Clean up Places resources
+        if (destinationAdapter != null) {
+            destinationAdapter.shutdown();
+            destinationAdapter = null;
         }
     }
 
@@ -464,10 +471,10 @@ public class TripPlanningFragment extends Fragment implements PlacesAutocomplete
 
         // Parse dates
         try {
-            if (!etStartDate.getText().toString().isEmpty()) {
+            if (!etStartDate.getText().isEmpty()) {
                 trip.setStartDate(dateFormat.parse(etStartDate.getText().toString()));
             }
-            if (!etEndDate.getText().toString().isEmpty()) {
+            if (!etEndDate.getText().isEmpty()) {
                 trip.setEndDate(dateFormat.parse(etEndDate.getText().toString()));
             }
         } catch (ParseException e) {
@@ -631,8 +638,8 @@ public class TripPlanningFragment extends Fragment implements PlacesAutocomplete
 
     private void setupPlaceAutocomplete() {
         try {
-            // Create adapter with inline callback (just like in dialog)
-            PlacesAutocompleteAdapter destinationAdapter = new PlacesAutocompleteAdapter(requireContext(),
+            // Create adapter with inline callback
+            destinationAdapter = new PlacesAutocompleteAdapter(requireContext(),
                     android.R.layout.simple_dropdown_item_1line,
                     place -> {
                         etDestination.setText(place.getName());
@@ -746,7 +753,7 @@ public class TripPlanningFragment extends Fragment implements PlacesAutocomplete
         Button btnSaveLocation = dialogView.findViewById(R.id.btn_save_location);
 
         // Set autocomplete adapter for location name
-        PlacesAutocompleteAdapter placesAdapter = new PlacesAutocompleteAdapter(requireContext(),
+        PlacesAutocompleteAdapter dialogPlacesAdapter = new PlacesAutocompleteAdapter(requireContext(),
                 android.R.layout.simple_dropdown_item_1line,
                 place -> {
                     etLocationName.setText(place.getName());
@@ -758,8 +765,13 @@ public class TripPlanningFragment extends Fragment implements PlacesAutocomplete
                     }
                 });
 
-        etLocationName.setAdapter(placesAdapter);
+        etLocationName.setAdapter(dialogPlacesAdapter);
         etLocationName.setThreshold(2);
+
+        // Make sure to clean up when dialog closes
+        builder.setOnDismissListener(dialogInterface -> {
+            dialogPlacesAdapter.shutdown();
+        });
 
         // Add text watchers to validate and auto-format time input
         etStartTime.addTextChangedListener(new TimeFormatWatcher(etStartTime));

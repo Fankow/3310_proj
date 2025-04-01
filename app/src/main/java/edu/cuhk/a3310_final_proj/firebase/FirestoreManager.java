@@ -1,4 +1,4 @@
-package edu.cuhk.firebase;
+package edu.cuhk.a3310_final_proj.firebase;
 
 import android.util.Log;
 
@@ -11,16 +11,13 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import edu.cuhk.a3310_final_proj.models.Trip;
 import edu.cuhk.a3310_final_proj.models.User;
@@ -144,44 +141,24 @@ public class FirestoreManager {
             trip.setOwner_id(currentUser.getUid());
         }
 
-        // For consistency, set owner_id field directly using a Map
-        Map<String, Object> tripData = new HashMap<>();
-        tripData.put("name", trip.getName());
-        tripData.put("destination", trip.getDestination());
-        tripData.put("startDate", trip.getStartDate());
-        tripData.put("endDate", trip.getEndDate());
-        tripData.put("flightNumber", trip.getFlightNumber());
-        tripData.put("budget", trip.getBudget());
-        tripData.put("currency", trip.getCurrency());
-        tripData.put("notes", trip.getNotes());
-        tripData.put("imageUrl", trip.getImageUrl());
-        tripData.put("locations", trip.getLocations());
-        tripData.put("documents", trip.getDocuments());
-        tripData.put("createdAt", trip.getCreatedAt());
-        tripData.put("updatedAt", trip.getUpdatedAt());
-
-        // Ensure we use owner_id (with underscore) to match the field in Firestore
-        tripData.put("owner_id", currentUser.getUid());
-
         // Update timestamps
-        tripData.put("updatedAt", new Date());
+        trip.setUpdatedAt(new Date());
         if (trip.getCreatedAt() == null) {
-            tripData.put("createdAt", new Date());
+            trip.setCreatedAt(new Date());
         }
 
         CollectionReference tripsRef = db.collection(TRIPS_COLLECTION);
 
         if (trip.getId() == null || trip.getId().isEmpty()) {
             // Create new trip
-            tripsRef.add(tripData)
+            tripsRef.add(trip)
                     .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                         @Override
                         public void onSuccess(DocumentReference documentReference) {
                             trip.setId(documentReference.getId());
 
                             // Update the document with its ID
-                            tripData.put("id", documentReference.getId());
-                            documentReference.set(tripData)
+                            documentReference.set(trip)
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
@@ -204,9 +181,8 @@ public class FirestoreManager {
                     });
         } else {
             // Update existing trip
-            tripData.put("id", trip.getId());
             tripsRef.document(trip.getId())
-                    .set(tripData)
+                    .set(trip)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
@@ -234,38 +210,26 @@ public class FirestoreManager {
             return;
         }
 
-        // Add more logs to debug the Firestore query
-        Log.d("FirestoreManager", "Getting trips for user: " + currentUser.getUid());
-
         db.collection(TRIPS_COLLECTION)
-                .whereEqualTo("owner_id", currentUser.getUid())
+                .whereEqualTo("ownerId", currentUser.getUid())
                 .orderBy("startDate", Query.Direction.DESCENDING)
-                .orderBy(FieldPath.documentId(), Query.Direction.DESCENDING)
                 .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    Log.d("FirestoreManager", "Query succeeded, got " + queryDocumentSnapshots.size() + " trips");
-                    List<Trip> trips = new ArrayList<>();
-
-                    for (DocumentSnapshot document : queryDocumentSnapshots) {
-                        try {
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        List<Trip> trips = new ArrayList<>();
+                        for (DocumentSnapshot document : queryDocumentSnapshots) {
                             Trip trip = document.toObject(Trip.class);
-                            if (trip != null) {
-                                // Don't rely on document.toObject to set the ID
-                                // Always explicitly set it from the document ID
-                                trip.setId(document.getId());
-                                trips.add(trip);
-                                Log.d("FirestoreManager", "Added trip: " + trip.getName());
-                            }
-                        } catch (Exception e) {
-                            Log.e("FirestoreManager", "Error converting document: " + document.getId(), e);
+                            trips.add(trip);
                         }
+                        listener.onSuccess(trips);
                     }
-
-                    listener.onSuccess(trips);
                 })
-                .addOnFailureListener(e -> {
-                    Log.e("FirestoreManager", "Failed to get trips: " + e.getMessage(), e);
-                    listener.onFailure(e);
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        listener.onFailure(e);
+                    }
                 });
     }
 

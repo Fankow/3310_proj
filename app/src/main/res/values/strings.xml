@@ -25,4 +25,21 @@
     <string name="currency">Currency</string>
     <string name="notes">Notes (Optional)</string>
     <string name="google_maps_api_key">YOUR_API_KEY_HERE</string>
+    <string-array name="currencies">
+        <item>USD</item>
+        <item>EUR</item>
+        <item>JPY</item>
+        <item>GBP</item>
+        <item>AUD</item>
+        <item>CAD</item>
+        <item>CHF</item>
+        <item>CNY</item>
+        <item>HKD</item>
+        <item>SGD</item>
+        <item>INR</item>
+        <item>KRW</item>
+        <item>MYR</item>
+        <item>THB</item>
+        <item>VND</item>
+    </string-array>
 </resources>

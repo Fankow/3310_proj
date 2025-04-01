@@ -1,46 +1,31 @@
 package edu.cuhk.a3310_final_proj.models;
 
-import com.google.firebase.firestore.DocumentId;
-import com.google.firebase.firestore.PropertyName;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class Trip {
 
-    @DocumentId
     private String id;
 
     private String name;
     private String destination;
 
-    @PropertyName("start_date")
     private Date startDate;
-
-    @PropertyName("end_date")
     private Date endDate;
 
     private double budget;
     private String currency = "USD";
     private String notes;
 
-    @PropertyName("flight_number")
     private String flightNumber;
-
-    @PropertyName("owner_id")
-    private String ownerId;
+    private String owner_id;
 
     private List<Location> locations = new ArrayList<>();
     private List<Expense> expenses = new ArrayList<>();
 
-    @PropertyName("image_url")
     private String imageUrl;
-
-    @PropertyName("created_at")
     private Date createdAt;
-
-    @PropertyName("updated_at")
     private Date updatedAt;
 
     private List<Document> documents = new ArrayList<>();
@@ -86,22 +71,18 @@ public class Trip {
         this.destination = destination;
     }
 
-    @PropertyName("start_date")
     public Date getStartDate() {
         return startDate;
     }
 
-    @PropertyName("start_date")
     public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
 
-    @PropertyName("end_date")
     public Date getEndDate() {
         return endDate;
     }
 
-    @PropertyName("end_date")
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
@@ -130,24 +111,20 @@ public class Trip {
         this.notes = notes;
     }
 
-    @PropertyName("flight_number")
     public String getFlightNumber() {
         return flightNumber;
     }
 
-    @PropertyName("flight_number")
     public void setFlightNumber(String flightNumber) {
         this.flightNumber = flightNumber;
     }
 
-    @PropertyName("owner_id")
-    public String getOwnerId() {
-        return ownerId;
+    public String getOwner_id() {
+        return owner_id;
     }
 
-    @PropertyName("owner_id")
-    public void setOwnerId(String ownerId) {
-        this.ownerId = ownerId;
+    public void setOwner_id(String owner_id) {
+        this.owner_id = owner_id;
     }
 
     public List<Location> getLocations() {
@@ -166,32 +143,26 @@ public class Trip {
         this.expenses = expenses;
     }
 
-    @PropertyName("image_url")
     public String getImageUrl() {
         return imageUrl;
     }
 
-    @PropertyName("image_url")
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
 
-    @PropertyName("created_at")
     public Date getCreatedAt() {
         return createdAt;
     }
 
-    @PropertyName("created_at")
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
 
-    @PropertyName("updated_at")
     public Date getUpdatedAt() {
         return updatedAt;
     }
 
-    @PropertyName("updated_at")
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }

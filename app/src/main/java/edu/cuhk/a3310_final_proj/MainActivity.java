@@ -15,6 +15,7 @@ import edu.cuhk.a3310_final_proj.fragments.CurrencyFragment;
 import edu.cuhk.a3310_final_proj.fragments.HomeFragment;
 import edu.cuhk.a3310_final_proj.fragments.PreferencesFragment;
 import edu.cuhk.a3310_final_proj.fragments.TripPlanningFragment;
+import edu.cuhk.a3310_final_proj.fragments.TripViewFragment;
 import edu.cuhk.a3310_final_proj.fragments.WeatherFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -48,10 +49,13 @@ public class MainActivity extends AppCompatActivity {
                 selectedFragment = new TripPlanningFragment();
             } else if (itemId == R.id.nav_currency) {
                 selectedFragment = new CurrencyFragment();
-            } else if (itemId == R.id.nav_weather) {
-                selectedFragment = new WeatherFragment();
-            } else if (itemId == R.id.nav_settings) {
+            } // Comment out the weather tab temporarily
+        /*else if (itemId == R.id.nav_weather) {
+            selectedFragment = new WeatherFragment();
+        }*/ else if (itemId == R.id.nav_settings) {
                 selectedFragment = new PreferencesFragment();
+            } else if (itemId == R.id.nav_trip) {
+                selectedFragment = new TripViewFragment();
             }
 
             if (selectedFragment != null) {

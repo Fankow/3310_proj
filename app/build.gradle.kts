@@ -77,4 +77,5 @@ dependencies {
     implementation(libs.glide)
 
     implementation(libs.places) // Places API
+    implementation("com.google.android.gms:play-services-maps:19.0.0")
 }
