@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.content.Intent;
+import android.net.Uri;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -50,6 +52,10 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
     public void onBindViewHolder(@NonNull LocationViewHolder holder, int position) {
         Location location = locations.get(position);
         holder.bind(location, position);
+
+        holder.btnOpenInMaps.setOnClickListener(v -> {
+            openInGoogleMaps(location);
+        });
     }
 
     @Override
@@ -87,7 +93,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
     class LocationViewHolder extends RecyclerView.ViewHolder {
 
         TextView tvLocationName, tvLocationTime;
-        ImageButton btnEdit, btnDelete;
+        ImageButton btnEdit, btnDelete, btnOpenInMaps;
 
         public LocationViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -95,6 +101,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
             tvLocationTime = itemView.findViewById(R.id.tv_location_time);
             btnEdit = itemView.findViewById(R.id.btn_edit_location);
             btnDelete = itemView.findViewById(R.id.btn_delete_location);
+            btnOpenInMaps = itemView.findViewById(R.id.btn_open_in_maps);
         }
 
         public void bind(Location location, int position) {
@@ -124,5 +131,9 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
                 }
             });
         }
+    }
+
+    private void openInGoogleMaps(Location location) {
+        // Implementation for opening location in Google Maps
     }
 }

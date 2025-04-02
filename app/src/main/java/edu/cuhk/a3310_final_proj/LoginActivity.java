@@ -35,21 +35,21 @@ public class LoginActivity extends AppCompatActivity {
 
         // Check if user is already logged in
         FirebaseAuth auth = FirebaseAuth.getInstance();
-        if (auth.getCurrentUser() != null) {
-            // User is already logged in, log details
-            String userId = auth.getCurrentUser().getUid();
-            String email = auth.getCurrentUser().getEmail();
-            Log.d("LoginFlow", "User already logged in - UID: " + userId + ", Email: " + email);
-
-            // User is already logged in, go directly to MainActivity
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-            finish();
-            return; // Exit onCreate to prevent further initialization
-        } else {
-            Log.d("LoginFlow", "No user is currently logged in, showing login screen");
-        }
+//        if (auth.getCurrentUser() != null) {
+//            // User is already logged in, log details
+//            String userId = auth.getCurrentUser().getUid();
+//            String email = auth.getCurrentUser().getEmail();
+//            Log.d("LoginFlow", "User already logged in - UID: " + userId + ", Email: " + email);
+//
+//            // User is already logged in, go directly to MainActivity
+//            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//            startActivity(intent);
+//            finish();
+//            return; // Exit onCreate to prevent further initialization
+//        } else {
+//            Log.d("LoginFlow", "No user is currently logged in, showing login screen");
+//        }
 
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);

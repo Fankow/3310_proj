@@ -19,6 +19,8 @@ public class Expense {
 
     // Required empty constructor for Firestore
     public Expense() {
+        // Empty constructor required for Firestore
+        this.date = new Date(); // Set default date
     }
 
     // Getters and Setters

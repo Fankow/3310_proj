@@ -17,7 +17,6 @@ public class CurrencyFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        // We'll create a simple layout for now - replace with actual layout later
         return inflater.inflate(R.layout.fragment_currency, container, false);
     }
 }

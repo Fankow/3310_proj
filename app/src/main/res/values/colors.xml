@@ -9,5 +9,8 @@
     <color name="location_background">#F9F9F9</color>
     <color name="primary_light">#E8E0FF</color>
     <color name="text_secondary">#757575</color>
-    <!-- Add more colors as needed -->
+    <color name="day_item">#E9E9E9</color>
+    <color name="budget_good">#4CAF50</color> <!-- Green -->
+    <color name="budget_warning">#FF9800</color> <!-- Orange -->
+    <color name="budget_danger">#F44336</color> <!-- Red -->
 </resources>

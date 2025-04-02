@@ -471,7 +471,7 @@ public class TripPlanningFragment extends Fragment implements PlacesAutocomplete
 
         // Parse dates
         try {
-            if (!etStartDate.getText().isEmpty()) {
+            if (etStartDate.getText() != null && etStartDate.getText().length() > 0) {
                 trip.setStartDate(dateFormat.parse(etStartDate.getText().toString()));
             }
             if (!etEndDate.getText().isEmpty()) {

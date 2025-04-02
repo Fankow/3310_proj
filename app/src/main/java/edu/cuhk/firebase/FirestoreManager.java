@@ -160,6 +160,11 @@ public class FirestoreManager {
         tripData.put("createdAt", trip.getCreatedAt());
         tripData.put("updatedAt", trip.getUpdatedAt());
 
+        // Ensure expenses are properly included
+        if (trip.getExpenses() != null) {
+            tripData.put("expenses", trip.getExpenses());
+        }
+
         // Ensure we use owner_id (with underscore) to match the field in Firestore
         tripData.put("owner_id", currentUser.getUid());
 

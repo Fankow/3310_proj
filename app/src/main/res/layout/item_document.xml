@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="10dp"
-    android:background="@drawable/bg_document_item"
+    android:background="@color/day_item"
     android:layout_marginBottom="8dp">
 
     <LinearLayout
