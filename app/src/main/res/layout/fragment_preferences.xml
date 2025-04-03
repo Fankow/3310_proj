@@ -4,20 +4,26 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/background">
-
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/settings"
-        android:textSize="32sp"
-        android:textStyle="bold"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"/>
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/settings"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:textSize="32sp"
+            android:textStyle="bold"/>
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="LOGOUT"
-        android:gravity="center"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="LOGOUT"
+            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="parent" />
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

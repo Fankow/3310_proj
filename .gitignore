@@ -65,6 +65,9 @@ google-services.json
 # API keys
 apikey.properties
 
+# API key files
+**/*/res/values/api_keys.xml
+
 # Crashlytics config file
 crashlytics.properties
 

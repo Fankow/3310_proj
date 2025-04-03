@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="nav_trip_view" type="id" />
+    <item name="amountInput" type="id" />
+    <item name="toCurrencySpinner" type="id" />
+    <item name="historyButton" type="id" />
+    <item name="resultText" type="id" />
+    <item name="convertButton" type="id" />
+    <item name="fromCurrencySpinner" type="id" />
 </resources>

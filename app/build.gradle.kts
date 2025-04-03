@@ -23,11 +23,14 @@ android {
         // Use a safer approach to read the API key
         val properties = readLocalProperties()
         val mapsApiKey = properties.getProperty("MAPS_API_KEY", "")
-
+        val exchangeRatesApiKey = properties.getProperty("EXCHANGE_RATES_API_KEY", "")
         // Create a string resource with the API key
         resValue("string", "google_maps_api_key", mapsApiKey)
+        buildConfigField("String", "EXCHANGE_RATES_API_KEY", "\"${exchangeRatesApiKey}\"")
     }
-
+    buildFeatures {
+        buildConfig = true
+    }
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -77,5 +80,8 @@ dependencies {
     implementation(libs.glide)
 
     implementation(libs.places) // Places API
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")
     implementation("com.google.android.gms:play-services-maps:19.0.0")
 }
