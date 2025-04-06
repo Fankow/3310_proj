@@ -3,6 +3,9 @@ package edu.cuhk.a3310_final_proj.models;
 import com.google.firebase.firestore.DocumentId;
 import com.google.firebase.firestore.PropertyName;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class User {
 
     @DocumentId
@@ -10,7 +13,7 @@ public class User {
     private String email;
     private String displayName;
     private String photoUrl;
-
+    private List<String> monitoredCurrencies;
     @PropertyName("default_currency")
     private String defaultCurrency = "USD";
 
@@ -72,16 +75,6 @@ public class User {
         this.defaultCurrency = defaultCurrency;
     }
 
-    @PropertyName("preferred_language")
-    public String getPreferredLanguage() {
-        return preferredLanguage;
-    }
-
-    @PropertyName("preferred_language")
-    public void setPreferredLanguage(String preferredLanguage) {
-        this.preferredLanguage = preferredLanguage;
-    }
-
     @PropertyName("dark_mode")
     public boolean isDarkMode() {
         return darkMode;
@@ -90,5 +83,18 @@ public class User {
     @PropertyName("dark_mode")
     public void setDarkMode(boolean darkMode) {
         this.darkMode = darkMode;
+    }
+
+    @PropertyName("monitored_currencies")
+    public List<String> getMonitoredCurrencies() {
+        if (monitoredCurrencies == null) {
+            monitoredCurrencies = new ArrayList<>();
+        }
+        return monitoredCurrencies;
+    }
+
+    @PropertyName("monitored_currencies")
+    public void setMonitoredCurrencies(List<String> monitoredCurrencies) {
+        this.monitoredCurrencies = monitoredCurrencies;
     }
 }

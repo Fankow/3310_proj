@@ -11,27 +11,30 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.content.Intent;
-import androidx.appcompat.app.AlertDialog;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.firestore.*;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.gson.annotations.SerializedName;
-import edu.cuhk.a3310_final_proj.network.ExchangeRateResponse;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import edu.cuhk.a3310_final_proj.BuildConfig;
+import edu.cuhk.a3310_final_proj.R;
+import edu.cuhk.a3310_final_proj.adapters.MonitoredCurrencyAdapter;
 import edu.cuhk.a3310_final_proj.network.CurrencyConverter;
-import edu.cuhk.a3310_final_proj.LoginActivity;
-
-import java.util.*;
-
+import edu.cuhk.a3310_final_proj.network.ExchangeRateResponse;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -40,19 +43,21 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
-import edu.cuhk.a3310_final_proj.R;
-
 public class CurrencyFragment extends Fragment {
 
     private static final String TAG = "CurrencyFragment";
-    private Spinner fromSpinner, toSpinner;
+    private Spinner sourceCurrencySpinner;
     private EditText amountInput;
-    private TextView resultText;
+    private Button convertButton;
     private FirebaseFirestore db;
     private String userId;
-    private List<String> favoriteCurrencies = new ArrayList<>();
-    private ArrayAdapter<String> spinnerAdapter;
-    private Call<edu.cuhk.a3310_final_proj.network.ExchangeRateResponse> activeCall;
+    private Call<ExchangeRateResponse> activeCall;
+
+    private RecyclerView monitoredCurrenciesRecycler;
+    private MonitoredCurrencyAdapter monitoredAdapter;
+    private Button addMonitoredCurrencyButton;
+    private List<String> monitoredCurrencies = new ArrayList<>();
+    private Map<String, Double> currentRates = new HashMap<>();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -64,43 +69,46 @@ public class CurrencyFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initializeFirebase();
+
+        // Initialize Firebase
+        db = FirebaseFirestore.getInstance();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            userId = user.getUid();
+        }
+
         initializeUI(view);
         loadUserPreferences();
     }
 
-    private void initializeFirebase() {
-        db = FirebaseFirestore.getInstance();
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-        if (user == null) {
-            navigateToLoginWithMessage("Session expired, please login again");
-            return;
-        }
-
-        userId = user.getUid();
-    }
-
     private void initializeUI(View view) {
-        fromSpinner = view.findViewById(R.id.fromCurrencySpinner);
-        toSpinner = view.findViewById(R.id.toCurrencySpinner);
+        // Initialize UI components
+        sourceCurrencySpinner = view.findViewById(R.id.sourceCurrencySpinner);
         amountInput = view.findViewById(R.id.amountInput);
-        resultText = view.findViewById(R.id.resultText);
+        convertButton = view.findViewById(R.id.convertButton);
 
-        // Initialize spinner with default values
-        List<String> defaultCurrencies = Arrays.asList("USD", "HKD", "EUR", "GBP", "JPY");
-        spinnerAdapter = new ArrayAdapter<>(
-                requireContext(),
-                android.R.layout.simple_spinner_item,
-                new ArrayList<>(defaultCurrencies)
-        );
+        // Setup convert button click listener
+        convertButton.setOnClickListener(v -> performConversion());
+
+        // Initialize monitored currencies recyclerView
+        monitoredCurrenciesRecycler = view.findViewById(R.id.monitored_currencies_recycler);
+        monitoredCurrenciesRecycler.setLayoutManager(new LinearLayoutManager(requireContext()));
+
+        monitoredAdapter = new MonitoredCurrencyAdapter(requireContext(), monitoredCurrencies,
+                currency -> removeMonitoredCurrency(currency));
+        monitoredCurrenciesRecycler.setAdapter(monitoredAdapter);
+
+        addMonitoredCurrencyButton = view.findViewById(R.id.add_monitored_currency_button);
+        addMonitoredCurrencyButton.setOnClickListener(v -> showAddCurrencyDialog());
+
+        // Initialize spinner with common currencies
+        List<String> currencies = Arrays.asList("USD", "EUR", "GBP", "JPY", "AUD", "CAD", "CHF", "CNY", "HKD", "SGD");
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, currencies);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        fromSpinner.setAdapter(spinnerAdapter);
-        toSpinner.setAdapter(spinnerAdapter);
+        sourceCurrencySpinner.setAdapter(spinnerAdapter);
 
-        // Set up button click listeners
-        view.findViewById(R.id.convertButton).setOnClickListener(v -> performConversion());
-        view.findViewById(R.id.historyButton).setOnClickListener(v -> showConversionHistory());
+        // Set default value
+        sourceCurrencySpinner.setSelection(currencies.indexOf("USD"));
     }
 
     private void loadUserPreferences() {
@@ -116,7 +124,22 @@ public class CurrencyFragment extends Fragment {
                         if (document.exists()) {
                             Map<String, Object> prefs = (Map<String, Object>) document.get("preferences");
                             if (prefs != null) {
-                                updateSpinnersWithPreferences(prefs);
+                                // Load spinner default selection if saved
+                                String defaultSource = (String) prefs.get("defaultSourceCurrency");
+                                if (defaultSource != null) {
+                                    int position = ((ArrayAdapter) sourceCurrencySpinner.getAdapter()).getPosition(defaultSource);
+                                    if (position >= 0) {
+                                        sourceCurrencySpinner.setSelection(position);
+                                    }
+                                }
+
+                                // Load monitored currencies
+                                List<String> monitored = (List<String>) prefs.get("monitoredCurrencies");
+                                if (monitored != null && !monitored.isEmpty()) {
+                                    monitoredCurrencies.clear();
+                                    monitoredCurrencies.addAll(monitored);
+                                    monitoredAdapter.notifyDataSetChanged();
+                                }
                             }
                         }
                     } else {
@@ -126,37 +149,8 @@ public class CurrencyFragment extends Fragment {
                 });
     }
 
-    private void updateSpinnersWithPreferences(Map<String, Object> prefs) {
-        String baseCurrency = (String) prefs.get("baseCurrency");
-        List<String> favorites = (List<String>) prefs.get("favoriteCurrencies");
-
-        if (favorites != null) {
-            favoriteCurrencies.clear();
-            favoriteCurrencies.addAll(favorites);
-            updateSpinnerOrder(baseCurrency);
-        }
-    }
-
-    private void updateSpinnerOrder(String baseCurrency) {
-        List<String> orderedCurrencies = new ArrayList<>(favoriteCurrencies);
-        for (String currency : Arrays.asList("USD", "HKD", "EUR", "GBP", "JPY")) {
-            if (!orderedCurrencies.contains(currency)) {
-                orderedCurrencies.add(currency);
-            }
-        }
-
-        spinnerAdapter.clear();
-        spinnerAdapter.addAll(orderedCurrencies);
-
-        if (baseCurrency != null) {
-            int position = orderedCurrencies.indexOf(baseCurrency);
-            if (position >= 0) {
-                fromSpinner.setSelection(position);
-            }
-        }
-    }
-
     private void performConversion() {
+        String sourceCurrency = sourceCurrencySpinner.getSelectedItem().toString();
         String amountStr = amountInput.getText().toString();
 
         if (amountStr.isEmpty()) {
@@ -164,106 +158,203 @@ public class CurrencyFragment extends Fragment {
             return;
         }
 
+        if (monitoredCurrencies.isEmpty()) {
+            Toast.makeText(requireContext(), "Please add currencies to monitor", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        double amount;
         try {
-            String from = fromSpinner.getSelectedItem().toString();
-            String to = toSpinner.getSelectedItem().toString();
-            double amount = Double.parseDouble(amountStr);
+            amount = Double.parseDouble(amountStr);
+        } catch (NumberFormatException e) {
+            Toast.makeText(requireContext(), "Invalid amount", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-            activeCall = CurrencyConverter.convert(
-                    from,
-                    to,
-                    amount,
-                    false,
-                    new CurrencyConverter.Callback() {
-                @Override
-                public void onSuccess(double result) {
-                    requireActivity().runOnUiThread(() -> {
-                        resultText.setText(String.format("%.2f %s = %.2f %s",
-                                amount, from, result, to));
-                        saveConversionHistory(from, to, amount, result);
-                    });
-                }
+        // Cancel previous call if active
+        if (activeCall != null) {
+            activeCall.cancel();
+        }
 
-                @Override
-                public void onFailure(String error) {
-                    requireActivity().runOnUiThread(()
-                            -> Toast.makeText(requireContext(), error, Toast.LENGTH_LONG).show());
+        // Create Retrofit instance
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(CurrencyConverter.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        ExchangeRateService service = retrofit.create(ExchangeRateService.class);
+        activeCall = service.getRates(sourceCurrency, CurrencyConverter.API_KEY);
+
+        Toast.makeText(requireContext(), "Converting...", Toast.LENGTH_SHORT).show();
+
+        activeCall.enqueue(new retrofit2.Callback<ExchangeRateResponse>() {
+            @Override
+            public void onResponse(Call<ExchangeRateResponse> call, Response<ExchangeRateResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Log.d(TAG, "Rates received successfully");
+                    currentRates = response.body().getRates();
+
+                    // Create a map to store the converted values
+                    Map<String, Double> convertedValues = new HashMap<>();
+
+                    // Calculate converted values for each monitored currency
+                    for (String currency : monitoredCurrencies) {
+                        Double rate = currentRates.get(currency);
+                        if (rate != null) {
+                            double convertedAmount = amount * rate;
+                            convertedValues.put(currency, convertedAmount);
+                        }
+                    }
+
+                    // Update the adapter with both rates and converted values
+                    monitoredAdapter.updateRatesAndValues(currentRates, convertedValues);
+
+                    // Save this conversion to history
+                    saveConversionToHistory(sourceCurrency, monitoredCurrencies, amount, convertedValues);
+                } else {
+                    Log.e(TAG, "Failed to load rates: " + response.code());
+                    Toast.makeText(requireContext(), "Failed to load rates", Toast.LENGTH_SHORT).show();
                 }
             }
-            );
 
-        } catch (NumberFormatException e) {
-            Toast.makeText(requireContext(), "Invalid number format", Toast.LENGTH_SHORT).show();
-        } catch (Exception e) {
-            Toast.makeText(requireContext(), "Conversion failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
+            @Override
+            public void onFailure(Call<ExchangeRateResponse> call, Throwable t) {
+                if (!call.isCanceled()) {
+                    Log.e(TAG, "Network error", t);
+                    Toast.makeText(requireContext(), "Network error", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
-    private void saveConversionHistory(String from, String to, double amount, double result) {
+    private void saveConversionToHistory(String from, List<String> toList, double amount, Map<String, Double> results) {
         if (userId == null) {
             return;
         }
 
-        Map<String, Object> conversion = new HashMap<>();
-        conversion.put("from", from);
-        conversion.put("to", to);
-        conversion.put("amount", amount);
-        conversion.put("result", result);
-        conversion.put("timestamp", new Date());
+        Map<String, Object> historyItem = new HashMap<>();
+        historyItem.put("fromCurrency", from);
+        historyItem.put("amount", amount);
+        historyItem.put("timestamp", System.currentTimeMillis());
+
+        // Save the list of target currencies and their converted values
+        historyItem.put("toCurrencies", toList);
+        historyItem.put("results", results);
 
         db.collection("users").document(userId)
-                .update("conversionHistory", FieldValue.arrayUnion(conversion))
-                .addOnSuccessListener(aVoid -> Log.d(TAG, "Conversion saved to history"))
+                .collection("conversionHistory")
+                .add(historyItem)
+                .addOnSuccessListener(documentReference -> Log.d(TAG, "Conversion saved with ID: " + documentReference.getId()))
+                .addOnFailureListener(e -> Log.w(TAG, "Error adding conversion", e));
+    }
+
+    private void showAddCurrencyDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Add Currency to Monitor");
+
+        // Create a list of available currencies (excluding already monitored ones)
+        List<String> availableCurrencies = new ArrayList<>(Arrays.asList(
+                "USD", "EUR", "GBP", "JPY", "AUD", "CAD", "CHF", "CNY", "HKD", "SGD"
+        ));
+        availableCurrencies.removeAll(monitoredCurrencies);
+
+        if (availableCurrencies.isEmpty()) {
+            Toast.makeText(requireContext(), "All currencies are already monitored", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        final String[] currencyArray = availableCurrencies.toArray(new String[0]);
+
+        builder.setItems(currencyArray, (dialog, which) -> {
+            String selectedCurrency = currencyArray[which];
+            addMonitoredCurrency(selectedCurrency);
+        });
+
+        builder.setNegativeButton("Cancel", null);
+        builder.show();
+    }
+
+    private void addMonitoredCurrency(String currency) {
+        if (!monitoredCurrencies.contains(currency)) {
+            monitoredCurrencies.add(currency);
+            monitoredAdapter.notifyItemInserted(monitoredCurrencies.size() - 1);
+            saveMonitoredCurrencies();
+        }
+    }
+
+    private void removeMonitoredCurrency(String currency) {
+        int position = monitoredCurrencies.indexOf(currency);
+        if (position != -1) {
+            monitoredCurrencies.remove(position);
+            monitoredAdapter.notifyItemRemoved(position);
+            saveMonitoredCurrencies();
+        }
+    }
+
+    private void saveMonitoredCurrencies() {
+        if (userId == null) {
+            return;
+        }
+
+        // First check if the document exists
+        db.collection("users").document(userId)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    Map<String, Object> preferences = new HashMap<>();
+                    preferences.put("monitoredCurrencies", monitoredCurrencies);
+                    preferences.put("defaultSourceCurrency", sourceCurrencySpinner.getSelectedItem().toString());
+
+                    if (documentSnapshot.exists()) {
+                        // Document exists - update it
+                        db.collection("users").document(userId)
+                                .update("preferences", preferences)
+                                .addOnSuccessListener(aVoid
+                                        -> Log.d(TAG, "Monitored currencies saved successfully"))
+                                .addOnFailureListener(e -> {
+                                    handleFirestoreError(e);
+                                    Log.w(TAG, "Error saving monitored currencies", e);
+                                });
+                    } else {
+                        // Document doesn't exist - create it
+                        Map<String, Object> userData = new HashMap<>();
+                        userData.put("preferences", preferences);
+                        userData.put("email", FirebaseAuth.getInstance().getCurrentUser().getEmail());
+
+                        db.collection("users").document(userId)
+                                .set(userData)
+                                .addOnSuccessListener(aVoid
+                                        -> Log.d(TAG, "User profile created with monitored currencies"))
+                                .addOnFailureListener(e -> {
+                                    handleFirestoreError(e);
+                                    Log.w(TAG, "Error creating user profile", e);
+                                });
+                    }
+                })
                 .addOnFailureListener(e -> {
                     handleFirestoreError(e);
-                    Log.w(TAG, "Error saving conversion history", e);
+                    Log.w(TAG, "Error loading user document", e);
                 });
     }
 
-    private void showConversionHistory() {
-        // Implement navigation to history fragment
-        requireActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, new ConversionHistoryFragment())
-                .addToBackStack("currency_history")
-                .commit();
-    }
-
     private void handleFirestoreError(Exception e) {
-        Log.w(TAG, "Firestore operation failed", e);
-
-        if (e instanceof FirebaseFirestoreException) {
-            FirebaseFirestoreException firestoreEx = (FirebaseFirestoreException) e;
-            if (firestoreEx.getCode() == FirebaseFirestoreException.Code.PERMISSION_DENIED) {
-                navigateToLoginWithMessage("Session expired, please login again");
-            }
-        }
+        Toast.makeText(requireContext(), "Database error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
     }
 
-    private void navigateToLoginWithMessage(String message) {
-        new AlertDialog.Builder(requireContext())
-                .setTitle("Authentication Required")
-                .setMessage(message)
-                .setPositiveButton("Login", (d, w) -> {
-                    FirebaseAuth.getInstance().signOut();
-                    startActivity(new Intent(requireContext(), LoginActivity.class));
-                    requireActivity().finish();
-                })
-                .setCancelable(false)
-                .show();
-    }
+    // Interface for currency rate API
+    private interface ExchangeRateService {
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (activeCall != null && !activeCall.isCanceled()) {
-            activeCall.cancel();
-            Log.d(TAG, "Network request cancelled");
-        }
+        @GET("{base}")
+        Call<ExchangeRateResponse> getRates(
+                @Path("base") String baseCurrency,
+                @Query("api_key") String apiKey
+        );
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        spinnerAdapter = null;
+        if (activeCall != null) {
+            activeCall.cancel();
+        }
     }
 }

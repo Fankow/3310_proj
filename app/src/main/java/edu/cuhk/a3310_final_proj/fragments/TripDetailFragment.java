@@ -62,7 +62,7 @@ import edu.cuhk.a3310_final_proj.adapters.DocumentAdapter;
 import edu.cuhk.a3310_final_proj.adapters.ExpenseAdapter;
 import edu.cuhk.a3310_final_proj.models.DayItineraryItem;
 import edu.cuhk.a3310_final_proj.models.Location;
-import edu.cuhk.firebase.FirestoreManager;
+import edu.cuhk.a3310_final_proj.firebase.FirestoreManager;
 import edu.cuhk.a3310_final_proj.models.Expense;
 import edu.cuhk.a3310_final_proj.models.Trip;
 

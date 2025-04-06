@@ -25,6 +25,8 @@
     <string name="currency">Currency</string>
     <string name="notes">Notes (Optional)</string>
     <string name="google_maps_api_key">YOUR_API_KEY_HERE</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
     <string-array name="currencies">
         <item>USD</item>
         <item>EUR</item>

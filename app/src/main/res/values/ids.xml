@@ -7,4 +7,12 @@
     <item name="resultText" type="id" />
     <item name="convertButton" type="id" />
     <item name="fromCurrencySpinner" type="id" />
+    <item name="drawer_layout" type="id" />
+    <item name="nav_view" type="id" />
+    <item name="toolbar" type="id" />
+    <item name="nav_trips" type="id" />
+    <item name="nav_plan" type="id" />
+    <item name="nav_currency" type="id" />
+    <item name="nav_settings" type="id" />
+    <item name="home" type="id"/>
 </resources>

@@ -14,9 +14,10 @@ import java.util.Map;
 import edu.cuhk.a3310_final_proj.BuildConfig;
 
 public class CurrencyConverter {
-    private static final String BASE_URL = "https://api.exchangerate-api.com/v4/latest/";
+
+    public static final String BASE_URL = "https://api.exchangerate-api.com/v4/latest/";
+    public static final String API_KEY = BuildConfig.EXCHANGE_RATES_API_KEY;
     private static final int CACHE_DURATION = 30 * 60 * 1000; // 30 minutes
-    private static String apiKey = BuildConfig.EXCHANGE_RATES_API_KEY;
     private static Map<String, CachedRate> rateCache = new HashMap<>();
 
     public static Call<ExchangeRateResponse> convert(
@@ -45,7 +46,7 @@ public class CurrencyConverter {
                 .build();
 
         CurrencyService service = retrofit.create(CurrencyService.class);
-        Call<ExchangeRateResponse> call = service.getRates(from, apiKey);
+        Call<ExchangeRateResponse> call = service.getRates(from, API_KEY);
 
         call.enqueue(new retrofit2.Callback<ExchangeRateResponse>() {
             @Override
@@ -77,6 +78,7 @@ public class CurrencyConverter {
 
     // Cached rate class
     private static class CachedRate {
+
         double rate;
         long timestamp;
 
@@ -88,13 +90,15 @@ public class CurrencyConverter {
 
     // Response callback interface
     public interface Callback {
+
         void onSuccess(double result);
 
         void onFailure(String error);
     }
 
     // Retrofit service interface
-    interface CurrencyService {
+    public interface CurrencyService {
+
         @GET("{base}")
         Call<ExchangeRateResponse> getRates(
                 @Path("base") String baseCurrency,

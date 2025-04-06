@@ -1,4 +1,4 @@
-package edu.cuhk.firebase;
+package edu.cuhk.a3310_final_proj.firebase;
 
 import android.util.Log;
 

@@ -1,75 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
+    android:fillViewport="true"
     android:background="@color/background">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="From Currency"
-        android:textSize="16sp"
-        android:layout_marginBottom="8dp"/>
+        android:orientation="vertical"
+        android:padding="16dp">
 
-    <Spinner
-        android:id="@+id/fromCurrencySpinner"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@drawable/spinner_background"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Source Currency"
+            android:textSize="16sp"
+            android:layout_marginBottom="8dp"/>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="To Currency"
-        android:textSize="16sp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="8dp"/>
+        <Spinner
+            android:id="@+id/sourceCurrencySpinner"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/spinner_background"/>
 
-    <Spinner
-        android:id="@+id/toCurrencySpinner"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@drawable/spinner_background"/>
+        <EditText
+            android:id="@+id/amountInput"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="16dp"
+            android:hint="Enter amount"
+            android:inputType="numberDecimal"
+            android:imeOptions="actionDone"
+            android:padding="12dp"
+            android:background="@drawable/edittext_background"/>
 
-    <EditText
-        android:id="@+id/amountInput"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_marginTop="24dp"
-        android:hint="Enter amount"
-        android:inputType="numberDecimal"
-        android:imeOptions="actionDone"
-        android:padding="12dp"
-        android:background="@drawable/edittext_background"/>
+        <Button
+            android:id="@+id/convertButton"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="16dp"
+            android:text="Convert to Monitored Currencies"
+            android:backgroundTint="@color/primary"
+            android:textColor="@android:color/white"/>
 
-    <Button
-        android:id="@+id/convertButton"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginTop="24dp"
-        android:text="Convert"
-        android:backgroundTint="@color/primary"
-        android:textColor="@android:color/white"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Monitored Currencies"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="8dp"/>
 
-    <TextView
-        android:id="@+id/resultText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:padding="16dp"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/monitored_currencies_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"/>
 
-    <Button
-        android:id="@+id/historyButton"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginTop="16dp"
-        android:backgroundTint="@color/secondary_color"
-        android:text="View History"
-        android:textColor="@android:color/white" />
-
-</LinearLayout>
+        <Button
+            android:id="@+id/add_monitored_currency_button"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="8dp"
+            android:text="Add Currency to Monitor"
+            android:backgroundTint="@color/secondary_color"
+            android:textColor="@android:color/white"/>
+    </LinearLayout>
+</ScrollView>

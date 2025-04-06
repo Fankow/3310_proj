@@ -76,42 +76,60 @@
             android:paddingEnd="15dp"
             android:scrollbars="none">
 
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/category_chips"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:singleLine="true">
+<!--            <com.google.android.material.chip.ChipGroup-->
+<!--                android:id="@+id/category_chips"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                app:singleLine="true">-->
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_all_trips"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checked="true"
-                    android:text="@string/all_trips" />
+<!--                <com.google.android.material.chip.Chip-->
+<!--                    android:id="@+id/chip_all_trips"-->
+<!--                    style="@style/Widget.MaterialComponents.Chip.Choice"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:checked="true"-->
+<!--                    android:text="@string/all_trips" />-->
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_upcoming"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/upcoming" />
+<!--                <com.google.android.material.chip.Chip-->
+<!--                    android:id="@+id/chip_upcoming"-->
+<!--                    style="@style/Widget.MaterialComponents.Chip.Choice"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="@string/upcoming" />-->
 
 
-                <!-- Add more chips as needed -->
-            </com.google.android.material.chip.ChipGroup>
+<!--                &lt;!&ndash; Add more chips as needed &ndash;&gt;-->
+<!--            </com.google.android.material.chip.ChipGroup>-->
         </HorizontalScrollView>
 
         <!-- Your Trips Section -->
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
             android:paddingStart="15dp"
             android:paddingTop="15dp"
-            android:paddingEnd="15dp"
-            android:text="@string/your_trips"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:paddingEnd="15dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/your_trips"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/trip_view_more"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="View more"
+                android:backgroundTint="@android:color/transparent"
+                android:textColor="#8A8A8A"
+                android:stateListAnimator="@null"
+                style="@style/Widget.MaterialComponents.Button.TextButton"/>
+        </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/trips_recycler_view"

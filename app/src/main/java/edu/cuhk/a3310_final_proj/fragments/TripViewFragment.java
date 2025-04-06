@@ -18,7 +18,7 @@ import java.util.List;
 
 import edu.cuhk.a3310_final_proj.R;
 import edu.cuhk.a3310_final_proj.adapters.TripAdapter;
-import edu.cuhk.firebase.FirestoreManager;
+import edu.cuhk.a3310_final_proj.firebase.FirestoreManager;
 import edu.cuhk.a3310_final_proj.firebase.StorageManager;
 import edu.cuhk.a3310_final_proj.models.Trip;
 
