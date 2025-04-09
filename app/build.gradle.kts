@@ -1,4 +1,3 @@
-import org.gradle.internal.os.OperatingSystem
 import java.io.File
 import java.util.Properties
 
@@ -20,11 +19,9 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        // Use a safer approach to read the API key
         val properties = readLocalProperties()
         val mapsApiKey = properties.getProperty("MAPS_API_KEY", "")
         val exchangeRatesApiKey = properties.getProperty("EXCHANGE_RATES_API_KEY", "")
-        // Create a string resource with the API key
         resValue("string", "google_maps_api_key", mapsApiKey)
         buildConfigField("String", "EXCHANGE_RATES_API_KEY", "\"${exchangeRatesApiKey}\"")
     }
@@ -46,7 +43,7 @@ android {
     }
 }
 
-// Helper function to read local.properties safely
+// helper function to read local.properties safely
 fun readLocalProperties(): Properties {
     val properties = Properties()
     val localPropertiesFile = File(rootDir, "local.properties")
@@ -71,12 +68,9 @@ dependencies {
     implementation(libs.google.firebase.auth)
     implementation(libs.google.firebase.firestore)
     implementation(libs.google.firebase.storage)
-
-    // Optional: add these if needed
     implementation(libs.google.firebase.messaging) // for notifications
     implementation(libs.play.services.maps.v1820) // for maps
 
-    // Image loading library (recommended for display of Firebase Storage images)
     implementation(libs.glide)
 
     implementation(libs.places) // Places API

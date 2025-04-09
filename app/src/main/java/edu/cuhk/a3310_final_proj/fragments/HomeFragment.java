@@ -65,13 +65,11 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         this.view = view;
 
-        // Initialize FirestoreManager for database operations
         firestoreManager = FirestoreManager.getInstance();
 
-        // Initialize views and set up listeners
         initializeViews();
 
-        // Load recent trips from Firebase
+        //load trip for homepage
         loadRecentTrips();
     }
 
@@ -79,7 +77,6 @@ public class HomeFragment extends Fragment {
      * Initializes all UI components and sets up click listeners
      */
     private void initializeViews() {
-        // Plan Trip button - navigates to trip planning screen
         planTripButton = view.findViewById(R.id.btn_plan_new_trip);
         planTripButton.setOnClickListener(v -> {
             Fragment tripPlanningFragment = new TripPlanningFragment();
@@ -89,7 +86,6 @@ public class HomeFragment extends Fragment {
                     .commit();
         });
 
-        // View More button - navigates to full trip list
         viewMoreButton = view.findViewById(R.id.trip_view_more);
         viewMoreButton.setOnClickListener(v -> {
             Fragment tripViewFragment = new TripViewFragment();
@@ -99,19 +95,13 @@ public class HomeFragment extends Fragment {
                     .commit();
         });
 
-        // RecyclerView for displaying trip previews
         tripsRecyclerView = view.findViewById(R.id.trips_recycler_view);
         tripsRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
 
-        // Create and set adapter - using simplified HomeTripAdapter which only allows clicking, not editing/deleting
         tripAdapter = new HomeTripAdapter(requireContext(), tripList, this::showTripDetails);
         tripsRecyclerView.setAdapter(tripAdapter);
     }
 
-    /**
-     * Loads a limited number of recent trips from Firestore Shows only
-     * MAX_TRIPS_TO_DISPLAY trips for preview
-     */
     private void loadRecentTrips() {
         // Load trips from Firestore database
         firestoreManager.getUserTrips(new FirestoreManager.DataCallback<List<Trip>>() {
@@ -130,7 +120,7 @@ public class HomeFragment extends Fragment {
                     tripAdapter.notifyDataSetChanged();
                     tripsRecyclerView.setVisibility(View.VISIBLE);
 
-                    // Show "View More" button only if there are more trips than we're displaying
+                    // Show "View More" button only if there are more trips than MAX_TRIPS_TO_DISPLAY
                     viewMoreButton.setVisibility(result.size() > MAX_TRIPS_TO_DISPLAY
                             ? View.VISIBLE : View.GONE);
                 } else {
@@ -153,13 +143,7 @@ public class HomeFragment extends Fragment {
             }
         });
     }
-
-    /**
-     * Opens the trip detail screen when a trip is clicked
-     *
-     * @param trip The trip to show details for
-     */
-    private void showTripDetails(Trip trip) {
+        private void showTripDetails(Trip trip) {
         // Create trip detail fragment
         Fragment tripDetailFragment = new TripDetailFragment();
 

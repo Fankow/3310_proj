@@ -42,34 +42,31 @@ public class TripViewFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Initialize RecyclerView
         tripRecyclerView = view.findViewById(R.id.trips_recycler_view);
         tripRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
 
-        // Create and set adapter
         tripAdapter = new TripAdapter(requireContext(), tripList, new TripAdapter.TripAdapterListener() {
             @Override
             public void onTripClicked(Trip trip) {
-                // Navigate to TripDetailFragment or show detail view
                 showTripDetails(trip);
             }
 
             @Override
             public void onEditTrip(Trip trip) {
-                // Navigate to TripPlanningFragment with the trip ID for editing
+                //go to trip planning fragment if edit option is click
                 openTripEditor(trip);
             }
 
             @Override
             public void onDeleteTrip(Trip trip) {
-                // Show confirmation dialog and delete trip
+                // show message for delete for trip
                 confirmDeleteTrip(trip);
             }
         });
 
         tripRecyclerView.setAdapter(tripAdapter);
 
-        // Load trips for the current user
+        // load trips
         loadUserTrips();
     }
 
@@ -79,33 +76,27 @@ public class TripViewFragment extends Fragment {
         // Log the attempt
         Log.d("TripViewFragment", "Loading trips for user");
 
-        // Reuse the FirestoreManager's getUserTrips method
         firestoreManager.getUserTrips(new FirestoreManager.DataCallback<List<Trip>>() {
             @Override
             public void onSuccess(List<Trip> result) {
-                // Log the result
                 Log.d("TripViewFragment", "Loaded " + (result != null ? result.size() : 0) + " trips");
 
-                // Update adapter with the trip list
                 tripList.clear();
                 if (result != null && !result.isEmpty()) {
                     tripList.addAll(result);
                     tripAdapter.notifyDataSetChanged();
                     showEmptyState(false);
                 } else {
-                    // Show empty state view if needed
+                    // if empty, show nothing found message
                     Log.d("TripViewFragment", "No trips found, showing empty state");
                     showEmptyState(true);
                 }
-
-                // Hide loading indicator if you have one
             }
 
             @Override
             public void onFailure(Exception e) {
                 Log.e("TripViewFragment", "Failed to load trips: " + e.getMessage(), e);
 
-                // Show a more user-friendly error message
                 String errorMessage = e.getMessage();
                 if (errorMessage != null && errorMessage.contains("FAILED_PRECONDITION")
                         && errorMessage.contains("requires an index")) {
@@ -117,22 +108,19 @@ public class TripViewFragment extends Fragment {
 
                 // Show empty state with error
                 showEmptyStateWithError();
-
-                // Hide loading indicator if you have one
             }
         });
     }
 
     private void showTripDetails(Trip trip) {
-        // Create a new fragment to show trip details
         Fragment tripDetailFragment = new TripDetailFragment();
 
-        // Pass the trip ID as argument
+        // pass the trip ID as argument to show trip detail
         Bundle args = new Bundle();
         args.putString("trip_id", trip.getId());
         tripDetailFragment.setArguments(args);
 
-        // Navigate to the trip detail fragment
+        // direct to the trip detail fragment
         getParentFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, tripDetailFragment)
                 .addToBackStack(null)
@@ -140,15 +128,14 @@ public class TripViewFragment extends Fragment {
     }
 
     private void openTripEditor(Trip trip) {
-        // Create a new fragment to edit the trip
         Fragment tripPlanningFragment = new TripPlanningFragment();
 
-        // Pass the trip ID as argument
+        // use the trip ID as argument
         Bundle args = new Bundle();
         args.putString("trip_id", trip.getId());
         tripPlanningFragment.setArguments(args);
 
-        // Navigate to the trip planning fragment
+        // direct to the trip planning fragment
         getParentFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, tripPlanningFragment)
                 .addToBackStack(null)
@@ -176,7 +163,7 @@ public class TripViewFragment extends Fragment {
                     tripList.remove(position);
                     tripAdapter.notifyItemRemoved(position);
 
-                    // Show empty state if no trips left
+                    // show  no trips left
                     if (tripList.isEmpty()) {
                         showEmptyState(true);
                     }
@@ -203,19 +190,12 @@ public class TripViewFragment extends Fragment {
     }
 
     private void showEmptyState(boolean show) {
-        // Implement to show/hide empty state view
-        // For example:
-        // emptyStateView.setVisibility(show ? View.VISIBLE : View.GONE);
-        // tripRecyclerView.setVisibility(show ? View.GONE : View.VISIBLE);
+        //  show/hide empty state view
         return;
     }
 
     private void showEmptyStateWithError() {
-        // Implement to show/hide empty state view with error
-        // For example:
-        // emptyStateView.setVisibility(View.VISIBLE);
-        // errorTextView.setVisibility(View.VISIBLE);
-        // tripRecyclerView.setVisibility(View.GONE);
+        //  show/hide empty state view with error
         return;
     }
 }

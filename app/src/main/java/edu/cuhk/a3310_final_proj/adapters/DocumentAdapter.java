@@ -104,7 +104,6 @@ public class DocumentAdapter extends RecyclerView.Adapter<DocumentAdapter.Docume
 
             tvDocumentType.setText(fileType);
 
-            // Set click listeners for view and delete
             btnView.setOnClickListener(v -> {
                 if (listener != null) {
                     listener.onViewDocument(document, position);

@@ -155,9 +155,6 @@
             android:orientation="horizontal"
             android:padding="15dp">
 
-            <!-- Currency Card -->
-            <!-- Weather Card -->
-            <!-- Add the two quick action cards here -->
         </LinearLayout>
 
 

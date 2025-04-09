@@ -12,7 +12,7 @@
     <color name="divider">#E0E0E0</color>
     <color name="secondary_color">#018786</color>
     <color name="day_item">#E9E9E9</color>
-    <color name="budget_good">#4CAF50</color> <!-- Green -->
-    <color name="budget_warning">#FF9800</color> <!-- Orange -->
-    <color name="budget_danger">#F44336</color> <!-- Red -->
+    <color name="budget_good">#4CAF50</color>
+    <color name="budget_warning">#FF9800</color>
+    <color name="budget_danger">#F44336</color>
 </resources>

@@ -30,13 +30,11 @@ public class Trip {
 
     private List<Document> documents = new ArrayList<>();
 
-    // Required empty constructor for Firestore
     public Trip() {
         this.createdAt = new Date();
         this.updatedAt = new Date();
     }
 
-    // Constructor with basic fields
     public Trip(String name, String destination, Date startDate, Date endDate) {
         this.name = name;
         this.destination = destination;
@@ -46,7 +44,6 @@ public class Trip {
         this.updatedAt = new Date();
     }
 
-    // Getters and setters
     public String getId() {
         return id;
     }
@@ -155,17 +152,11 @@ public class Trip {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
 
     public Date getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
 
     public List<Document> getDocuments() {
         return documents;
@@ -173,29 +164,5 @@ public class Trip {
 
     public void setDocuments(List<Document> documents) {
         this.documents = documents;
-    }
-
-    // Helper method to add a location
-    public void addLocation(Location location) {
-        if (this.locations == null) {
-            this.locations = new ArrayList<>();
-        }
-        this.locations.add(location);
-    }
-
-    // Helper method to add an expense
-    public void addExpense(Expense expense) {
-        if (this.expenses == null) {
-            this.expenses = new ArrayList<>();
-        }
-        this.expenses.add(expense);
-    }
-
-    // Helper method to add a document
-    public void addDocument(Document document) {
-        if (this.documents == null) {
-            this.documents = new ArrayList<>();
-        }
-        this.documents.add(document);
     }
 }

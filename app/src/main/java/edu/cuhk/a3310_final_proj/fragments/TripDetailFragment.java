@@ -70,6 +70,7 @@ public class TripDetailFragment extends Fragment implements OnMapReadyCallback {
 
     private static final int PICK_EXPENSE_RECEIPT_REQUEST = 3;
 
+    private DocumentAdapter documentAdapter;
     private MapView mapView;
     private GoogleMap googleMap;
     private List<Marker> locationMarkers = new ArrayList<>();
@@ -90,7 +91,6 @@ public class TripDetailFragment extends Fragment implements OnMapReadyCallback {
         this.trip_id = tripId;
     }
 
-    // UI elements
     private ImageView ivTripImage;
     private TextView tvTripName, tvDestination, tvDateRange, tvBudget, tvFlightNumber, tvNotes;
     private RecyclerView rvDayContainers, rvDocuments, rvExpenses;
@@ -100,7 +100,6 @@ public class TripDetailFragment extends Fragment implements OnMapReadyCallback {
     private ExpenseAdapter expenseAdapter;
     private Uri selectedExpenseReceiptUri = null;
 
-    // Format for dates
     private SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy", Locale.US);
 
     private CardView cardBudgetTracker;
@@ -128,23 +127,18 @@ public class TripDetailFragment extends Fragment implements OnMapReadyCallback {
 
         if (tripId == null || tripId.isEmpty()) {
             Toast.makeText(requireContext(), "Trip ID is missing", Toast.LENGTH_SHORT).show();
-            // Navigate back
             getParentFragmentManager().popBackStack();
             return;
         }
 
-        // Initialize FirestoreManager
         firestoreManager = FirestoreManager.getInstance();
 
-        // Initialize views
         initializeViews(view);
 
-        // Initialize MapView
         mapView = view.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
 
-        // Load trip data
         loadTripData();
     }
 
@@ -152,10 +146,8 @@ public class TripDetailFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap map) {
         googleMap = map;
 
-        // Configure map settings
         googleMap.getUiSettings().setZoomControlsEnabled(true);
 
-        // If trip is already loaded, display its locations on the map
         if (currentTrip != null && currentTrip.getLocations() != null) {
             displayLocationsOnMap(currentTrip.getLocations());
         }
@@ -180,15 +172,12 @@ public class TripDetailFragment extends Fragment implements OnMapReadyCallback {
         tvBudgetSpent = view.findViewById(R.id.tv_budget_spent);
         tvBudgetRemaining = view.findViewById(R.id.tv_budget_remaining);
 
-        // Set up RecyclerViews
         rvDayContainers.setLayoutManager(new LinearLayoutManager(requireContext()));
         rvDocuments.setLayoutManager(new LinearLayoutManager(requireContext()));
 
-        // Set up button click listeners
         btnEditTrip.setOnClickListener(v -> openTripEditor());
         btnDeleteTrip.setOnClickListener(v -> confirmDeleteTrip());
 
-        // Initialize expense section
         rvExpenses = view.findViewById(R.id.rv_expenses);
         rvExpenses.setLayoutManager(new LinearLayoutManager(requireContext()));
         btnAddExpense = view.findViewById(R.id.btn_add_expense);
@@ -243,18 +232,16 @@ public class TripDetailFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void displayTripDetails(Trip trip) {
-        // Set trip details
+
         tvTripName.setText(trip.getName());
         tvDestination.setText(trip.getDestination());
 
-        // Set date range
         if (trip.getStartDate() != null && trip.getEndDate() != null) {
             String dateRange = dateFormat.format(trip.getStartDate()) + " - "
                     + dateFormat.format(trip.getEndDate());
             tvDateRange.setText(dateRange);
         }
 
-        // Set budget
         if (trip.getBudget() > 0) {
             tvBudget.setText(String.format(Locale.getDefault(),
                     "Budget: %.2f %s", trip.getBudget(), trip.getCurrency()));
@@ -263,7 +250,6 @@ public class TripDetailFragment extends Fragment implements OnMapReadyCallback {
             tvBudget.setVisibility(View.GONE);
         }
 
-        // Set flight number
         if (trip.getFlightNumber() != null && !trip.getFlightNumber().isEmpty()) {
             tvFlightNumber.setText("Flight: " + trip.getFlightNumber());
             tvFlightNumber.setVisibility(View.VISIBLE);
@@ -271,7 +257,6 @@ public class TripDetailFragment extends Fragment implements OnMapReadyCallback {
             tvFlightNumber.setVisibility(View.GONE);
         }
 
-        // Set notes
         if (trip.getNotes() != null && !trip.getNotes().isEmpty()) {
             tvNotes.setText(trip.getNotes());
             tvNotes.setVisibility(View.VISIBLE);
@@ -279,7 +264,6 @@ public class TripDetailFragment extends Fragment implements OnMapReadyCallback {
             tvNotes.setVisibility(View.GONE);
         }
 
-        // Load image using Glide
         if (trip.getImageUrl() != null && !trip.getImageUrl().isEmpty()) {
             Glide.with(this)
                     .load(trip.getImageUrl())
@@ -291,18 +275,14 @@ public class TripDetailFragment extends Fragment implements OnMapReadyCallback {
             ivTripImage.setVisibility(View.GONE);
         }
 
-        // Display locations by day
         displayLocations(trip);
 
-        // Also display locations on the map
         if (googleMap != null && trip.getLocations() != null) {
             displayLocationsOnMap(trip.getLocations());
         }
 
-        // Display documents
         displayDocuments(trip);
 
-        // Display expenses
         displayExpenses(trip);
 
         updateBudgetTracker();
@@ -310,10 +290,9 @@ public class TripDetailFragment extends Fragment implements OnMapReadyCallback {
 
     private void displayLocations(Trip trip) {
         if (trip.getLocations() != null && !trip.getLocations().isEmpty()) {
-            // Group locations by day
+
             Map<Integer, List<Location>> locationsByDay = new HashMap<>();
 
-            // Find the max day index to determine how many days to display
             int maxDayIndex = 1;
 
             for (Location location : trip.getLocations()) {
@@ -328,13 +307,12 @@ public class TripDetailFragment extends Fragment implements OnMapReadyCallback {
                 locationsByDay.get(dayIndex).add(location);
             }
 
-            // Create adapters for each day and add to a parent adapter
             List<DayItineraryItem> dayItems = new ArrayList<>();
 
             for (int i = 1; i <= maxDayIndex; i++) {
                 List<Location> dayLocations = locationsByDay.getOrDefault(i, new ArrayList<>());
                 if (!dayLocations.isEmpty()) {
-                    // Calculate the date for this day based on trip start date and day index
+
                     Date dayDate = null;
                     if (trip.getStartDate() != null) {
                         Calendar cal = Calendar.getInstance();
@@ -348,41 +326,75 @@ public class TripDetailFragment extends Fragment implements OnMapReadyCallback {
                 }
             }
 
-            // Create and set adapter
             DayItineraryAdapter adapter = new DayItineraryAdapter(requireContext(), dayItems);
             rvDayContainers.setAdapter(adapter);
             rvDayContainers.setVisibility(View.VISIBLE);
         } else {
-            // No locations to display
+
             rvDayContainers.setVisibility(View.GONE);
 
-            // Optionally show an empty state message
             TextView emptyLocationsText = new TextView(requireContext());
             emptyLocationsText.setText("No itinerary locations added yet.");
             emptyLocationsText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             emptyLocationsText.setPadding(0, 16, 0, 16);
 
-            // Add to a container or handle as appropriate for your layout
         }
     }
 
     private void displayDocuments(Trip trip) {
         if (trip.getDocuments() != null && !trip.getDocuments().isEmpty()) {
-            DocumentAdapter adapter = new DocumentAdapter(requireContext(),
+            documentAdapter = new DocumentAdapter(requireContext(),
                     new DocumentAdapter.DocumentAdapterListener() {
-                @Override
-                public void onViewDocument(edu.cuhk.a3310_final_proj.models.Document document, int position) {
-                    // Open document
-                    // Implement viewing document logic
-                }
+                        @Override
+                        public void onViewDocument(edu.cuhk.a3310_final_proj.models.Document document, int position) {
+                            if (document.getFileUrl() != null && !document.getFileUrl().isEmpty()) {
+                                try {
+                                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                                    intent.setData(Uri.parse(document.getFileUrl()));
+                                    startActivity(intent);
+                                } catch (android.content.ActivityNotFoundException e) {
+                                    Toast.makeText(requireContext(),
+                                            "No app found to open this document type",
+                                            Toast.LENGTH_SHORT).show();
+                                    Log.e("TripDetailFragment", "No app to open document: " + e.getMessage());
+                                } catch (Exception e) {
+                                    Toast.makeText(requireContext(),
+                                            "Error opening document: " + e.getMessage(),
+                                            Toast.LENGTH_SHORT).show();
+                                    Log.e("TripDetailFragment", "Error opening document", e);
+                                }
+                            } else {
+                                Toast.makeText(requireContext(),
+                                        "Document URL is missing or invalid",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }
 
-                @Override
-                public void onDeleteDocument(edu.cuhk.a3310_final_proj.models.Document document, int position) {
-                    // This is a detail view, so maybe disable deletion here
-                }
-            });
-            adapter.setDocuments(new ArrayList<>(trip.getDocuments()));
-            rvDocuments.setAdapter(adapter);
+                        @Override
+                        public void onDeleteDocument(edu.cuhk.a3310_final_proj.models.Document document, int position) {
+                            new AlertDialog.Builder(requireContext())
+                                    .setTitle("Delete Document")
+                                    .setMessage("Are you sure you want to delete " + document.getName() + "?")
+                                    .setPositiveButton("Delete", (dialog, which) -> {
+                                        // Remove document from trip
+                                        if (currentTrip.getDocuments() != null) {
+                                            currentTrip.getDocuments().remove(position);
+
+                                            documentAdapter.notifyItemRemoved(position);
+
+                                            if (currentTrip.getDocuments().isEmpty()) {
+                                                rvDocuments.setVisibility(View.GONE);
+                                            }
+
+                                            updateTripInFirestore();
+                                        }
+                                    })
+                                    .setNegativeButton("Cancel", null)
+                                    .show();
+                        }
+                    });
+            documentAdapter.setDocuments(new ArrayList<>(trip.getDocuments()));
+            rvDocuments.setAdapter(documentAdapter);
             rvDocuments.setVisibility(View.VISIBLE);
         } else {
             rvDocuments.setVisibility(View.GONE);
@@ -428,7 +440,6 @@ public class TripDetailFragment extends Fragment implements OnMapReadyCallback {
             public void onSuccess(Void result) {
                 Toast.makeText(requireContext(), "Trip deleted successfully", Toast.LENGTH_SHORT).show();
 
-                // Navigate back to trip list
                 getParentFragmentManager().popBackStack();
             }
 
@@ -449,7 +460,6 @@ public class TripDetailFragment extends Fragment implements OnMapReadyCallback {
         TextView tvDescription = dialogView.findViewById(R.id.tv_detail_description);
         ImageView ivReceipt = dialogView.findViewById(R.id.iv_detail_receipt);
 
-        // Set values
         tvAmount.setText(String.format(Locale.getDefault(), "%s %.2f",
                 expense.getCurrency(), expense.getAmount()));
         tvCategory.setText(expense.getCategory());
@@ -466,7 +476,6 @@ public class TripDetailFragment extends Fragment implements OnMapReadyCallback {
             tvDescription.setVisibility(View.GONE);
         }
 
-        // Load receipt image if available
         if (expense.getReceiptImageUrl() != null && !expense.getReceiptImageUrl().isEmpty()) {
             Glide.with(this)
                     .load(expense.getReceiptImageUrl())
@@ -491,7 +500,6 @@ public class TripDetailFragment extends Fragment implements OnMapReadyCallback {
                 .setView(dialogView)
                 .create();
 
-        // Initialize views
         TextView tvTitle = dialogView.findViewById(R.id.tv_dialog_title);
         TextInputEditText etAmount = dialogView.findViewById(R.id.et_expense_amount);
         AutoCompleteTextView dropdownCurrency = dialogView.findViewById(R.id.dropdown_currency);
@@ -503,7 +511,6 @@ public class TripDetailFragment extends Fragment implements OnMapReadyCallback {
         Button btnCancel = dialogView.findViewById(R.id.btn_cancel);
         Button btnSave = dialogView.findViewById(R.id.btn_save);
 
-        // Set up currency dropdown
         String[] currencies = getResources().getStringArray(R.array.currencies);
         ArrayAdapter<String> currencyAdapter = new ArrayAdapter<>(
                 requireContext(),
@@ -512,7 +519,6 @@ public class TripDetailFragment extends Fragment implements OnMapReadyCallback {
         );
         dropdownCurrency.setAdapter(currencyAdapter);
 
-        // Set up date picker
         SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy", Locale.US);
         etDate.setText(dateFormat.format(new Date()));
         etDate.setOnClickListener(v -> {
@@ -534,7 +540,6 @@ public class TripDetailFragment extends Fragment implements OnMapReadyCallback {
             datePickerDialog.show();
         });
 
-        // If editing, populate with existing data
         if (expenseToEdit != null) {
             tvTitle.setText("Edit Expense");
             etAmount.setText(String.valueOf(expenseToEdit.getAmount()));
@@ -546,7 +551,6 @@ public class TripDetailFragment extends Fragment implements OnMapReadyCallback {
                 etDate.setText(dateFormat.format(expenseToEdit.getDate()));
             }
 
-            // Load receipt image
             if (expenseToEdit.getReceiptImageUrl() != null && !expenseToEdit.getReceiptImageUrl().isEmpty()) {
                 Glide.with(requireContext())
                         .load(expenseToEdit.getReceiptImageUrl())
@@ -556,18 +560,16 @@ public class TripDetailFragment extends Fragment implements OnMapReadyCallback {
             }
         }
 
-        // Set up receipt image selection
         btnAddReceipt.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType("image/*");
             startActivityForResult(Intent.createChooser(intent, "Select Receipt Image"), PICK_EXPENSE_RECEIPT_REQUEST);
         });
 
-        // Handle button clicks
         btnCancel.setOnClickListener(v -> dialog.dismiss());
 
         btnSave.setOnClickListener(v -> {
-            // Validate inputs
+
             if (etAmount.getText().toString().isEmpty()) {
                 etAmount.setError("Amount is required");
                 return;
@@ -578,7 +580,6 @@ public class TripDetailFragment extends Fragment implements OnMapReadyCallback {
                 return;
             }
 
-            // Create or update expense
             Expense expense = (expenseToEdit != null) ? expenseToEdit : new Expense();
             expense.setAmount(Double.parseDouble(etAmount.getText().toString()));
             expense.setCurrency(dropdownCurrency.getText().toString());
@@ -593,11 +594,10 @@ public class TripDetailFragment extends Fragment implements OnMapReadyCallback {
             }
 
             if (selectedExpenseReceiptUri != null) {
-                // Upload receipt image and save expense
+
                 uploadExpenseReceiptAndSave(expense, selectedExpenseReceiptUri, position);
                 selectedExpenseReceiptUri = null;
             } else {
-                // Save expense without image
                 saveExpense(expense, position);
             }
 
@@ -612,14 +612,11 @@ public class TripDetailFragment extends Fragment implements OnMapReadyCallback {
                 .setTitle("Delete Expense")
                 .setMessage("Are you sure you want to delete this expense?")
                 .setPositiveButton("Delete", (dialog, which) -> {
-                    // Remove expense from list
                     currentTrip.getExpenses().remove(position);
                     expenseAdapter.removeExpense(position);
 
-                    // Update trip in Firestore
                     updateTripInFirestore();
 
-                    // Add this line to update the budget tracker immediately
                     updateBudgetTracker();
                 })
                 .setNegativeButton("Cancel", null)
@@ -632,7 +629,6 @@ public class TripDetailFragment extends Fragment implements OnMapReadyCallback {
         progressDialog.setCancelable(false);
         progressDialog.show();
 
-        // Create unique file name for receipt
         String fileName = "receipt_" + System.currentTimeMillis() + ".jpg";
         StorageReference receiptRef = FirebaseStorage.getInstance().getReference()
                 .child("receipts")
@@ -642,10 +638,9 @@ public class TripDetailFragment extends Fragment implements OnMapReadyCallback {
         receiptRef.putFile(imageUri)
                 .addOnSuccessListener(taskSnapshot -> {
                     receiptRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                        // Set receipt URL to expense
+
                         expense.setReceiptImageUrl(uri.toString());
 
-                        // Save expense
                         saveExpense(expense, position);
 
                         progressDialog.dismiss();
@@ -658,35 +653,32 @@ public class TripDetailFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void saveExpense(Expense expense, int position) {
-        // Set trip ID and generate ID if new
+
         expense.setTripId(currentTrip.getId());
         if (expense.getId() == null || expense.getId().isEmpty()) {
             expense.setId(UUID.randomUUID().toString());
         }
 
-        // Add to or update in trip's expense list
         if (position == -1) {
-            // New expense
+
             if (currentTrip.getExpenses() == null) {
                 currentTrip.setExpenses(new ArrayList<>());
             }
             currentTrip.getExpenses().add(expense);
             expenseAdapter.addExpense(expense);
         } else {
-            // Update existing expense
+
             currentTrip.getExpenses().set(position, expense);
             expenseAdapter.updateExpense(expense, position);
         }
 
-        // Update trip in Firestore
         updateTripInFirestore();
 
-        // Update budget tracker immediately for better UX
         updateBudgetTracker();
     }
 
     private void updateTripInFirestore() {
-        // Add this debugging
+
         if (currentTrip.getExpenses() != null) {
             Log.d("TripDetailFragment", "Saving trip with " + currentTrip.getExpenses().size() + " expenses");
             for (Expense expense : currentTrip.getExpenses()) {
@@ -701,7 +693,6 @@ public class TripDetailFragment extends Fragment implements OnMapReadyCallback {
             public void onSuccess(Trip result) {
                 Toast.makeText(requireContext(), "Trip updated successfully", Toast.LENGTH_SHORT).show();
 
-                // Add this line to ensure the UI is refreshed
                 displayExpenses(currentTrip);
             }
 
@@ -720,38 +711,30 @@ public class TripDetailFragment extends Fragment implements OnMapReadyCallback {
         if (requestCode == PICK_EXPENSE_RECEIPT_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
             selectedExpenseReceiptUri = data.getData();
 
-            // Update preview in dialog if it's visible
-            // This approach won't work because we're in a Fragment, not a DialogFragment
-            // Instead, store the URI and let the next dialog access use it
-            // The dialog will have been dismissed by this point anyway
         }
     }
 
     private void updateBudgetTracker() {
         if (currentTrip == null || currentTrip.getBudget() <= 0) {
-            // Hide budget tracker if there's no budget set
+
             cardBudgetTracker.setVisibility(View.GONE);
             return;
         }
 
         cardBudgetTracker.setVisibility(View.VISIBLE);
 
-        // Calculate total expenses
         double totalExpenses = 0;
         if (currentTrip.getExpenses() != null && !currentTrip.getExpenses().isEmpty()) {
-            // For simplicity, we'll assume all expenses are in the same currency as the budget
-            // In a real app, you'd want to handle currency conversion
+
             for (Expense expense : currentTrip.getExpenses()) {
                 totalExpenses += expense.getAmount();
             }
         }
 
-        // Calculate budget metrics
         double budgetAmount = currentTrip.getBudget();
         double remainingBudget = budgetAmount - totalExpenses;
         int percentageUsed = (int) Math.min(100, (totalExpenses / budgetAmount) * 100);
 
-        // Update UI elements
         progressBudget.setProgress(percentageUsed);
         tvBudgetPercentage.setText(percentageUsed + "%");
 
@@ -761,17 +744,15 @@ public class TripDetailFragment extends Fragment implements OnMapReadyCallback {
         tvBudgetRemaining.setText(String.format(Locale.getDefault(),
                 "Remaining: %s %.2f", currency, remainingBudget));
 
-        // Set progress bar color based on percentage used
         int colorId;
         if (percentageUsed < 70) {
-            colorId = R.color.budget_good; // Define this color in your colors.xml (e.g., green)
+            colorId = R.color.budget_good;
         } else if (percentageUsed < 90) {
-            colorId = R.color.budget_warning; // Define this color (e.g., yellow/orange)
+            colorId = R.color.budget_warning;
         } else {
-            colorId = R.color.budget_danger; // Define this color (e.g., red)
+            colorId = R.color.budget_danger;
         }
 
-        // Apply the color to the progress bar
         progressBudget.getProgressDrawable().setColorFilter(
                 ContextCompat.getColor(requireContext(), colorId),
                 PorterDuff.Mode.SRC_IN);
@@ -782,19 +763,16 @@ public class TripDetailFragment extends Fragment implements OnMapReadyCallback {
             return;
         }
 
-        // Clear existing markers
         for (Marker marker : locationMarkers) {
             marker.remove();
         }
         locationMarkers.clear();
 
-        // Create bounds to include all locations
         LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
         boolean hasValidCoordinates = false;
 
-        // Add markers for each location
         for (Location location : locations) {
-            // Skip locations without coordinates
+
             if (location.getLatitude() == 0 && location.getLongitude() == 0) {
                 continue;
             }
@@ -803,7 +781,6 @@ public class TripDetailFragment extends Fragment implements OnMapReadyCallback {
             boundsBuilder.include(position);
             hasValidCoordinates = true;
 
-            // Add marker with info
             Marker marker = googleMap.addMarker(new MarkerOptions()
                     .position(position)
                     .title(location.getName()));
@@ -816,25 +793,24 @@ public class TripDetailFragment extends Fragment implements OnMapReadyCallback {
         // If we have valid locations, zoom to fit them all
         if (hasValidCoordinates) {
             try {
-                int padding = 100; // Padding around markers in pixels
+                int padding = 100;
                 LatLngBounds bounds = boundsBuilder.build();
                 googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding));
             } catch (Exception e) {
-                // Fallback to center on first location
+
                 if (!locationMarkers.isEmpty()) {
                     googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                             locationMarkers.get(0).getPosition(), 12f));
                 }
             }
         } else {
-            // If no valid coordinates, show a default view (e.g., destination city)
-            // You'd need to geocode the trip's destination to get coordinates
+
             geocodeDestination(currentTrip.getDestination());
         }
     }
 
     private void geocodeDestination(String destination) {
-        // Use Geocoder to get coordinates for the destination
+
         Geocoder geocoder = new Geocoder(requireContext(), Locale.getDefault());
         try {
             List<Address> addresses = geocoder.getFromLocationName(destination, 1);

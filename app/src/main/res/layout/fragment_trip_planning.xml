@@ -22,7 +22,7 @@
             android:textColor="@color/black"
             android:layout_marginBottom="16dp"/>
 
-        <!-- Trip Image -->
+        <!-- image -->
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="200dp"
@@ -83,7 +83,7 @@
             android:orientation="horizontal"
             android:layout_marginBottom="12dp">
 
-            <!-- Start Date -->
+            <!-- Start  -->
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -100,7 +100,7 @@
                     android:inputType="none"/>
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- End Date -->
+            <!-- End  -->
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -189,7 +189,7 @@
                 android:inputType="textMultiLine"/>
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Documents Section -->
+        <!-- Documents -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -237,7 +237,7 @@
             android:visibility="gone"
             android:nestedScrollingEnabled="false"/>
 
-        <!-- Trip Itinerary Section -->
+        <!-- Itinerary Section -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -252,7 +252,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <!-- Day containers will be added here programmatically -->
         </LinearLayout>
 
         <Button

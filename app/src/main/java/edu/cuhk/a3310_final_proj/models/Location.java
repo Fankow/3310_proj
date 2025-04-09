@@ -12,7 +12,6 @@ public class Location {
     private double latitude;
     private double longitude;
     private int dayIndex = 1;
-
     @PropertyName("visit_date")
     private Date visitDate;
 
@@ -24,7 +23,6 @@ public class Location {
 
     private String notes;
 
-    // Required empty constructor for Firestore
     public Location() {
     }
 

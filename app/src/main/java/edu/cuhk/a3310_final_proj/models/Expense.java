@@ -17,13 +17,10 @@ public class Expense {
 
     private String trip_id;
 
-    // Required empty constructor for Firestore
     public Expense() {
-        // Empty constructor required for Firestore
-        this.date = new Date(); // Set default date
+        this.date = new Date();
     }
 
-    // Getters and Setters
     public String getId() {
         return id;
     }

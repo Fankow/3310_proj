@@ -32,22 +32,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Initialize Places API
         if (!Places.isInitialized()) {
             Places.initialize(getApplicationContext(), getString(R.string.google_maps_api_key));
         }
 
-        // Setup toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // Setup drawer
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         plan = findViewById(R.id.btn_plan_new_trip);
 
-        // Create ActionBarDrawerToggle (hamburger icon that opens the drawer)
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -67,9 +63,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int itemId = item.getItemId();
 
         if (itemId == R.id.nav_trips) {
-            // Change this line to create a TripViewFragment instance
             selectedFragment = new TripViewFragment();
-            // Update toolbar title
             getSupportActionBar().setTitle("My Trips");
         } else if (itemId == R.id.nav_plan) {
             selectedFragment = new TripPlanningFragment();
@@ -91,14 +85,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     .commit();
         }
 
-        // Close the drawer after selecting an item
+        // close the drawer after selecting item
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
     @Override
     public void onBackPressed() {
-        // If drawer is open, close it on back press
+        // press back will close the drawer
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {

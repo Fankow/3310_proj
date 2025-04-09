@@ -22,80 +22,89 @@ import edu.cuhk.a3310_final_proj.models.Trip;
 public class HomeTripAdapter extends RecyclerView.Adapter<HomeTripAdapter.TripViewHolder> {
 
     private final Context context;
-    private final List<Trip> trips;
-    private final TripClickListener listener;
-    private final SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault());
+    private final List<Trip> tripList;
+    private final TripClickListener tripClickListener;
+    private final SimpleDateFormat dateFormatter;
 
     public interface TripClickListener {
 
         void onTripClicked(Trip trip);
     }
 
-    public HomeTripAdapter(Context context, List<Trip> trips, TripClickListener listener) {
+    public HomeTripAdapter(Context context, List<Trip> tripList, TripClickListener tripClickListener) {
         this.context = context;
-        this.trips = trips;
-        this.listener = listener;
+        this.tripList = tripList;
+        this.tripClickListener = tripClickListener;
+        this.dateFormatter = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault());
     }
 
     @NonNull
     @Override
     public TripViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_home_trip, parent, false);
-        return new TripViewHolder(view);
+        View itemView = LayoutInflater.from(context).inflate(R.layout.item_home_trip, parent, false);
+        return new TripViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull TripViewHolder holder, int position) {
-        Trip trip = trips.get(position);
-
-        holder.tvTripName.setText(trip.getName());
-        holder.tvDestination.setText(trip.getDestination());
-
-        // Format date range
-        if (trip.getStartDate() != null && trip.getEndDate() != null) {
-            String dateRange = dateFormat.format(trip.getStartDate())
-                    + " - " + dateFormat.format(trip.getEndDate());
-            holder.tvDateRange.setText(dateRange);
-        } else {
-            holder.tvDateRange.setText("Dates not set");
-        }
-
-        // Load image if available
-        if (trip.getImageUrl() != null && !trip.getImageUrl().isEmpty()) {
-            Glide.with(context)
-                    .load(trip.getImageUrl())
-                    .placeholder(R.drawable.placeholder_image)
-                    .error(R.drawable.error_image)
-                    .into(holder.ivTripImage);
-            holder.ivTripImage.setVisibility(View.VISIBLE);
-        } else {
-            holder.ivTripImage.setVisibility(View.GONE);
-        }
-
-        // Set click listener
-        holder.itemView.setOnClickListener(v -> {
-            if (listener != null) {
-                listener.onTripClicked(trip);
-            }
-        });
+        Trip currentTrip = tripList.get(position);
+        holder.bind(currentTrip);
     }
 
     @Override
     public int getItemCount() {
-        return trips.size();
+        return tripList.size();
     }
 
-    static class TripViewHolder extends RecyclerView.ViewHolder {
+    class TripViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tvTripName, tvDestination, tvDateRange;
-        ImageView ivTripImage;
+        TextView tripNameTextView, destinationTextView, dateRangeTextView;
+        ImageView tripImageView;
 
         TripViewHolder(View itemView) {
             super(itemView);
-            tvTripName = itemView.findViewById(R.id.tv_trip_name);
-            tvDestination = itemView.findViewById(R.id.tv_destination);
-            tvDateRange = itemView.findViewById(R.id.tv_date_range);
-            ivTripImage = itemView.findViewById(R.id.iv_trip_image);
+            tripNameTextView = itemView.findViewById(R.id.tv_trip_name);
+            destinationTextView = itemView.findViewById(R.id.tv_destination);
+            dateRangeTextView = itemView.findViewById(R.id.tv_date_range);
+            tripImageView = itemView.findViewById(R.id.iv_trip_image);
+        }
+
+        void bind(Trip trip) {
+            tripNameTextView.setText(trip.getName());
+            destinationTextView.setText(trip.getDestination());
+
+            displayDateRange(trip);
+            loadImage(trip);
+
+            itemView.setOnClickListener(v -> {
+                if (tripClickListener != null) {
+                    tripClickListener.onTripClicked(trip);
+                }
+            });
+        }
+
+        private void displayDateRange(Trip trip) {
+            if (trip.getStartDate() != null && trip.getEndDate() != null) {
+                String startDate = dateFormatter.format(trip.getStartDate());
+                String endDate = dateFormatter.format(trip.getEndDate());
+                String dateRange = startDate + " - " + endDate;
+                dateRangeTextView.setText(dateRange);
+            } else {
+                dateRangeTextView.setText(R.string.dates_not_set); // Use a string resource
+            }
+        }
+
+        private void loadImage(Trip trip) {
+            if (trip.getImageUrl() != null && !trip.getImageUrl().isEmpty()) {
+                Glide.with(context)
+                        .load(trip.getImageUrl())
+                        .placeholder(R.drawable.placeholder_image)
+                        .error(R.drawable.error_image)
+                        .into(tripImageView);
+                tripImageView.setVisibility(View.VISIBLE);
+            } else {
+                tripImageView.setVisibility(View.GONE);
+            }
         }
     }
 }

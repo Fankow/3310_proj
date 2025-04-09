@@ -11,11 +11,9 @@ public class Document {
     @PropertyName("file_url")
     private String fileUrl;
 
-    // Required empty constructor for Firestore
     public Document() {
     }
 
-    // Getters and Setters
     public String getId() {
         return id;
     }
@@ -31,7 +29,6 @@ public class Document {
     public void setName(String name) {
         this.name = name;
     }
-
     public String getType() {
         return type;
     }

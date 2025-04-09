@@ -54,18 +54,15 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
     public void onBindViewHolder(@NonNull TripViewHolder holder, int position) {
         Trip trip = tripList.get(position);
 
-        // Set trip name and destination
         holder.tvTripName.setText(trip.getName());
         holder.tvDestination.setText(trip.getDestination());
 
-        // Format and set dates
         if (trip.getStartDate() != null && trip.getEndDate() != null) {
             String dateRange = dateFormat.format(trip.getStartDate()) + " - "
                     + dateFormat.format(trip.getEndDate());
             holder.tvDateRange.setText(dateRange);
         }
 
-        // Set budget and currency
         if (trip.getBudget() > 0) {
             holder.tvBudget.setText(String.format(Locale.getDefault(),
                     "%.2f %s", trip.getBudget(), trip.getCurrency()));
@@ -74,7 +71,6 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
             holder.tvBudget.setVisibility(View.GONE);
         }
 
-        // Load trip image if available
         if (trip.getImageUrl() != null && !trip.getImageUrl().isEmpty()) {
             Glide.with(context)
                     .load(trip.getImageUrl())
@@ -86,7 +82,6 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
             holder.ivTripImage.setVisibility(View.GONE);
         }
 
-        // Set click listeners
         holder.itemView.setOnClickListener(v -> listener.onTripClicked(trip));
         holder.btnEdit.setOnClickListener(v -> listener.onEditTrip(trip));
         holder.btnDelete.setOnClickListener(v -> listener.onDeleteTrip(trip));

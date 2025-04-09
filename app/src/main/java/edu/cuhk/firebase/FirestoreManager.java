@@ -34,16 +34,13 @@ public class FirestoreManager {
     private FirebaseFirestore db;
     private static FirestoreManager instance;
 
-    // Collection names
     private static final String USERS_COLLECTION = "users";
     private static final String TRIPS_COLLECTION = "trips";
 
-    // Private constructor for singleton
     private FirestoreManager() {
         db = FirebaseFirestore.getInstance();
     }
 
-    // Singleton instance getter
     public static FirestoreManager getInstance() {
         if (instance == null) {
             instance = new FirestoreManager();
@@ -51,29 +48,17 @@ public class FirestoreManager {
         return instance;
     }
 
-    /**
-     * Get current user from Firebase Auth
-     *
-     * @return FirebaseUser or null if not logged in
-     */
+
     private FirebaseUser getCurrentUser() {
         return FirebaseAuth.getInstance().getCurrentUser();
     }
 
-    /**
-     * Save user profile to Firestore
-     *
-     * @param user User object to save
-     * @param listener Callback for success/failure
-     */
     public void saveUserProfile(User user, final DataCallback<User> listener) {
         FirebaseUser currentUser = getCurrentUser();
         if (currentUser == null) {
             listener.onFailure(new Exception("No user logged in"));
             return;
         }
-
-        // Set user ID to match Firebase Auth ID
         user.setId(currentUser.getUid());
 
         db.collection(USERS_COLLECTION).document(currentUser.getUid())
@@ -92,11 +77,6 @@ public class FirestoreManager {
                 });
     }
 
-    /**
-     * Get user profile from Firestore
-     *
-     * @param listener Callback for success/failure
-     */
     public void getUserProfile(final DataCallback<User> listener) {
         FirebaseUser currentUser = getCurrentUser();
         if (currentUser == null) {
@@ -126,12 +106,6 @@ public class FirestoreManager {
                 });
     }
 
-    /**
-     * Save a trip to Firestore
-     *
-     * @param trip Trip object to save
-     * @param listener Callback for success/failure
-     */
     public void saveTrip(final Trip trip, final DataCallback<Trip> listener) {
         FirebaseUser currentUser = getCurrentUser();
         if (currentUser == null) {
@@ -139,12 +113,10 @@ public class FirestoreManager {
             return;
         }
 
-        // Set the owner ID if it's a new trip
         if (trip.getOwner_id() == null || trip.getOwner_id().isEmpty()) {
             trip.setOwner_id(currentUser.getUid());
         }
 
-        // For consistency, set owner_id field directly using a Map
         Map<String, Object> tripData = new HashMap<>();
         tripData.put("name", trip.getName());
         tripData.put("destination", trip.getDestination());
@@ -160,15 +132,12 @@ public class FirestoreManager {
         tripData.put("createdAt", trip.getCreatedAt());
         tripData.put("updatedAt", trip.getUpdatedAt());
 
-        // Ensure expenses are properly included
         if (trip.getExpenses() != null) {
             tripData.put("expenses", trip.getExpenses());
         }
 
-        // Ensure we use owner_id (with underscore) to match the field in Firestore
         tripData.put("owner_id", currentUser.getUid());
 
-        // Update timestamps
         tripData.put("updatedAt", new Date());
         if (trip.getCreatedAt() == null) {
             tripData.put("createdAt", new Date());
@@ -227,11 +196,6 @@ public class FirestoreManager {
         }
     }
 
-    /**
-     * Get all trips for the current user
-     *
-     * @param listener Callback for success/failure
-     */
     public void getUserTrips(final DataCallback<List<Trip>> listener) {
         FirebaseUser currentUser = getCurrentUser();
         if (currentUser == null) {
@@ -239,7 +203,6 @@ public class FirestoreManager {
             return;
         }
 
-        // Add more logs to debug the Firestore query
         Log.d("FirestoreManager", "Getting trips for user: " + currentUser.getUid());
 
         db.collection(TRIPS_COLLECTION)
@@ -255,8 +218,6 @@ public class FirestoreManager {
                         try {
                             Trip trip = document.toObject(Trip.class);
                             if (trip != null) {
-                                // Don't rely on document.toObject to set the ID
-                                // Always explicitly set it from the document ID
                                 trip.setId(document.getId());
                                 trips.add(trip);
                                 Log.d("FirestoreManager", "Added trip: " + trip.getName());
@@ -274,12 +235,6 @@ public class FirestoreManager {
                 });
     }
 
-    /**
-     * Get a specific trip by ID
-     *
-     * @param tripId Trip ID
-     * @param listener Callback for success/failure
-     */
     public void getTripById(String tripId, final DataCallback<Trip> listener) {
         db.collection(TRIPS_COLLECTION).document(tripId)
                 .get()
@@ -302,12 +257,6 @@ public class FirestoreManager {
                 });
     }
 
-    /**
-     * Delete a trip
-     *
-     * @param tripId Trip ID to delete
-     * @param listener Callback for success/failure
-     */
     public void deleteTrip(String tripId, final DataCallback<Void> listener) {
         if (tripId == null || tripId.isEmpty()) {
             listener.onFailure(new Exception("Invalid trip ID"));
@@ -320,9 +269,6 @@ public class FirestoreManager {
                 .addOnFailureListener(listener::onFailure);
     }
 
-    /**
-     * Generic callback interface for data operations
-     */
     public interface DataCallback<T> {
 
         void onSuccess(T result);

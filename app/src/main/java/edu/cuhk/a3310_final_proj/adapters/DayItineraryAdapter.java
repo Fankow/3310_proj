@@ -1,4 +1,3 @@
-// Create this class in the adapters package
 package edu.cuhk.a3310_final_proj.adapters;
 
 import android.content.Context;

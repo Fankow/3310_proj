@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Trip Image -->
+        <!-- image -->
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="200dp">
@@ -51,7 +51,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </androidx.cardview.widget.CardView>
-        <!-- Trip Details -->
+        <!-- trip details -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -111,7 +111,7 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Budget Tracker Section - Add this after the trip details section and before itinerary -->
+        <!-- budget tracker -->
         <androidx.cardview.widget.CardView
             android:id="@+id/card_budget_tracker"
             android:layout_width="match_parent"
@@ -182,7 +182,7 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Itinerary Section -->
+        <!-- itinerary -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -212,7 +212,7 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Documents Section -->
+        <!-- documents  -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -243,7 +243,7 @@
         </androidx.cardview.widget.CardView>
 
 
-        <!-- Expenses Section -->
+        <!-- expenses -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -257,7 +257,6 @@
                 android:orientation="vertical"
                 android:padding="16dp">
 
-                <!-- This LinearLayout will contain the title and button side by side -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -314,7 +313,7 @@
                 android:text="Delete Trip" />
         </LinearLayout>
 
-        <!-- Empty State View -->
+        <!-- Empty State -->
         <LinearLayout
             android:id="@+id/empty_state_view"
             android:layout_width="match_parent"

@@ -107,17 +107,17 @@ public class TripPlanningFragment extends Fragment implements PlacesAutocomplete
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Get trip ID if passed (for editing an existing trip)
+
         Bundle args = getArguments();
         if (args != null) {
             tripId = args.getString("trip_id");
         }
 
-        // Initialize managers
+
         firestoreManager = FirestoreManager.getInstance();
         storageManager = StorageManager.getInstance();
 
-        // Initialize UI components
+
         initializeViews(view);
         setupDatePickers();
         setupCurrencyDropdown();
@@ -126,7 +126,7 @@ public class TripPlanningFragment extends Fragment implements PlacesAutocomplete
         setupLocationManagement();
         setupDocumentSection(view);
         setupPlaceAutocomplete();
-        // Load existing trip data if editing
+
         if (tripId != null) {
             loadTripData(tripId);
         }
@@ -136,7 +136,6 @@ public class TripPlanningFragment extends Fragment implements PlacesAutocomplete
     public void onDestroy() {
         super.onDestroy();
 
-        // Clean up Places resources
         if (destinationAdapter != null) {
             destinationAdapter.shutdown();
             destinationAdapter = null;
@@ -146,7 +145,6 @@ public class TripPlanningFragment extends Fragment implements PlacesAutocomplete
     private void initializeViews(View view) {
         etTripName = view.findViewById(R.id.et_trip_name);
 
-        // Change the type to AutoCompleteTextView
         etDestination = (AutoCompleteTextView) view.findViewById(R.id.et_destination);
 
         etStartDate = view.findViewById(R.id.et_start_date);
@@ -223,7 +221,7 @@ public class TripPlanningFragment extends Fragment implements PlacesAutocomplete
         documentAdapter = new DocumentAdapter(requireContext(), new DocumentAdapter.DocumentAdapterListener() {
             @Override
             public void onViewDocument(Document document, int position) {
-                // Open the document
+
                 if (document.getFileUrl() != null && !document.getFileUrl().isEmpty()) {
                     Intent intent = new Intent(Intent.ACTION_VIEW);
                     intent.setData(Uri.parse(document.getFileUrl()));
@@ -233,7 +231,7 @@ public class TripPlanningFragment extends Fragment implements PlacesAutocomplete
 
             @Override
             public void onDeleteDocument(Document document, int position) {
-                // Confirm and delete document
+
                 new AlertDialog.Builder(requireContext())
                         .setTitle("Delete Document")
                         .setMessage("Are you sure you want to delete " + document.getName() + "?")
@@ -253,10 +251,10 @@ public class TripPlanningFragment extends Fragment implements PlacesAutocomplete
             selectDocument();
         });
 
-        // Initialize document fields
+
         TextInputEditText etDocumentName = view.findViewById(R.id.et_document_name);
 
-        // If editing a trip, populate documents
+
         if (currentTrip != null && currentTrip.getDocuments() != null) {
             documentList.addAll(currentTrip.getDocuments());
             documentAdapter.setDocuments(documentList);
@@ -286,7 +284,7 @@ public class TripPlanningFragment extends Fragment implements PlacesAutocomplete
         if (requestCode == PICK_DOCUMENT_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
             selectedDocumentUri = data.getData();
 
-            // Get document name
+
             String fileName = "Document";
             Cursor cursor = requireContext().getContentResolver().query(selectedDocumentUri, null, null, null, null);
             if (cursor != null && cursor.moveToFirst()) {
@@ -301,20 +299,20 @@ public class TripPlanningFragment extends Fragment implements PlacesAutocomplete
             TextInputEditText etDocumentName = getView().findViewById(R.id.et_document_name);
             etDocumentName.setText(selectedDocumentName);
 
-            // Upload document
+
             uploadDocumentToFirebase(selectedDocumentUri, selectedDocumentName);
         }
     }
 
     private void uploadDocumentToFirebase(Uri documentUri, String fileName) {
-        // Show progress
+
         ProgressDialog progressDialog = new ProgressDialog(requireContext());
         progressDialog.setTitle("Uploading Document");
         progressDialog.setMessage("Please wait...");
         progressDialog.setCancelable(false);
         progressDialog.show();
 
-        // Get current user
+
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser == null) {
             Toast.makeText(requireContext(), "Please login to upload documents", Toast.LENGTH_SHORT).show();
@@ -322,31 +320,31 @@ public class TripPlanningFragment extends Fragment implements PlacesAutocomplete
             return;
         }
 
-        // Create unique filename
+
         String uniqueFileName = UUID.randomUUID().toString() + "_" + fileName;
         final String documentPath = "documents/" + currentUser.getUid() + "/" + uniqueFileName;
 
-        // Get Firebase Storage reference
+
         StorageReference storageRef = FirebaseStorage.getInstance().getReference();
         StorageReference documentRef = storageRef.child(documentPath);
 
-        // Upload file
+
         documentRef.putFile(documentUri)
                 .addOnSuccessListener(taskSnapshot -> {
-                    // Get download URL
+
                     documentRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                        // Create Document object
+
                         Document document = new Document();
                         document.setId(UUID.randomUUID().toString());
                         document.setName(fileName);
                         document.setFileUrl(uri.toString());
 
-                        // Add to adapter and list
+
                         documentList.add(document);
                         documentAdapter.addDocument(document);
                         rvDocuments.setVisibility(View.VISIBLE);
 
-                        // Clear fields
+
                         TextInputEditText etDocumentName = getView().findViewById(R.id.et_document_name);
                         etDocumentName.setText("");
                         selectedDocumentUri = null;
@@ -357,7 +355,7 @@ public class TripPlanningFragment extends Fragment implements PlacesAutocomplete
                     });
                 })
                 .addOnFailureListener(e -> {
-                    // Add more detailed error logging
+
                     Log.e("TripPlanningFragment", "Document upload failed", e);
                     if (e instanceof StorageException) {
                         StorageException storageException = (StorageException) e;
@@ -384,19 +382,16 @@ public class TripPlanningFragment extends Fragment implements PlacesAutocomplete
     private boolean validateForm() {
         boolean valid = true;
 
-        // Validate Trip Name
         if (etTripName.getText().toString().trim().isEmpty()) {
             etTripName.setError("Trip name is required");
             valid = false;
         }
 
-        // Validate Destination
         if (etDestination.getText().toString().trim().isEmpty()) {
             etDestination.setError("Destination is required");
             valid = false;
         }
 
-        // Validate Dates
         if (etStartDate.getText().toString().trim().isEmpty()) {
             etStartDate.setError("Start date is required");
             valid = false;
@@ -407,7 +402,6 @@ public class TripPlanningFragment extends Fragment implements PlacesAutocomplete
             valid = false;
         }
 
-        // Validate date order (start date must be before or equal to end date)
         if (!etStartDate.getText().toString().trim().isEmpty()
                 && !etEndDate.getText().toString().trim().isEmpty()) {
             try {
@@ -424,7 +418,6 @@ public class TripPlanningFragment extends Fragment implements PlacesAutocomplete
             }
         }
 
-        // Validate Budget (if provided)
         if (!etBudget.getText().toString().trim().isEmpty()) {
             try {
                 double budget = Double.parseDouble(etBudget.getText().toString());
@@ -591,18 +584,12 @@ public class TripPlanningFragment extends Fragment implements PlacesAutocomplete
 
         // Load image if available
         if (trip.getImageUrl() != null && !trip.getImageUrl().isEmpty()) {
-            // You'd typically use Glide or Picasso here to load the image
-            // For simplicity, we'll just note that this would be needed
-            tripImage.setVisibility(View.VISIBLE);
-            // Example with Glide:
-            // Glide.with(this).load(trip.getImageUrl()).into(tripImage);
+            tripImage.setVisibility(View.VISIBLE);;
         }
         if (trip.getLocations() != null && !trip.getLocations().isEmpty()) {
-            // Clear any existing data
             locationsByDay.clear();
             daysContainer.removeAllViews();
 
-            // Group locations by day
             int maxDay = 1;
             for (Location location : trip.getLocations()) {
                 int dayIndex = location.getDayIndex();
@@ -616,12 +603,10 @@ public class TripPlanningFragment extends Fragment implements PlacesAutocomplete
                 locationsByDay.get(dayIndex).add(location);
             }
 
-            // Create day containers
             for (int i = 1; i <= maxDay; i++) {
                 addDayContainer(i);
             }
 
-            // Update day count
             dayCount = maxDay;
         }
 
@@ -632,13 +617,11 @@ public class TripPlanningFragment extends Fragment implements PlacesAutocomplete
             rvDocuments.setVisibility(View.VISIBLE);
         }
 
-        // Update button text for edit mode
         btnSaveTrip.setText("Update Trip");
     }
 
     private void setupPlaceAutocomplete() {
         try {
-            // Create adapter with inline callback
             destinationAdapter = new PlacesAutocompleteAdapter(requireContext(),
                     android.R.layout.simple_dropdown_item_1line,
                     place -> {
@@ -652,7 +635,6 @@ public class TripPlanningFragment extends Fragment implements PlacesAutocomplete
                         }
                     });
 
-            // Set adapter to AutoCompleteTextView
             etDestination.setAdapter(destinationAdapter);
             etDestination.setThreshold(2);
 
@@ -667,21 +649,17 @@ public class TripPlanningFragment extends Fragment implements PlacesAutocomplete
     public void onPlaceSelected(Place place) {
         etDestination.setText(place.getName());
 
-        // Store latitude and longitude
         if (place.getLatLng() != null) {
             selectedLat = place.getLatLng().latitude;
             selectedLng = place.getLatLng().longitude;
         }
 
-        // Hide the dropdown
         ((AutoCompleteTextView) etDestination).dismissDropDown();
     }
 
     private void setupLocationManagement() {
-        // Add first day
         addDayContainer(1);
 
-        // Setup add day button
         btnAddDay.setOnClickListener(v -> {
             dayCount++;
             addDayContainer(dayCount);
@@ -689,18 +667,18 @@ public class TripPlanningFragment extends Fragment implements PlacesAutocomplete
     }
 
     private void addDayContainer(int dayIndex) {
-        // Inflate day container view
+
         View dayView = getLayoutInflater().inflate(R.layout.item_day_locations, daysContainer, false);
 
-        // Setup day title
+
         TextView tvDayTitle = dayView.findViewById(R.id.tv_day_title);
         tvDayTitle.setText("Locations for Day " + dayIndex);
 
-        // Setup RecyclerView
+
         RecyclerView rvLocations = dayView.findViewById(R.id.rv_locations);
         rvLocations.setLayoutManager(new LinearLayoutManager(requireContext()));
 
-        // Create adapter for this day
+
         LocationAdapter adapter = new LocationAdapter(requireContext(), dayIndex,
                 new LocationAdapter.LocationAdapterListener() {
             @Override
@@ -716,25 +694,20 @@ public class TripPlanningFragment extends Fragment implements PlacesAutocomplete
 
         rvLocations.setAdapter(adapter);
 
-        // Initialize empty location list for this day
         if (!locationsByDay.containsKey(dayIndex)) {
             locationsByDay.put(dayIndex, new ArrayList<>());
         }
 
-        // Set data to adapter
         adapter.setLocations(locationsByDay.get(dayIndex));
 
-        // Setup add location button
         Button btnAddLocation = dayView.findViewById(R.id.btn_add_location);
         btnAddLocation.setOnClickListener(v -> {
             showLocationDialog(null, -1, dayIndex);
         });
 
-        // Store references
         dayRecyclerViews.put(dayIndex, rvLocations);
         locationAdapters.put(dayIndex, adapter);
 
-        // Add to container
         daysContainer.addView(dayView);
     }
 
@@ -743,7 +716,7 @@ public class TripPlanningFragment extends Fragment implements PlacesAutocomplete
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setView(dialogView);
 
-        // Get views
+
         TextView tvDialogTitle = dialogView.findViewById(R.id.tv_dialog_title);
         AutoCompleteTextView etLocationName = dialogView.findViewById(R.id.et_location_name);
         TextInputEditText etStartTime = dialogView.findViewById(R.id.et_start_time);
@@ -752,14 +725,14 @@ public class TripPlanningFragment extends Fragment implements PlacesAutocomplete
         Button btnCancel = dialogView.findViewById(R.id.btn_cancel);
         Button btnSaveLocation = dialogView.findViewById(R.id.btn_save_location);
 
-        // Set autocomplete adapter for location name
+
         PlacesAutocompleteAdapter dialogPlacesAdapter = new PlacesAutocompleteAdapter(requireContext(),
                 android.R.layout.simple_dropdown_item_1line,
                 place -> {
                     etLocationName.setText(place.getName());
                     etLocationName.dismissDropDown();
 
-                    // Store the latitude and longitude for this place
+
                     if (place.getLatLng() != null) {
                         etLocationName.setTag(place.getLatLng());
                     }
@@ -768,16 +741,14 @@ public class TripPlanningFragment extends Fragment implements PlacesAutocomplete
         etLocationName.setAdapter(dialogPlacesAdapter);
         etLocationName.setThreshold(2);
 
-        // Make sure to clean up when dialog closes
         builder.setOnDismissListener(dialogInterface -> {
             dialogPlacesAdapter.shutdown();
         });
 
-        // Add text watchers to validate and auto-format time input
         etStartTime.addTextChangedListener(new TimeFormatWatcher(etStartTime));
         etEndTime.addTextChangedListener(new TimeFormatWatcher(etEndTime));
 
-        // If editing, populate fields
+
         if (location != null) {
             tvDialogTitle.setText("Edit Location");
             etLocationName.setText(location.getName());
@@ -790,7 +761,6 @@ public class TripPlanningFragment extends Fragment implements PlacesAutocomplete
 
         AlertDialog dialog = builder.create();
 
-        // Handle button clicks
         btnCancel.setOnClickListener(v -> dialog.dismiss());
 
         btnSaveLocation.setOnClickListener(v -> {
@@ -814,14 +784,14 @@ public class TripPlanningFragment extends Fragment implements PlacesAutocomplete
                 return;
             }
 
-            // Create or update location
+
             Location newLocation = (location != null) ? location : new Location();
             newLocation.setName(name);
             newLocation.setStartTime(startTime);
             newLocation.setEndTime(endTime);
             newLocation.setNotes(etLocationNotes.getText().toString().trim());
 
-            // Set latitude and longitude if available from Places API
+
             if (etLocationName.getTag() instanceof com.google.android.gms.maps.model.LatLng) {
                 com.google.android.gms.maps.model.LatLng latLng
                         = (com.google.android.gms.maps.model.LatLng) etLocationName.getTag();
@@ -829,13 +799,13 @@ public class TripPlanningFragment extends Fragment implements PlacesAutocomplete
                 newLocation.setLongitude(latLng.longitude);
             }
 
-            // Save to appropriate day's list
+
             if (position == -1) {
-                // Add new location
+
                 locationAdapters.get(dayIndex).addLocation(newLocation);
                 locationsByDay.get(dayIndex).add(newLocation);
             } else {
-                // Update existing location
+
                 locationAdapters.get(dayIndex).updateLocation(newLocation, position);
                 locationsByDay.get(dayIndex).set(position, newLocation);
             }
@@ -860,7 +830,7 @@ public class TripPlanningFragment extends Fragment implements PlacesAutocomplete
 
     private boolean isValidTimeFormat(String time) {
         if (time == null || time.isEmpty()) {
-            return true; // Empty is considered valid (optional field)
+            return true;
         }
 
         // Regex for HH:MM format (00:00 to 23:59)
@@ -898,7 +868,7 @@ public class TripPlanningFragment extends Fragment implements PlacesAutocomplete
                 return;
             }
 
-            // If it already contains a colon, check if it's valid
+            // check input with colon
             if (text.contains(":")) {
                 if (!isValidTimeFormat(text)) {
                     timeField.setError("Use format HH:MM (e.g. 09:30)");
@@ -908,19 +878,19 @@ public class TripPlanningFragment extends Fragment implements PlacesAutocomplete
                 return;
             }
 
-            // If it's a numeric entry without colon, try to auto-format it
+            // if no colon, reformat it
             if (text.matches("\\d+")) {
                 mChanging = true;
 
                 try {
-                    // If we have 4 digits, format it as HH:MM
+                    // for 4 digits, format it as HH:MM
                     if (text.length() == 4) {
                         int hours = Integer.parseInt(text.substring(0, 2));
                         int minutes = Integer.parseInt(text.substring(2, 4));
 
-                        // Validate hours and minutes
+                        // check hours and minutes
                         if (hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59) {
-                            // Format as HH:MM
+                            // format as HH:MM
                             String formattedTime = String.format(Locale.US, "%02d:%02d", hours, minutes);
                             timeField.setText(formattedTime);
                             timeField.setSelection(formattedTime.length());
@@ -928,11 +898,11 @@ public class TripPlanningFragment extends Fragment implements PlacesAutocomplete
                         } else {
                             timeField.setError("Invalid time. Hours: 00-23, Minutes: 00-59");
                         }
-                    } // If we have fewer than 4 digits, wait for more input
+                    } // check if fewer than 4 digits
                     else if (text.length() < 4) {
                         // Just clear any error while typing
                         timeField.setError(null);
-                    } // If we have more than 4 digits, show an error
+                    } // show  we have more than 4 digits error
                     else if (text.length() > 4) {
                         timeField.setError("Enter exactly 4 digits (e.g., 1230 for 12:30)");
                     }

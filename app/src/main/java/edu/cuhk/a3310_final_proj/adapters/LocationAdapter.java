@@ -107,7 +107,6 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
         public void bind(Location location, int position) {
             tvLocationName.setText(location.getName());
 
-            // Display time range
             String timeDisplay = "";
             if (location.getStartTime() != null && !location.getStartTime().isEmpty()) {
                 timeDisplay += location.getStartTime();
@@ -118,7 +117,6 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
             }
             tvLocationTime.setText(timeDisplay);
 
-            // Set click listeners for edit and delete
             btnEdit.setOnClickListener(v -> {
                 if (listener != null) {
                     listener.onEditLocation(location, position, dayIndex);
@@ -134,6 +132,5 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
     }
 
     private void openInGoogleMaps(Location location) {
-        // Implementation for opening location in Google Maps
     }
 }

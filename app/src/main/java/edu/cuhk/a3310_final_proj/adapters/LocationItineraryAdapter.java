@@ -71,7 +71,7 @@ public class LocationItineraryAdapter extends RecyclerView.Adapter<LocationItine
     }
 
     private void openInGoogleMaps(Location location) {
-        // Check if we have coordinates
+        //  Coordinates checking
         if (location.getLatitude() != 0 && location.getLongitude() != 0) {
             // Use coordinates
             Uri gmmIntentUri = Uri.parse("geo:" + location.getLatitude() + "," + location.getLongitude()
@@ -91,7 +91,7 @@ public class LocationItineraryAdapter extends RecyclerView.Adapter<LocationItine
         if (mapIntent.resolveActivity(context.getPackageManager()) != null) {
             context.startActivity(mapIntent);
         } else {
-            // Google Maps app is not installed, open browser instead
+            // open browser if Google Maps app is not installed,
             Uri browserUri = Uri.parse("https://www.google.com/maps/search/?api=1&query="
                     + Uri.encode(gmmIntentUri.getQueryParameter("q")));
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, browserUri);

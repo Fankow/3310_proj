@@ -33,7 +33,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Check if user is already logged in
+        // check if user is already logged in
         FirebaseAuth auth = FirebaseAuth.getInstance();
 //        if (auth.getCurrentUser() != null) {
 //            // User is already logged in, log details

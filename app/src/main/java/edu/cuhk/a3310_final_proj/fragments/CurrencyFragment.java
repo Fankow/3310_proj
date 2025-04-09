@@ -87,7 +87,6 @@ public class CurrencyFragment extends Fragment {
         amountInput = view.findViewById(R.id.amountInput);
         convertButton = view.findViewById(R.id.convertButton);
 
-        // Setup convert button click listener
         convertButton.setOnClickListener(v -> performConversion());
 
         // Initialize monitored currencies recyclerView
@@ -296,7 +295,7 @@ public class CurrencyFragment extends Fragment {
             return;
         }
 
-        // First check if the document exists
+        //check if the document exists
         db.collection("users").document(userId)
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
@@ -305,7 +304,7 @@ public class CurrencyFragment extends Fragment {
                     preferences.put("defaultSourceCurrency", sourceCurrencySpinner.getSelectedItem().toString());
 
                     if (documentSnapshot.exists()) {
-                        // Document exists - update it
+                        //  update document if exists
                         db.collection("users").document(userId)
                                 .update("preferences", preferences)
                                 .addOnSuccessListener(aVoid
@@ -315,7 +314,7 @@ public class CurrencyFragment extends Fragment {
                                     Log.w(TAG, "Error saving monitored currencies", e);
                                 });
                     } else {
-                        // Document doesn't exist - create it
+                        //  create document it if doesn't exist
                         Map<String, Object> userData = new HashMap<>();
                         userData.put("preferences", preferences);
                         userData.put("email", FirebaseAuth.getInstance().getCurrentUser().getEmail());
@@ -340,7 +339,6 @@ public class CurrencyFragment extends Fragment {
         Toast.makeText(requireContext(), "Database error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
     }
 
-    // Interface for currency rate API
     private interface ExchangeRateService {
 
         @GET("{base}")
