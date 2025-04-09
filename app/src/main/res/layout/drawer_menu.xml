@@ -17,5 +17,9 @@
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_settings"
             android:title="Settings" />
+        <item
+            android:id="@+id/nav_hotel_flight"
+            android:icon="@drawable/ic_search"
+            android:title="Hotel and Flight"/>
     </group>
 </menu>

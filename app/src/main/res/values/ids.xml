@@ -15,4 +15,5 @@
     <item name="nav_currency" type="id" />
     <item name="nav_settings" type="id" />
     <item name="home" type="id"/>
+    <item name="nav_hotel_flight" type="id"/>
 </resources>

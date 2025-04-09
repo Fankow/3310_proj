@@ -17,6 +17,7 @@ import com.google.android.libraries.places.api.Places;
 import com.google.android.material.navigation.NavigationView;
 import edu.cuhk.a3310_final_proj.fragments.CurrencyFragment;
 import edu.cuhk.a3310_final_proj.fragments.HomeFragment;
+import edu.cuhk.a3310_final_proj.fragments.HotelNFlightFragment;
 import edu.cuhk.a3310_final_proj.fragments.PreferencesFragment;
 import edu.cuhk.a3310_final_proj.fragments.TripDetailFragment;
 import edu.cuhk.a3310_final_proj.fragments.TripPlanningFragment;
@@ -77,6 +78,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if(itemId == R.id.nav_home){
             selectedFragment = new HomeFragment();
             getSupportActionBar().setTitle("Home Page");
+        }else if(itemId == R.id.nav_hotel_flight){
+            selectedFragment = new HotelNFlightFragment();
+            getSupportActionBar().setTitle("Hotel and Flight");
         }
 
         if (selectedFragment != null) {
