@@ -15,18 +15,23 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.libraries.places.api.Places;
 import com.google.android.material.navigation.NavigationView;
+
 import edu.cuhk.a3310_final_proj.fragments.CurrencyFragment;
+import edu.cuhk.a3310_final_proj.fragments.FlightSearchFragment;
 import edu.cuhk.a3310_final_proj.fragments.HomeFragment;
 import edu.cuhk.a3310_final_proj.fragments.HotelNFlightFragment;
 import edu.cuhk.a3310_final_proj.fragments.PreferencesFragment;
 import edu.cuhk.a3310_final_proj.fragments.TripDetailFragment;
 import edu.cuhk.a3310_final_proj.fragments.TripPlanningFragment;
 import edu.cuhk.a3310_final_proj.fragments.TripViewFragment;
+import edu.cuhk.a3310_final_proj.fragments.HotelSearchFragment;
+import edu.cuhk.a3310_final_proj.fragments.FavoriteHotelsFragment;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout drawer;
     private Button plan;
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,12 +80,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (itemId == R.id.nav_settings) {
             selectedFragment = new PreferencesFragment();
             getSupportActionBar().setTitle("Settings");
-        } else if(itemId == R.id.nav_home){
+        } else if (itemId == R.id.nav_home) {
             selectedFragment = new HomeFragment();
             getSupportActionBar().setTitle("Home Page");
-        }else if(itemId == R.id.nav_hotel_flight){
+        } else if (itemId == R.id.nav_hotel_flight) {
             selectedFragment = new HotelNFlightFragment();
             getSupportActionBar().setTitle("Hotel and Flight");
+        } else if (itemId == R.id.nav_hotel_search) {
+            selectedFragment = new HotelSearchFragment();
+            getSupportActionBar().setTitle("Hotel Search");
+        } else if (itemId == R.id.nav_favorite_hotels) {
+            selectedFragment = new FavoriteHotelsFragment();
+            getSupportActionBar().setTitle("Favorite Hotels");
+        } else if (itemId == R.id.nav_flight_search){
+            selectedFragment = new FlightSearchFragment();
+            getSupportActionBar().setTitle("Flight Search");
         }
 
         if (selectedFragment != null) {

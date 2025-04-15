@@ -1,0 +1,1599 @@
+{
+"search_metadata":
+{
+"id":
+"67fd7bfea73b1a466eb15371",
+"status":
+"Success",
+"json_endpoint":
+"https://serpapi.com/searches/abe4dcc03368a140/67fd7bfea73b1a466eb15371.json",
+"created_at":
+"2025-04-14 21:19:58 UTC",
+"processed_at":
+"2025-04-14 21:19:58 UTC",
+"google_flights_url":
+"https://www.google.com/travel/flights?hl=en&gl=us&curr=USD&tfs=CBwQAhoeEgoyMDI1LTA0LTE1agcIARIDTlJUcgcIARIDSEtHQgEBSAFwAZgBAg&tfu=EgIIAQ",
+"raw_html_file":
+"https://serpapi.com/searches/abe4dcc03368a140/67fd7bfea73b1a466eb15371.html",
+"prettify_html_file":
+"https://serpapi.com/searches/abe4dcc03368a140/67fd7bfea73b1a466eb15371.prettify",
+"total_time_taken":
+1.07
+},
+"search_parameters":
+{
+"engine":
+"google_flights",
+"hl":
+"en",
+"gl":
+"us",
+"type":
+"2",
+"departure_id":
+"NRT",
+"arrival_id":
+"HKG",
+"outbound_date":
+"2025-04-15",
+"currency":
+"USD"
+},
+"best_flights":
+[
+{
+"flights":
+[
+{
+"departure_airport":
+{
+"name":
+"Narita International Airport",
+"id":
+"NRT",
+"time":
+"2025-04-15 15:55"
+},
+"arrival_airport":
+{
+"name":
+"Hong Kong International Airport",
+"id":
+"HKG",
+"time":
+"2025-04-15 20:00"
+},
+"duration":
+305,
+"airplane":
+"Airbus A330",
+"airline":
+"Hong Kong Airlines",
+"airline_logo":
+"https://www.gstatic.com/flights/airline_logos/70px/HX.png",
+"travel_class":
+"Economy",
+"flight_number":
+"HX 609",
+"legroom":
+"31 in",
+"extensions":
+[
+"Average legroom (31 in)",
+"In-seat power outlet",
+"Carbon emissions estimate: 211 kg"
+]
+}
+],
+"total_duration":
+305,
+"carbon_emissions":
+{
+"this_flight":
+211000,
+"typical_for_this_route":
+219000,
+"difference_percent":
+-4
+},
+"price":
+148,
+"type":
+"One way",
+"airline_logo":
+"https://www.gstatic.com/flights/airline_logos/70px/HX.png",
+"booking_token":
+"WyJDalJJU1hweFFUZG5VM2hmVjNOQlNWRkNkMmRDUnkwdExTMHRMUzB0TFMxdmEzUmpOMEZCUVVGQlIyWTVaVjg0UkhKNk5qQkJFZ1ZJV0RZd09Sb0tDTEJ6RUFJYUExVlRSRGdjY0xCeiIsW1siTlJUIiwiMjAyNS0wNC0xNSIsIkhLRyIsbnVsbCwiSFgiLCI2MDkiXV1d"
+},
+{
+"flights":
+[
+{
+"departure_airport":
+{
+"name":
+"Narita International Airport",
+"id":
+"NRT",
+"time":
+"2025-04-15 17:45"
+},
+"arrival_airport":
+{
+"name":
+"Hong Kong International Airport",
+"id":
+"HKG",
+"time":
+"2025-04-15 21:50"
+},
+"duration":
+305,
+"airplane":
+"Boeing 737",
+"airline":
+"Greater Bay Airlines",
+"airline_logo":
+"https://www.gstatic.com/flights/airline_logos/70px/HB.png",
+"travel_class":
+"Economy",
+"flight_number":
+"HB 323",
+"legroom":
+"29 in",
+"extensions":
+[
+"Below average legroom (29 in)",
+"In-seat USB outlet",
+"Carbon emissions estimate: 234 kg"
+]
+}
+],
+"total_duration":
+305,
+"carbon_emissions":
+{
+"this_flight":
+234000,
+"typical_for_this_route":
+219000,
+"difference_percent":
+7
+},
+"price":
+164,
+"type":
+"One way",
+"airline_logo":
+"https://www.gstatic.com/flights/airline_logos/70px/HB.png",
+"booking_token":
+"WyJDalJJU1hweFFUZG5VM2hmVjNOQlNWRkNkMmRDUnkwdExTMHRMUzB0TFMxdmEzUmpOMEZCUVVGQlIyWTVaVjg0UkhKNk5qQkJFZ1ZJUWpNeU14b0tDTXQvRUFJYUExVlRSRGdjY010LyIsW1siTlJUIiwiMjAyNS0wNC0xNSIsIkhLRyIsbnVsbCwiSEIiLCIzMjMiXV1d"
+},
+{
+"flights":
+[
+{
+"departure_airport":
+{
+"name":
+"Narita International Airport",
+"id":
+"NRT",
+"time":
+"2025-04-15 14:30"
+},
+"arrival_airport":
+{
+"name":
+"Hong Kong International Airport",
+"id":
+"HKG",
+"time":
+"2025-04-15 18:30"
+},
+"duration":
+300,
+"airplane":
+"Airbus A320",
+"airline":
+"Hong Kong Airlines",
+"airline_logo":
+"https://www.gstatic.com/flights/airline_logos/70px/HX.png",
+"travel_class":
+"Economy",
+"flight_number":
+"HX 605",
+"legroom":
+"30 in",
+"extensions":
+[
+"Average legroom (30 in)",
+"Carbon emissions estimate: 276 kg"
+],
+"often_delayed_by_over_30_min":
+true
+}
+],
+"total_duration":
+300,
+"carbon_emissions":
+{
+"this_flight":
+277000,
+"typical_for_this_route":
+219000,
+"difference_percent":
+26
+},
+"price":
+165,
+"type":
+"One way",
+"airline_logo":
+"https://www.gstatic.com/flights/airline_logos/70px/HX.png",
+"booking_token":
+"WyJDalJJU1hweFFUZG5VM2hmVjNOQlNWRkNkMmRDUnkwdExTMHRMUzB0TFMxdmEzUmpOMEZCUVVGQlIyWTVaVjg0UkhKNk5qQkJFZ1ZJV0RZd05Sb0xDTmVBQVJBQ0dnTlZVMFE0SEhEWGdBRT0iLFtbIk5SVCIsIjIwMjUtMDQtMTUiLCJIS0ciLG51bGwsIkhYIiwiNjA1Il1dXQ=="
+}
+],
+"other_flights":
+[
+{
+"flights":
+[
+{
+"departure_airport":
+{
+"name":
+"Narita International Airport",
+"id":
+"NRT",
+"time":
+"2025-04-15 21:55"
+},
+"arrival_airport":
+{
+"name":
+"Hong Kong International Airport",
+"id":
+"HKG",
+"time":
+"2025-04-16 01:50"
+},
+"duration":
+295,
+"airplane":
+"Airbus A330",
+"airline":
+"Hong Kong Airlines",
+"airline_logo":
+"https://www.gstatic.com/flights/airline_logos/70px/HX.png",
+"travel_class":
+"Economy",
+"flight_number":
+"HX 631",
+"legroom":
+"31 in",
+"extensions":
+[
+"Average legroom (31 in)",
+"In-seat power outlet",
+"Carbon emissions estimate: 211 kg"
+]
+}
+],
+"total_duration":
+295,
+"carbon_emissions":
+{
+"this_flight":
+211000,
+"typical_for_this_route":
+219000,
+"difference_percent":
+-4
+},
+"price":
+148,
+"type":
+"One way",
+"airline_logo":
+"https://www.gstatic.com/flights/airline_logos/70px/HX.png",
+"booking_token":
+"WyJDalJJU1hweFFUZG5VM2hmVjNOQlNWRkNkMmRDUnkwdExTMHRMUzB0TFMxdmEzUmpOMEZCUVVGQlIyWTVaVjg0UkhKNk5qQkJFZ1ZJV0RZek1Sb0tDTEJ6RUFJYUExVlRSRGdjY0xCeiIsW1siTlJUIiwiMjAyNS0wNC0xNSIsIkhLRyIsbnVsbCwiSFgiLCI2MzEiXV1d"
+},
+{
+"flights":
+[
+{
+"departure_airport":
+{
+"name":
+"Narita International Airport",
+"id":
+"NRT",
+"time":
+"2025-04-15 17:05"
+},
+"arrival_airport":
+{
+"name":
+"Hong Kong International Airport",
+"id":
+"HKG",
+"time":
+"2025-04-15 21:00"
+},
+"duration":
+295,
+"airplane":
+"Airbus A321neo",
+"airline":
+"Hong Kong Express",
+"airline_logo":
+"https://www.gstatic.com/flights/airline_logos/70px/UO.png",
+"travel_class":
+"Economy",
+"flight_number":
+"UO 871",
+"legroom":
+"28 in",
+"extensions":
+[
+"Below average legroom (28 in)",
+"Carbon emissions estimate: 186 kg"
+]
+}
+],
+"total_duration":
+295,
+"carbon_emissions":
+{
+"this_flight":
+186000,
+"typical_for_this_route":
+219000,
+"difference_percent":
+-15
+},
+"price":
+150,
+"type":
+"One way",
+"airline_logo":
+"https://www.gstatic.com/flights/airline_logos/70px/UO.png",
+"booking_token":
+"WyJDalJJU1hweFFUZG5VM2hmVjNOQlNWRkNkMmRDUnkwdExTMHRMUzB0TFMxdmEzUmpOMEZCUVVGQlIyWTVaVjg0UkhKNk5qQkJFZ1ZWVHpnM01Sb0tDSk4xRUFJYUExVlRSRGdjY0pOMSIsW1siTlJUIiwiMjAyNS0wNC0xNSIsIkhLRyIsbnVsbCwiVU8iLCI4NzEiXV1d"
+},
+{
+"flights":
+[
+{
+"departure_airport":
+{
+"name":
+"Narita International Airport",
+"id":
+"NRT",
+"time":
+"2025-04-15 20:40"
+},
+"arrival_airport":
+{
+"name":
+"Hong Kong International Airport",
+"id":
+"HKG",
+"time":
+"2025-04-16 00:35"
+},
+"duration":
+295,
+"airplane":
+"Airbus A321neo",
+"airline":
+"Hong Kong Express",
+"airline_logo":
+"https://www.gstatic.com/flights/airline_logos/70px/UO.png",
+"travel_class":
+"Economy",
+"flight_number":
+"UO 651",
+"legroom":
+"28 in",
+"extensions":
+[
+"Below average legroom (28 in)",
+"Carbon emissions estimate: 186 kg"
+]
+}
+],
+"total_duration":
+295,
+"carbon_emissions":
+{
+"this_flight":
+186000,
+"typical_for_this_route":
+219000,
+"difference_percent":
+-15
+},
+"price":
+150,
+"type":
+"One way",
+"airline_logo":
+"https://www.gstatic.com/flights/airline_logos/70px/UO.png",
+"booking_token":
+"WyJDalJJU1hweFFUZG5VM2hmVjNOQlNWRkNkMmRDUnkwdExTMHRMUzB0TFMxdmEzUmpOMEZCUVVGQlIyWTVaVjg0UkhKNk5qQkJFZ1ZWVHpZMU1Sb0tDSk4xRUFJYUExVlRSRGdjY0pOMSIsW1siTlJUIiwiMjAyNS0wNC0xNSIsIkhLRyIsbnVsbCwiVU8iLCI2NTEiXV1d"
+},
+{
+"flights":
+[
+{
+"departure_airport":
+{
+"name":
+"Narita International Airport",
+"id":
+"NRT",
+"time":
+"2025-04-15 21:25"
+},
+"arrival_airport":
+{
+"name":
+"Hong Kong International Airport",
+"id":
+"HKG",
+"time":
+"2025-04-16 01:20"
+},
+"duration":
+295,
+"airplane":
+"Airbus A321neo",
+"airline":
+"Hong Kong Express",
+"airline_logo":
+"https://www.gstatic.com/flights/airline_logos/70px/UO.png",
+"travel_class":
+"Economy",
+"flight_number":
+"UO 653",
+"legroom":
+"28 in",
+"extensions":
+[
+"Below average legroom (28 in)",
+"Carbon emissions estimate: 186 kg"
+]
+}
+],
+"total_duration":
+295,
+"carbon_emissions":
+{
+"this_flight":
+186000,
+"typical_for_this_route":
+219000,
+"difference_percent":
+-15
+},
+"price":
+150,
+"type":
+"One way",
+"airline_logo":
+"https://www.gstatic.com/flights/airline_logos/70px/UO.png",
+"booking_token":
+"WyJDalJJU1hweFFUZG5VM2hmVjNOQlNWRkNkMmRDUnkwdExTMHRMUzB0TFMxdmEzUmpOMEZCUVVGQlIyWTVaVjg0UkhKNk5qQkJFZ1ZWVHpZMU14b0tDSk4xRUFJYUExVlRSRGdjY0pOMSIsW1siTlJUIiwiMjAyNS0wNC0xNSIsIkhLRyIsbnVsbCwiVU8iLCI2NTMiXV1d"
+},
+{
+"flights":
+[
+{
+"departure_airport":
+{
+"name":
+"Narita International Airport",
+"id":
+"NRT",
+"time":
+"2025-04-15 15:45"
+},
+"arrival_airport":
+{
+"name":
+"Hong Kong International Airport",
+"id":
+"HKG",
+"time":
+"2025-04-15 19:40"
+},
+"duration":
+295,
+"airplane":
+"Airbus A321",
+"airline":
+"Hong Kong Express",
+"airline_logo":
+"https://www.gstatic.com/flights/airline_logos/70px/UO.png",
+"travel_class":
+"Economy",
+"flight_number":
+"UO 849",
+"legroom":
+"29 in",
+"extensions":
+[
+"Below average legroom (29 in)",
+"Carbon emissions estimate: 235 kg"
+]
+}
+],
+"total_duration":
+295,
+"carbon_emissions":
+{
+"this_flight":
+235000,
+"typical_for_this_route":
+219000,
+"difference_percent":
+7
+},
+"price":
+154,
+"type":
+"One way",
+"airline_logo":
+"https://www.gstatic.com/flights/airline_logos/70px/UO.png",
+"booking_token":
+"WyJDalJJU1hweFFUZG5VM2hmVjNOQlNWRkNkMmRDUnkwdExTMHRMUzB0TFMxdmEzUmpOMEZCUVVGQlIyWTVaVjg0UkhKNk5qQkJFZ1ZWVHpnME9Sb0tDT2gzRUFJYUExVlRSRGdjY09oMyIsW1siTlJUIiwiMjAyNS0wNC0xNSIsIkhLRyIsbnVsbCwiVU8iLCI4NDkiXV1d"
+},
+{
+"flights":
+[
+{
+"departure_airport":
+{
+"name":
+"Narita International Airport",
+"id":
+"NRT",
+"time":
+"2025-04-15 16:05"
+},
+"arrival_airport":
+{
+"name":
+"Hong Kong International Airport",
+"id":
+"HKG",
+"time":
+"2025-04-15 20:15"
+},
+"duration":
+310,
+"airplane":
+"Boeing 737",
+"airline":
+"Greater Bay Airlines",
+"airline_logo":
+"https://www.gstatic.com/flights/airline_logos/70px/HB.png",
+"travel_class":
+"Economy",
+"flight_number":
+"HB 321",
+"legroom":
+"29 in",
+"extensions":
+[
+"Below average legroom (29 in)",
+"In-seat USB outlet",
+"Carbon emissions estimate: 234 kg"
+]
+}
+],
+"total_duration":
+310,
+"carbon_emissions":
+{
+"this_flight":
+234000,
+"typical_for_this_route":
+219000,
+"difference_percent":
+7
+},
+"price":
+164,
+"type":
+"One way",
+"airline_logo":
+"https://www.gstatic.com/flights/airline_logos/70px/HB.png",
+"booking_token":
+"WyJDalJJU1hweFFUZG5VM2hmVjNOQlNWRkNkMmRDUnkwdExTMHRMUzB0TFMxdmEzUmpOMEZCUVVGQlIyWTVaVjg0UkhKNk5qQkJFZ1ZJUWpNeU1Sb0tDTXQvRUFJYUExVlRSRGdjY010LyIsW1siTlJUIiwiMjAyNS0wNC0xNSIsIkhLRyIsbnVsbCwiSEIiLCIzMjEiXV1d"
+},
+{
+"flights":
+[
+{
+"departure_airport":
+{
+"name":
+"Narita International Airport",
+"id":
+"NRT",
+"time":
+"2025-04-15 09:25"
+},
+"arrival_airport":
+{
+"name":
+"Hong Kong International Airport",
+"id":
+"HKG",
+"time":
+"2025-04-15 13:15"
+},
+"duration":
+290,
+"airplane":
+"Airbus A350",
+"airline":
+"Cathay Pacific",
+"airline_logo":
+"https://www.gstatic.com/flights/airline_logos/70px/CX.png",
+"travel_class":
+"Economy",
+"flight_number":
+"CX 509",
+"ticket_also_sold_by":
+[
+"JAL"
+],
+"legroom":
+"32 in",
+"extensions":
+[
+"Above average legroom (32 in)",
+"Wi-Fi for a fee",
+"In-seat power & USB outlets",
+"On-demand video",
+"Carbon emissions estimate: 224 kg"
+]
+}
+],
+"total_duration":
+290,
+"carbon_emissions":
+{
+"this_flight":
+225000,
+"typical_for_this_route":
+219000,
+"difference_percent":
+3
+},
+"price":
+659,
+"type":
+"One way",
+"airline_logo":
+"https://www.gstatic.com/flights/airline_logos/70px/CX.png",
+"booking_token":
+"WyJDalJJU1hweFFUZG5VM2hmVjNOQlNWRkNkMmRDUnkwdExTMHRMUzB0TFMxdmEzUmpOMEZCUVVGQlIyWTVaVjg0UkhKNk5qQkJFZ1ZEV0RVd09Sb0xDS0NDQkJBQ0dnTlZVMFE0SEhDZ2dnUT0iLFtbIk5SVCIsIjIwMjUtMDQtMTUiLCJIS0ciLG51bGwsIkNYIiwiNTA5Il1dXQ=="
+},
+{
+"flights":
+[
+{
+"departure_airport":
+{
+"name":
+"Narita International Airport",
+"id":
+"NRT",
+"time":
+"2025-04-15 14:50"
+},
+"arrival_airport":
+{
+"name":
+"Hong Kong International Airport",
+"id":
+"HKG",
+"time":
+"2025-04-15 18:50"
+},
+"duration":
+300,
+"airplane":
+"Boeing 777",
+"airline":
+"Cathay Pacific",
+"airline_logo":
+"https://www.gstatic.com/flights/airline_logos/70px/CX.png",
+"travel_class":
+"Economy",
+"flight_number":
+"CX 527",
+"ticket_also_sold_by":
+[
+"JAL"
+],
+"legroom":
+"32 in",
+"extensions":
+[
+"Above average legroom (32 in)",
+"Wi-Fi for a fee",
+"In-seat power & USB outlets",
+"On-demand video",
+"Carbon emissions estimate: 249 kg"
+]
+}
+],
+"total_duration":
+300,
+"carbon_emissions":
+{
+"this_flight":
+249000,
+"typical_for_this_route":
+219000,
+"difference_percent":
+14
+},
+"price":
+659,
+"type":
+"One way",
+"airline_logo":
+"https://www.gstatic.com/flights/airline_logos/70px/CX.png",
+"booking_token":
+"WyJDalJJU1hweFFUZG5VM2hmVjNOQlNWRkNkMmRDUnkwdExTMHRMUzB0TFMxdmEzUmpOMEZCUVVGQlIyWTVaVjg0UkhKNk5qQkJFZ1ZEV0RVeU54b0xDS0NDQkJBQ0dnTlZVMFE0SEhDZ2dnUT0iLFtbIk5SVCIsIjIwMjUtMDQtMTUiLCJIS0ciLG51bGwsIkNYIiwiNTI3Il1dXQ=="
+},
+{
+"flights":
+[
+{
+"departure_airport":
+{
+"name":
+"Narita International Airport",
+"id":
+"NRT",
+"time":
+"2025-04-15 17:15"
+},
+"arrival_airport":
+{
+"name":
+"Hong Kong International Airport",
+"id":
+"HKG",
+"time":
+"2025-04-15 21:10"
+},
+"duration":
+295,
+"airplane":
+"Boeing 777",
+"airline":
+"Cathay Pacific",
+"airline_logo":
+"https://www.gstatic.com/flights/airline_logos/70px/CX.png",
+"travel_class":
+"Economy",
+"flight_number":
+"CX 521",
+"ticket_also_sold_by":
+[
+"JAL"
+],
+"legroom":
+"31 in",
+"extensions":
+[
+"Average legroom (31 in)",
+"In-seat power & USB outlets",
+"On-demand video",
+"Carbon emissions estimate: 197 kg"
+]
+}
+],
+"total_duration":
+295,
+"carbon_emissions":
+{
+"this_flight":
+198000,
+"typical_for_this_route":
+219000,
+"difference_percent":
+-10
+},
+"price":
+659,
+"type":
+"One way",
+"airline_logo":
+"https://www.gstatic.com/flights/airline_logos/70px/CX.png",
+"booking_token":
+"WyJDalJJU1hweFFUZG5VM2hmVjNOQlNWRkNkMmRDUnkwdExTMHRMUzB0TFMxdmEzUmpOMEZCUVVGQlIyWTVaVjg0UkhKNk5qQkJFZ1ZEV0RVeU1Sb0xDS0NDQkJBQ0dnTlZVMFE0SEhDZ2dnUT0iLFtbIk5SVCIsIjIwMjUtMDQtMTUiLCJIS0ciLG51bGwsIkNYIiwiNTIxIl1dXQ=="
+},
+{
+"flights":
+[
+{
+"departure_airport":
+{
+"name":
+"Narita International Airport",
+"id":
+"NRT",
+"time":
+"2025-04-15 18:30"
+},
+"arrival_airport":
+{
+"name":
+"Hong Kong International Airport",
+"id":
+"HKG",
+"time":
+"2025-04-15 22:20"
+},
+"duration":
+290,
+"airplane":
+"Boeing 777",
+"airline":
+"Cathay Pacific",
+"airline_logo":
+"https://www.gstatic.com/flights/airline_logos/70px/CX.png",
+"travel_class":
+"Economy",
+"flight_number":
+"CX 505",
+"ticket_also_sold_by":
+[
+"JAL"
+],
+"legroom":
+"31 in",
+"extensions":
+[
+"Average legroom (31 in)",
+"In-seat power & USB outlets",
+"On-demand video",
+"Carbon emissions estimate: 197 kg"
+]
+}
+],
+"total_duration":
+290,
+"carbon_emissions":
+{
+"this_flight":
+198000,
+"typical_for_this_route":
+219000,
+"difference_percent":
+-10
+},
+"price":
+659,
+"type":
+"One way",
+"airline_logo":
+"https://www.gstatic.com/flights/airline_logos/70px/CX.png",
+"booking_token":
+"WyJDalJJU1hweFFUZG5VM2hmVjNOQlNWRkNkMmRDUnkwdExTMHRMUzB0TFMxdmEzUmpOMEZCUVVGQlIyWTVaVjg0UkhKNk5qQkJFZ1ZEV0RVd05Sb0xDS0NDQkJBQ0dnTlZVMFE0SEhDZ2dnUT0iLFtbIk5SVCIsIjIwMjUtMDQtMTUiLCJIS0ciLG51bGwsIkNYIiwiNTA1Il1dXQ=="
+},
+{
+"flights":
+[
+{
+"departure_airport":
+{
+"name":
+"Narita International Airport",
+"id":
+"NRT",
+"time":
+"2025-04-15 21:40"
+},
+"arrival_airport":
+{
+"name":
+"Hong Kong International Airport",
+"id":
+"HKG",
+"time":
+"2025-04-16 01:40"
+},
+"duration":
+300,
+"airplane":
+"Boeing 777",
+"airline":
+"Cathay Pacific",
+"airline_logo":
+"https://www.gstatic.com/flights/airline_logos/70px/CX.png",
+"travel_class":
+"Economy",
+"flight_number":
+"CX 501",
+"ticket_also_sold_by":
+[
+"JAL"
+],
+"legroom":
+"31 in",
+"extensions":
+[
+"Average legroom (31 in)",
+"In-seat power & USB outlets",
+"On-demand video",
+"Carbon emissions estimate: 197 kg"
+]
+}
+],
+"total_duration":
+300,
+"carbon_emissions":
+{
+"this_flight":
+198000,
+"typical_for_this_route":
+219000,
+"difference_percent":
+-10
+},
+"price":
+659,
+"type":
+"One way",
+"airline_logo":
+"https://www.gstatic.com/flights/airline_logos/70px/CX.png",
+"booking_token":
+"WyJDalJJU1hweFFUZG5VM2hmVjNOQlNWRkNkMmRDUnkwdExTMHRMUzB0TFMxdmEzUmpOMEZCUVVGQlIyWTVaVjg0UkhKNk5qQkJFZ1ZEV0RVd01Sb0xDS0NDQkJBQ0dnTlZVMFE0SEhDZ2dnUT0iLFtbIk5SVCIsIjIwMjUtMDQtMTUiLCJIS0ciLG51bGwsIkNYIiwiNTAxIl1dXQ=="
+},
+{
+"flights":
+[
+{
+"departure_airport":
+{
+"name":
+"Narita International Airport",
+"id":
+"NRT",
+"time":
+"2025-04-15 18:20"
+},
+"arrival_airport":
+{
+"name":
+"Hong Kong International Airport",
+"id":
+"HKG",
+"time":
+"2025-04-15 22:00"
+},
+"duration":
+280,
+"airplane":
+"Boeing 787",
+"airline":
+"JAL",
+"airline_logo":
+"https://www.gstatic.com/flights/airline_logos/70px/JL.png",
+"travel_class":
+"Economy",
+"flight_number":
+"JL 735",
+"ticket_also_sold_by":
+[
+"Cathay Pacific"
+],
+"legroom":
+"31 in",
+"extensions":
+[
+"Average legroom (31 in)",
+"Wi-Fi for a fee",
+"In-seat power & USB outlets",
+"On-demand video",
+"Carbon emissions estimate: 280 kg"
+],
+"often_delayed_by_over_30_min":
+true
+}
+],
+"total_duration":
+280,
+"carbon_emissions":
+{
+"this_flight":
+280000,
+"typical_for_this_route":
+219000,
+"difference_percent":
+28
+},
+"price":
+931,
+"type":
+"One way",
+"airline_logo":
+"https://www.gstatic.com/flights/airline_logos/70px/JL.png",
+"booking_token":
+"WyJDalJJU1hweFFUZG5VM2hmVjNOQlNWRkNkMmRDUnkwdExTMHRMUzB0TFMxdmEzUmpOMEZCUVVGQlIyWTVaVjg0UkhKNk5qQkJFZ1ZLVERjek5Sb0xDS0RYQlJBQ0dnTlZVMFE0SEhDZzF3VT0iLFtbIk5SVCIsIjIwMjUtMDQtMTUiLCJIS0ciLG51bGwsIkpMIiwiNzM1Il1dXQ=="
+},
+{
+"flights":
+[
+{
+"departure_airport":
+{
+"name":
+"Narita International Airport",
+"id":
+"NRT",
+"time":
+"2025-04-15 18:45"
+},
+"arrival_airport":
+{
+"name":
+"Hong Kong International Airport",
+"id":
+"HKG",
+"time":
+"2025-04-15 22:45"
+},
+"duration":
+300,
+"airplane":
+"Boeing 787",
+"airline":
+"ANA",
+"airline_logo":
+"https://www.gstatic.com/flights/airline_logos/70px/NH.png",
+"travel_class":
+"Economy",
+"flight_number":
+"NH 811",
+"legroom":
+"31 in",
+"extensions":
+[
+"Average legroom (31 in)",
+"Wi-Fi for a fee",
+"In-seat power & USB outlets",
+"On-demand video",
+"Carbon emissions estimate: 235 kg"
+],
+"plane_and_crew_by":
+"Air Japan"
+}
+],
+"total_duration":
+300,
+"carbon_emissions":
+{
+"this_flight":
+235000,
+"typical_for_this_route":
+219000,
+"difference_percent":
+7
+},
+"price":
+1428,
+"type":
+"One way",
+"airline_logo":
+"https://www.gstatic.com/flights/airline_logos/70px/NH.png",
+"booking_token":
+"WyJDalJJU1hweFFUZG5VM2hmVjNOQlNWRkNkMmRDUnkwdExTMHRMUzB0TFMxdmEzUmpOMEZCUVVGQlIyWTVaVjg0UkhKNk5qQkJFZ1ZPU0RneE1Sb0xDSUxiQ0JBQ0dnTlZVMFE0SEhDQzJ3Zz0iLFtbIk5SVCIsIjIwMjUtMDQtMTUiLCJIS0ciLG51bGwsIk5IIiwiODExIl1dXQ=="
+},
+{
+"flights":
+[
+{
+"departure_airport":
+{
+"name":
+"Narita International Airport",
+"id":
+"NRT",
+"time":
+"2025-04-15 08:00"
+},
+"arrival_airport":
+{
+"name":
+"Hong Kong International Airport",
+"id":
+"HKG",
+"time":
+"2025-04-15 11:55"
+},
+"duration":
+295,
+"airplane":
+"Airbus A321",
+"airline":
+"Hong Kong Express",
+"airline_logo":
+"https://www.gstatic.com/flights/airline_logos/70px/UO.png",
+"travel_class":
+"Economy",
+"flight_number":
+"UO 857",
+"legroom":
+"29 in",
+"extensions":
+[
+"Below average legroom (29 in)",
+"Carbon emissions estimate: 235 kg"
+]
+}
+],
+"total_duration":
+295,
+"carbon_emissions":
+{
+"this_flight":
+235000,
+"typical_for_this_route":
+219000,
+"difference_percent":
+7
+},
+"type":
+"One way",
+"airline_logo":
+"https://www.gstatic.com/flights/airline_logos/70px/UO.png",
+"booking_token":
+"WyJDalJJU1hweFFUZG5VM2hmVjNOQlNWRkNkMmRDUnkwdExTMHRMUzB0TFMxdmEzUmpOMEZCUVVGQlIyWTVaVjg0UkhKNk5qQkJFZ1ZWVHpnMU56Z2MiLFtbIk5SVCIsIjIwMjUtMDQtMTUiLCJIS0ciLG51bGwsIlVPIiwiODU3Il1dXQ=="
+},
+{
+"flights":
+[
+{
+"departure_airport":
+{
+"name":
+"Narita International Airport",
+"id":
+"NRT",
+"time":
+"2025-04-15 09:30"
+},
+"arrival_airport":
+{
+"name":
+"Hong Kong International Airport",
+"id":
+"HKG",
+"time":
+"2025-04-15 13:30"
+},
+"duration":
+300,
+"airplane":
+"Airbus A320",
+"airline":
+"Hong Kong Airlines",
+"airline_logo":
+"https://www.gstatic.com/flights/airline_logos/70px/HX.png",
+"travel_class":
+"Economy",
+"flight_number":
+"HX 607",
+"legroom":
+"28 in",
+"extensions":
+[
+"Below average legroom (28 in)",
+"Carbon emissions estimate: 241 kg"
+]
+}
+],
+"total_duration":
+300,
+"carbon_emissions":
+{
+"this_flight":
+241000,
+"typical_for_this_route":
+219000,
+"difference_percent":
+10
+},
+"type":
+"One way",
+"airline_logo":
+"https://www.gstatic.com/flights/airline_logos/70px/HX.png",
+"booking_token":
+"WyJDalJJU1hweFFUZG5VM2hmVjNOQlNWRkNkMmRDUnkwdExTMHRMUzB0TFMxdmEzUmpOMEZCUVVGQlIyWTVaVjg0UkhKNk5qQkJFZ1ZJV0RZd056Z2MiLFtbIk5SVCIsIjIwMjUtMDQtMTUiLCJIS0ciLG51bGwsIkhYIiwiNjA3Il1dXQ=="
+},
+{
+"flights":
+[
+{
+"departure_airport":
+{
+"name":
+"Narita International Airport",
+"id":
+"NRT",
+"time":
+"2025-04-15 19:25"
+},
+"arrival_airport":
+{
+"name":
+"Hong Kong International Airport",
+"id":
+"HKG",
+"time":
+"2025-04-15 23:20"
+},
+"duration":
+295,
+"airplane":
+"Airbus A321neo",
+"airline":
+"Hong Kong Express",
+"airline_logo":
+"https://www.gstatic.com/flights/airline_logos/70px/UO.png",
+"travel_class":
+"Economy",
+"flight_number":
+"UO 647",
+"legroom":
+"28 in",
+"extensions":
+[
+"Below average legroom (28 in)",
+"Carbon emissions estimate: 186 kg"
+]
+}
+],
+"total_duration":
+295,
+"carbon_emissions":
+{
+"this_flight":
+186000,
+"typical_for_this_route":
+219000,
+"difference_percent":
+-15
+},
+"type":
+"One way",
+"airline_logo":
+"https://www.gstatic.com/flights/airline_logos/70px/UO.png",
+"booking_token":
+"WyJDalJJU1hweFFUZG5VM2hmVjNOQlNWRkNkMmRDUnkwdExTMHRMUzB0TFMxdmEzUmpOMEZCUVVGQlIyWTVaVjg0UkhKNk5qQkJFZ1ZWVHpZME56Z2MiLFtbIk5SVCIsIjIwMjUtMDQtMTUiLCJIS0ciLG51bGwsIlVPIiwiNjQ3Il1dXQ=="
+}
+],
+"price_insights":
+{
+"lowest_price":
+148,
+"price_level":
+"typical",
+"typical_price_range":
+[
+110,
+205
+],
+"price_history":
+[
+[
+1739458800,
+140
+],
+[
+1739545200,
+141
+],
+[
+1739631600,
+141
+],
+[
+1739718000,
+137
+],
+[
+1739804400,
+107
+],
+[
+1739890800,
+107
+],
+[
+1739977200,
+106
+],
+[
+1740063600,
+106
+],
+[
+1740150000,
+107
+],
+[
+1740236400,
+109
+],
+[
+1740322800,
+109
+],
+[
+1740409200,
+109
+],
+[
+1740495600,
+109
+],
+[
+1740582000,
+109
+],
+[
+1740668400,
+109
+],
+[
+1740754800,
+110
+],
+[
+1740841200,
+109
+],
+[
+1740927600,
+109
+],
+[
+1741014000,
+108
+],
+[
+1741100400,
+109
+],
+[
+1741186800,
+93
+],
+[
+1741273200,
+94
+],
+[
+1741359600,
+94
+],
+[
+1741446000,
+95
+],
+[
+1741532400,
+94
+],
+[
+1741618800,
+94
+],
+[
+1741705200,
+96
+],
+[
+1741791600,
+95
+],
+[
+1741878000,
+96
+],
+[
+1741964400,
+100
+],
+[
+1742050800,
+100
+],
+[
+1742137200,
+99
+],
+[
+1742223600,
+102
+],
+[
+1742310000,
+100
+],
+[
+1742396400,
+99
+],
+[
+1742482800,
+100
+],
+[
+1742569200,
+100
+],
+[
+1742655600,
+101
+],
+[
+1742742000,
+99
+],
+[
+1742828400,
+99
+],
+[
+1742914800,
+101
+],
+[
+1743001200,
+100
+],
+[
+1743087600,
+100
+],
+[
+1743174000,
+101
+],
+[
+1743260400,
+101
+],
+[
+1743346800,
+101
+],
+[
+1743433200,
+103
+],
+[
+1743519600,
+113
+],
+[
+1743606000,
+107
+],
+[
+1743692400,
+115
+],
+[
+1743778800,
+114
+],
+[
+1743865200,
+114
+],
+[
+1743951600,
+116
+],
+[
+1744038000,
+116
+],
+[
+1744124400,
+117
+],
+[
+1744210800,
+118
+],
+[
+1744297200,
+119
+],
+[
+1744383600,
+121
+],
+[
+1744470000,
+121
+],
+[
+1744556400,
+121
+],
+[
+1744642800,
+148
+]
+]
+},
+"airports":
+[
+{
+"departure":
+[
+{
+"airport":
+{
+"id":
+"NRT",
+"name":
+"Narita International Airport"
+},
+"city":
+"Tokyo",
+"country":
+"Japan",
+"country_code":
+"JP",
+"image":
+"https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTqHkzEeI2bSglPzmSGZL7bxXmn0wJgOn2ZtEN8I47uBnzY1CnHzGtD-YseJXqyexcAcw_uJp-D5HTkCg",
+"thumbnail":
+"https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRLnIToEgwiM_jV3cbw5eQZoUAIg6XqdrJAiClDyyg0w-JBSRN5ZeOT-iFb3SvwkwP1uoBCmT-gKE5VcyCYf-xq4guL4NAFICSaNyOnYOA"
+}
+],
+"arrival":
+[
+{
+"airport":
+{
+"id":
+"HKG",
+"name":
+"Hong Kong International Airport"
+},
+"city":
+"Hong Kong",
+"country":
+"Hong Kong",
+"country_code":
+"HK",
+"image":
+"https://encrypted-tbn3.gstatic.com/licensed-image?q=tbn:ANd9GcTMZVwttsm-YttlNfHgMw2CgpFq8o_nNXI3stC3hTMEsl_pGfOF0ByT09NXRmMn_Au6IBu-UE7dHvfjFoUxO19b8TgRVj1FHe_WZQgGPf4",
+"thumbnail":
+"https://encrypted-tbn3.gstatic.com/licensed-image?q=tbn:ANd9GcQ8kvUParzjkRgJS3Q4rEz6D3at5BlMaSUoEq_YDBGbNzXY3COpLuq8rMrIROPYETioHQJZlM3VPethAx42PcZ9cSyb-pJfZGAjAWQp2Hw"
+}
+]
+}
+]
+}

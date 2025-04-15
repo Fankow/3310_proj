@@ -304,6 +304,15 @@
                 android:text="Edit Trip" />
 
             <Button
+                android:id="@+id/btn_add_to_calendar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="4dp"
+                android:layout_weight="1"
+                android:backgroundTint="@android:color/holo_blue_light"
+                android:text="Add to Calendar" />
+
+            <Button
                 android:id="@+id/btn_delete_trip"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -312,6 +321,7 @@
                 android:backgroundTint="@android:color/holo_red_light"
                 android:text="Delete Trip" />
         </LinearLayout>
+        
 
         <!-- Empty State -->
         <LinearLayout

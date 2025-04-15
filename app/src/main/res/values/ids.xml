@@ -16,4 +16,6 @@
     <item name="nav_settings" type="id" />
     <item name="home" type="id"/>
     <item name="nav_hotel_flight" type="id"/>
+    <item name="nav_hotel_search" type="id"/>
+    <item name="nav_flight_search" type="id"/>
 </resources>

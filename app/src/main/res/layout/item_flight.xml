@@ -1,39 +1,141 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.cardview.widget.CardView 
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <LinearLayout
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        android:padding="16dp">
+
+        <!-- Airline logo -->
+        <ImageView
+            android:id="@+id/iv_airline_logo"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:contentDescription="Airline logo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/placeholder_image" />
+
+        <!-- Airline name and flight number -->
         <TextView
-            android:id="@+id/tv_flight_airline"
-            android:layout_width="match_parent"
+            android:id="@+id/tv_airline_name"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:text="flight airline"
-            android:paddingBottom="12dp">
-        </TextView>
+            android:layout_marginStart="16dp"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iv_airline_logo"
+            app:layout_constraintTop_toTopOf="@id/iv_airline_logo"
+            tools:text="United Airlines" />
+
         <TextView
             android:id="@+id/tv_flight_number"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:text="flight number"
-            android:paddingBottom="12dp">
-        </TextView>
+            android:layout_marginStart="16dp"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iv_airline_logo"
+            app:layout_constraintTop_toBottomOf="@id/tv_airline_name"
+            tools:text="Flight UA123" />
+
+        <!-- Divider -->
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="16dp"
+            android:background="@android:color/darker_gray"
+            app:layout_constraintTop_toBottomOf="@id/iv_airline_logo" />
+
+        <!-- Departure information -->
         <TextView
-            android:id="@+id/tv_flight_time"
-            android:layout_width="match_parent"
+            android:id="@+id/tv_departure_time"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/divider"
+            tools:text="15:55" />
+
+        <TextView
+            android:id="@+id/tv_departure_airport_code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_departure_time"
+            tools:text="NRT" />
+
+
+
+        <!-- Flight duration -->
+        <TextView
+            android:id="@+id/tv_duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:textSize="12sp"
-            android:text="flight time">
-        </TextView>
-    </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/divider"
+            tools:text="4h 30m" />
+
+        <View
+            android:id="@+id/flight_line"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="8dp"
+            android:background="@android:color/darker_gray"
+            app:layout_constraintBottom_toBottomOf="@id/tv_departure_airport_code"
+            app:layout_constraintEnd_toStartOf="@id/tv_arrival_airport_code"
+            app:layout_constraintStart_toEndOf="@id/tv_departure_airport_code"
+            app:layout_constraintTop_toTopOf="@id/tv_departure_airport_code" />
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:contentDescription="Flight direction"
+            android:src="@drawable/ic_flight"
+            app:layout_constraintBottom_toBottomOf="@id/flight_line"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/flight_line" />
+
+        <!-- Arrival information -->
+        <TextView
+            android:id="@+id/tv_arrival_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/divider"
+            tools:text="20:25" />
+
+        <TextView
+            android:id="@+id/tv_arrival_airport_code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_arrival_time"
+            tools:text="HKG" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

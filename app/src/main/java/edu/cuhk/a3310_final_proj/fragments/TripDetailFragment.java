@@ -20,6 +20,12 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.Manifest;
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.provider.CalendarContract;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -54,6 +60,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.UUID;
 
 import edu.cuhk.a3310_final_proj.R;
@@ -78,7 +85,7 @@ public class TripDetailFragment extends Fragment implements OnMapReadyCallback {
     private String tripId;
     private FirestoreManager firestoreManager;
     private Trip currentTrip;
-
+    private static final int REQUEST_CALENDAR_PERMISSION = 100;
     private String trip_id;
 
     @PropertyName("trip_id")
@@ -171,7 +178,8 @@ public class TripDetailFragment extends Fragment implements OnMapReadyCallback {
         tvBudgetPercentage = view.findViewById(R.id.tv_budget_percentage);
         tvBudgetSpent = view.findViewById(R.id.tv_budget_spent);
         tvBudgetRemaining = view.findViewById(R.id.tv_budget_remaining);
-
+        Button btnAddToCalendar = view.findViewById(R.id.btn_add_to_calendar);
+        btnAddToCalendar.setOnClickListener(v -> addTripToCalendar());
         rvDayContainers.setLayoutManager(new LinearLayoutManager(requireContext()));
         rvDocuments.setLayoutManager(new LinearLayoutManager(requireContext()));
 
@@ -345,54 +353,54 @@ public class TripDetailFragment extends Fragment implements OnMapReadyCallback {
         if (trip.getDocuments() != null && !trip.getDocuments().isEmpty()) {
             documentAdapter = new DocumentAdapter(requireContext(),
                     new DocumentAdapter.DocumentAdapterListener() {
-                        @Override
-                        public void onViewDocument(edu.cuhk.a3310_final_proj.models.Document document, int position) {
-                            if (document.getFileUrl() != null && !document.getFileUrl().isEmpty()) {
-                                try {
-                                    Intent intent = new Intent(Intent.ACTION_VIEW);
-                                    intent.setData(Uri.parse(document.getFileUrl()));
-                                    startActivity(intent);
-                                } catch (android.content.ActivityNotFoundException e) {
-                                    Toast.makeText(requireContext(),
-                                            "No app found to open this document type",
-                                            Toast.LENGTH_SHORT).show();
-                                    Log.e("TripDetailFragment", "No app to open document: " + e.getMessage());
-                                } catch (Exception e) {
-                                    Toast.makeText(requireContext(),
-                                            "Error opening document: " + e.getMessage(),
-                                            Toast.LENGTH_SHORT).show();
-                                    Log.e("TripDetailFragment", "Error opening document", e);
+                @Override
+                public void onViewDocument(edu.cuhk.a3310_final_proj.models.Document document, int position) {
+                    if (document.getFileUrl() != null && !document.getFileUrl().isEmpty()) {
+                        try {
+                            Intent intent = new Intent(Intent.ACTION_VIEW);
+                            intent.setData(Uri.parse(document.getFileUrl()));
+                            startActivity(intent);
+                        } catch (android.content.ActivityNotFoundException e) {
+                            Toast.makeText(requireContext(),
+                                    "No app found to open this document type",
+                                    Toast.LENGTH_SHORT).show();
+                            Log.e("TripDetailFragment", "No app to open document: " + e.getMessage());
+                        } catch (Exception e) {
+                            Toast.makeText(requireContext(),
+                                    "Error opening document: " + e.getMessage(),
+                                    Toast.LENGTH_SHORT).show();
+                            Log.e("TripDetailFragment", "Error opening document", e);
+                        }
+                    } else {
+                        Toast.makeText(requireContext(),
+                                "Document URL is missing or invalid",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onDeleteDocument(edu.cuhk.a3310_final_proj.models.Document document, int position) {
+                    new AlertDialog.Builder(requireContext())
+                            .setTitle("Delete Document")
+                            .setMessage("Are you sure you want to delete " + document.getName() + "?")
+                            .setPositiveButton("Delete", (dialog, which) -> {
+                                // Remove document from trip
+                                if (currentTrip.getDocuments() != null) {
+                                    currentTrip.getDocuments().remove(position);
+
+                                    documentAdapter.notifyItemRemoved(position);
+
+                                    if (currentTrip.getDocuments().isEmpty()) {
+                                        rvDocuments.setVisibility(View.GONE);
+                                    }
+
+                                    updateTripInFirestore();
                                 }
-                            } else {
-                                Toast.makeText(requireContext(),
-                                        "Document URL is missing or invalid",
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        }
-
-                        @Override
-                        public void onDeleteDocument(edu.cuhk.a3310_final_proj.models.Document document, int position) {
-                            new AlertDialog.Builder(requireContext())
-                                    .setTitle("Delete Document")
-                                    .setMessage("Are you sure you want to delete " + document.getName() + "?")
-                                    .setPositiveButton("Delete", (dialog, which) -> {
-                                        // Remove document from trip
-                                        if (currentTrip.getDocuments() != null) {
-                                            currentTrip.getDocuments().remove(position);
-
-                                            documentAdapter.notifyItemRemoved(position);
-
-                                            if (currentTrip.getDocuments().isEmpty()) {
-                                                rvDocuments.setVisibility(View.GONE);
-                                            }
-
-                                            updateTripInFirestore();
-                                        }
-                                    })
-                                    .setNegativeButton("Cancel", null)
-                                    .show();
-                        }
-                    });
+                            })
+                            .setNegativeButton("Cancel", null)
+                            .show();
+                }
+            });
             documentAdapter.setDocuments(new ArrayList<>(trip.getDocuments()));
             rvDocuments.setAdapter(documentAdapter);
             rvDocuments.setVisibility(View.VISIBLE);
@@ -821,6 +829,109 @@ public class TripDetailFragment extends Fragment implements OnMapReadyCallback {
             }
         } catch (IOException e) {
             Log.e("TripDetailFragment", "Error geocoding destination", e);
+        }
+    }
+
+    private void addTripToCalendar() {
+        // Check for both calendar permissions
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+
+            requestPermissions(new String[]{
+                Manifest.permission.READ_CALENDAR,
+                Manifest.permission.WRITE_CALENDAR
+            }, REQUEST_CALENDAR_PERMISSION);
+            return;
+        }
+
+        if (currentTrip != null && currentTrip.getStartDate() != null && currentTrip.getEndDate() != null) {
+            try {
+                ContentResolver cr = requireActivity().getContentResolver();
+                ContentValues values = new ContentValues();
+
+                // Event details
+                values.put(CalendarContract.Events.TITLE, currentTrip.getName());
+                values.put(CalendarContract.Events.DESCRIPTION,
+                        "Trip to " + currentTrip.getDestination());
+                values.put(CalendarContract.Events.EVENT_LOCATION, currentTrip.getDestination());
+
+                // Create a UTC calendar instance for all-day events
+                TimeZone utcTimeZone = TimeZone.getTimeZone("UTC");
+                Calendar startCalendar = Calendar.getInstance(utcTimeZone);
+                startCalendar.setTime(currentTrip.getStartDate());
+                // Set time to midnight
+                startCalendar.set(Calendar.HOUR_OF_DAY, 0);
+                startCalendar.set(Calendar.MINUTE, 0);
+                startCalendar.set(Calendar.SECOND, 0);
+                startCalendar.set(Calendar.MILLISECOND, 0);
+
+                // Add one day to compensate for timezone issues
+                startCalendar.add(Calendar.DAY_OF_MONTH, 1);
+
+                Calendar endCalendar = Calendar.getInstance(utcTimeZone);
+                endCalendar.setTime(currentTrip.getEndDate());
+                // Set time to midnight
+                endCalendar.set(Calendar.HOUR_OF_DAY, 0);
+                endCalendar.set(Calendar.MINUTE, 0);
+                endCalendar.set(Calendar.SECOND, 0);
+                endCalendar.set(Calendar.MILLISECOND, 0);
+                // Add two days - one for inclusive end date, one for timezone
+                endCalendar.add(Calendar.DAY_OF_MONTH, 2);
+
+                // Convert to milliseconds
+                long startMillis = startCalendar.getTimeInMillis();
+                long endMillis = endCalendar.getTimeInMillis();
+
+                // Set the event values for an all-day event
+                values.put(CalendarContract.Events.DTSTART, startMillis);
+                values.put(CalendarContract.Events.DTEND, endMillis);
+                values.put(CalendarContract.Events.ALL_DAY, 1);
+                values.put(CalendarContract.Events.EVENT_TIMEZONE, "UTC");
+
+                // Get default calendar ID
+                Cursor cursor = cr.query(
+                        CalendarContract.Calendars.CONTENT_URI,
+                        new String[]{CalendarContract.Calendars._ID},
+                        null, null, null);
+
+                long calendarId = 1; // Default fallback
+                if (cursor != null && cursor.moveToFirst()) {
+                    calendarId = cursor.getLong(0);
+                    cursor.close();
+                }
+
+                values.put(CalendarContract.Events.CALENDAR_ID, calendarId);
+
+                // Add event
+                Uri uri = cr.insert(CalendarContract.Events.CONTENT_URI, values);
+
+                Toast.makeText(requireContext(), "Trip added to calendar", Toast.LENGTH_SHORT).show();
+
+                // Log the dates for debugging
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                Log.d("TripDetailFragment", "Original start date: " + sdf.format(currentTrip.getStartDate()));
+                Log.d("TripDetailFragment", "Original end date: " + sdf.format(currentTrip.getEndDate()));
+                Log.d("TripDetailFragment", "Calendar start: " + sdf.format(new Date(startMillis)));
+                Log.d("TripDetailFragment", "Calendar end: " + sdf.format(new Date(endMillis)));
+
+            } catch (Exception e) {
+                Log.e("TripDetailFragment", "Error adding trip to calendar", e);
+                Toast.makeText(requireContext(), "Failed to add trip to calendar", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(requireContext(), "Trip dates not set", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == REQUEST_CALENDAR_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, add to calendar
+                addTripToCalendar();
+            } else {
+                Toast.makeText(requireContext(), "Calendar permission required to add trip", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

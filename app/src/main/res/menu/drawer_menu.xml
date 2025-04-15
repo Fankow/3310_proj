@@ -25,5 +25,17 @@
             android:id="@+id/nav_hotel_flight"
             android:icon="@drawable/ic_search"
             android:title="Hotel and Flight"/>
+        <item
+            android:id="@+id/nav_hotel_search"
+            android:icon="@drawable/ic_search"
+            android:title="Hotel Search"/>
+        <item
+            android:id="@+id/nav_favorite_hotels"
+            android:icon="@drawable/ic_favorite_filled"
+            android:title="Favorite Hotels"/>
+        <item
+            android:id="@+id/nav_flight_search"
+            android:icon="@drawable/ic_flight"
+            android:title="Flight Search" />
     </group>
 </menu>
