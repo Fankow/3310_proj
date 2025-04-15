@@ -292,32 +292,39 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/btn_edit_trip"
-                android:layout_width="0dp"
+            android:orientation="vertical"
+            android:layout_margin="16dp">
+            
+            <!-- Non-destructive actions in one row -->
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_weight="1"
-                android:text="Edit Trip" />
+                android:orientation="horizontal"
+                android:layout_marginBottom="8dp">
 
-            <Button
-                android:id="@+id/btn_add_to_calendar"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="4dp"
-                android:layout_weight="1"
-                android:backgroundTint="@android:color/holo_blue_light"
-                android:text="Add to Calendar" />
+                <Button
+                    android:id="@+id/btn_edit_trip"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="4dp"
+                    android:text="Edit Trip" />
 
+                <Button
+                    android:id="@+id/btn_add_to_calendar"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="4dp"
+                    android:backgroundTint="@android:color/holo_blue_light"
+                    android:text="Add to Calendar" />
+            </LinearLayout>
+
+            <!-- Destructive action in a separate row -->
             <Button
                 android:id="@+id/btn_delete_trip"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_weight="1"
                 android:backgroundTint="@android:color/holo_red_light"
                 android:text="Delete Trip" />
         </LinearLayout>

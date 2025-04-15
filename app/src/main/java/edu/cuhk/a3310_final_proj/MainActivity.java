@@ -4,6 +4,10 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.content.Intent;
+import android.widget.Toast;
+import androidx.appcompat.app.AlertDialog;
+import com.google.firebase.auth.FirebaseAuth;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -83,10 +87,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (itemId == R.id.nav_home) {
             selectedFragment = new HomeFragment();
             getSupportActionBar().setTitle("Home Page");
-        } else if (itemId == R.id.nav_hotel_flight) {
-            selectedFragment = new HotelNFlightFragment();
-            getSupportActionBar().setTitle("Hotel and Flight");
-        } else if (itemId == R.id.nav_hotel_search) {
+        }  else if (itemId == R.id.nav_hotel_search) {
             selectedFragment = new HotelSearchFragment();
             getSupportActionBar().setTitle("Hotel Search");
         } else if (itemId == R.id.nav_favorite_hotels) {
@@ -95,6 +96,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (itemId == R.id.nav_flight_search){
             selectedFragment = new FlightSearchFragment();
             getSupportActionBar().setTitle("Flight Search");
+        }else if (itemId == R.id.nav_logout) {
+            // Handle logout
+            confirmLogout();
+            return true;
         }
 
         if (selectedFragment != null) {
@@ -107,7 +112,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
+    private void confirmLogout() {
+        new AlertDialog.Builder(this)
+                .setTitle("Logout")
+                .setMessage("Are you sure you want to logout?")
+                .setPositiveButton("Logout", (dialog, which) -> performLogout())
+                .setNegativeButton("Cancel", null)
+                .show();
+    }
+    
+    private void performLogout() {
+        FirebaseAuth.getInstance().signOut();
+        Toast.makeText(this, "Logged out successfully", Toast.LENGTH_SHORT).show();
+        
+        // Redirect to login screen
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
+    }
     @Override
     public void onBackPressed() {
         // press back will close the drawer
