@@ -26,7 +26,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
     private List<Location> locations = new ArrayList<>();
     private Context context;
     private LocationAdapterListener listener;
-    private int dayIndex;  // To track which day this adapter belongs to
+    private int dayIndex;
 
     public interface LocationAdapterListener {
 

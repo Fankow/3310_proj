@@ -24,23 +24,19 @@ public class HotelSearchClient {
     private final HotelSearchService service;
 
     private HotelSearchClient() {
-        // Create logging interceptor for debugging
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
-        // Create OkHttpClient with interceptor
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(loggingInterceptor)
                 .build();
 
-        // Build Retrofit instance
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        // Create service
         service = retrofit.create(HotelSearchService.class);
     }
 
@@ -52,12 +48,10 @@ public class HotelSearchClient {
     }
 
     public void searchHotels(String location, String checkInDate, String checkOutDate, final HotelSearchCallback callback) {
-        // SerpAPI expects search query in the format: "hotels in {location}"
         String query = "hotels in " + location;
 
-        // Make the API call with correct engine parameter
         Call<HotelSearchResponse> call = service.searchHotels(
-                "google_hotels", // Use Google Hotels engine
+                "google_hotels",
                 query,
                 checkInDate,
                 checkOutDate,
@@ -67,7 +61,6 @@ public class HotelSearchClient {
         call.enqueue(new Callback<HotelSearchResponse>() {
             @Override
             public void onResponse(Call<HotelSearchResponse> call, Response<HotelSearchResponse> response) {
-                // Rest of the implementation remains the same
                 if (response.isSuccessful() && response.body() != null) {
                     List<Hotel> hotels = response.body().getHotels();
                     callback.onSuccess(hotels);

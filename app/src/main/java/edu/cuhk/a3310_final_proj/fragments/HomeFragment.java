@@ -35,7 +35,6 @@ public class HomeFragment extends Fragment {
     // Maximum number of trips to display on the home screen
     private static final int MAX_TRIPS_TO_DISPLAY = 3;
 
-    // UI components
     private View view;
     private Button planTripButton;        // Button to create a new trip
     private Button viewMoreButton;        // Button to view all trips
@@ -48,18 +47,13 @@ public class HomeFragment extends Fragment {
     // Firebase manager for fetching trip data
     private FirestoreManager firestoreManager;
 
-    /**
-     * Inflates the layout for this fragment
-     */
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
 
-    /**
-     * Called after the view is created. Initializes components and loads data.
-     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -73,9 +67,7 @@ public class HomeFragment extends Fragment {
         loadRecentTrips();
     }
 
-    /**
-     * Initializes all UI components and sets up click listeners
-     */
+
     private void initializeViews() {
         planTripButton = view.findViewById(R.id.btn_plan_new_trip);
         planTripButton.setOnClickListener(v -> {
@@ -132,22 +124,18 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onFailure(Exception e) {
-                // Log and show error message on failure
                 Log.e(TAG, "Failed to load trips: " + e.getMessage(), e);
                 Toast.makeText(requireContext(),
                         "Failed to load trips: " + e.getMessage(), Toast.LENGTH_SHORT).show();
 
-                // Hide trip-related UI elements
                 tripsRecyclerView.setVisibility(View.GONE);
                 viewMoreButton.setVisibility(View.GONE);
             }
         });
     }
         private void showTripDetails(Trip trip) {
-        // Create trip detail fragment
         Fragment tripDetailFragment = new TripDetailFragment();
 
-        // Pass trip ID as an argument
         Bundle args = new Bundle();
         args.putString("trip_id", trip.getId());
         tripDetailFragment.setArguments(args);

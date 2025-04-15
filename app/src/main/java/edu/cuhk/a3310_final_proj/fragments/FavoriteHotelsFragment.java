@@ -56,7 +56,6 @@ public class FavoriteHotelsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        // Refresh data each time fragment resumes
         loadFavoriteHotels();
     }
 

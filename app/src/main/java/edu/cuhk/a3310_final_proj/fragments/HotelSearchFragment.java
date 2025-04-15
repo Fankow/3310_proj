@@ -58,7 +58,6 @@ public class HotelSearchFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Initialize views
         etQuery = view.findViewById(R.id.et_hotel_query);
         etCheckInDate = view.findViewById(R.id.et_check_in_date);
         etCheckOutDate = view.findViewById(R.id.et_check_out_date);
@@ -67,20 +66,15 @@ public class HotelSearchFragment extends Fragment {
         progressBar = view.findViewById(R.id.progress_bar);
         tvEmptyState = view.findViewById(R.id.tv_empty_state);
 
-        // Set up RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         hotelAdapter = new HotelAdapter(requireContext(), hotels);
         recyclerView.setAdapter(hotelAdapter);
 
-        // Set up date pickers
         setupDatePickers();
-
-        // Set up search button
         btnSearch.setOnClickListener(v -> searchHotels());
     }
 
     private void setupDatePickers() {
-        // Check-in date picker
         etCheckInDate.setOnClickListener(v -> {
             final Calendar c = Calendar.getInstance();
             int year = c.get(Calendar.YEAR);
@@ -96,7 +90,6 @@ public class HotelSearchFragment extends Fragment {
             datePickerDialog.show();
         });
 
-        // Check-out date picker
         etCheckOutDate.setOnClickListener(v -> {
             final Calendar c = Calendar.getInstance();
             int year = c.get(Calendar.YEAR);
@@ -159,18 +152,15 @@ public class HotelSearchFragment extends Fragment {
     }
 
     private void performHotelSearch(String location, String checkInDate, String checkOutDate) {
-        // Show loading state
         progressBar.setVisibility(View.VISIBLE);
         recyclerView.setVisibility(View.GONE);
         tvEmptyState.setVisibility(View.GONE);
 
-        // Clear previous results
         hotels.clear();
 
-        // Get hotel search client
         HotelSearchClient searchClient = HotelSearchClient.getInstance();
 
-        // Perform search
+        // do search
         searchClient.searchHotels(location, checkInDate, checkOutDate, new HotelSearchClient.HotelSearchCallback() {
             @Override
             public void onSuccess(List<Hotel> results) {

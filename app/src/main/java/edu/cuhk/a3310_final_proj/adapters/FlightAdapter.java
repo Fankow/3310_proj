@@ -26,7 +26,6 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightView
     private List<Flight> flights;
     private OnFlightClickListener listener;
 
-    // Airport name mapping for common airport codes
     private static final java.util.Map<String, String> AIRPORT_NAMES = new java.util.HashMap<>();
 
     static {
@@ -40,7 +39,6 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightView
         AIRPORT_NAMES.put("PEK", "Beijing Capital International Airport");
         AIRPORT_NAMES.put("PVG", "Shanghai Pudong International Airport");
         AIRPORT_NAMES.put("TPE", "Taiwan Taoyuan International Airport");
-        // Add more airport codes and names as needed
     }
 
     public FlightAdapter(Context context, List<Flight> flights) {
@@ -64,21 +62,19 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightView
         Log.d(TAG, "  Flight Number is null: " + (flight.getFlightNumber() == null));
         Log.d(TAG, "  Flight Number is empty: " + (flight.getFlightNumber() != null && flight.getFlightNumber().isEmpty()));
 
-        // Set airline info
         if (flight.getAirline() != null) {
             holder.tvAirlineName.setText(flight.getAirline());
         } else {
             holder.tvAirlineName.setText("Unknown Airline");
         }
 
-        // Simplified flight number display - high priority
         if (flight.getFlightNumber() != null) {
             holder.tvFlightNumber.setText("Flight " + flight.getFlightNumber());
         } else {
             holder.tvFlightNumber.setText("Flight number unavailable");
         }
 
-        // Load airline logo using Glide
+
         if (flight.getAirlineIcon() != null && !flight.getAirlineIcon().isEmpty()) {
             Glide.with(context)
                     .load(flight.getAirlineIcon())
@@ -89,21 +85,17 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightView
             holder.ivAirlineLogo.setImageResource(R.drawable.ic_airplane);
         }
 
-        // Set departure airport code - higher priority than name
         String departureCode = getAirportCode(flight, true);
         holder.tvDepartureAirportCode.setText(departureCode);
 
-        // Set arrival airport code - higher priority than name
         String arrivalCode = getAirportCode(flight, false);
         holder.tvArrivalAirportCode.setText(arrivalCode);
 
-        // Set times - high priority
         String departureTime = getFormattedTime(flight, true);
         String arrivalTime = getFormattedTime(flight, false);
         holder.tvDepartureTime.setText(departureTime.isEmpty() ? "---" : departureTime);
         holder.tvArrivalTime.setText(arrivalTime.isEmpty() ? "---" : arrivalTime);
 
-        // Set airport names - lower priority
         if (holder.tvDepartureAirportName != null) {
             holder.tvDepartureAirportName.setText(getAirportName(departureCode));
         }
@@ -112,10 +104,8 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightView
             holder.tvArrivalAirportName.setText(getAirportName(arrivalCode));
         }
 
-        // Set duration - high priority
         holder.tvDuration.setText(flight.getFormattedDuration());
 
-        // Set click listener
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) {
                 listener.onFlightClick(flight);
@@ -135,8 +125,6 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightView
                 return airport.getId();
             }
         }
-
-        // Use hardcoded fallback values from screenshot
         return isDeparture ? "NRT" : "HKG";
     }
 
@@ -186,7 +174,6 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightView
         }
 
         try {
-            // Format from API might be like: "2025-04-15 15:55" or "2025-04-15T15:55:00"
             Log.d(TAG, "Parsing dateTime: " + dateTime);
 
             String[] parts;
@@ -194,13 +181,12 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightView
                 parts = dateTime.split(" ");
                 if (parts.length > 1) {
                     Log.d(TAG, "Extracted time from space-separated format: " + parts[1]);
-                    return parts[1]; // Return only the time part
+                    return parts[1];
                 }
             } else if (dateTime.contains("T")) {
                 parts = dateTime.split("T");
                 if (parts.length > 1) {
                     String timePart = parts[1];
-                    // If there are seconds or timezone, remove them
                     if (timePart.contains(":")) {
                         String[] timeParts = timePart.split(":");
                         if (timeParts.length >= 2) {
@@ -219,7 +205,7 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.FlightView
             Log.e(TAG, "Error parsing dateTime: " + dateTime + ", error: " + e.getMessage(), e);
         }
 
-        return dateTime; // Return the original string if parsing fails
+        return dateTime;
     }
 
     @Override

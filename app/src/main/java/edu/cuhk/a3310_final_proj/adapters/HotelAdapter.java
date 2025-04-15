@@ -63,8 +63,6 @@ public class HotelAdapter extends RecyclerView.Adapter<HotelAdapter.HotelViewHol
         } else {
             holder.tvHotelAddress.setVisibility(View.GONE);
         }
-
-        // If hotel has an image URL, load it with Glide
         if (hotel.getImageUrl() != null && !hotel.getImageUrl().isEmpty()) {
             Glide.with(context)
                     .load(hotel.getImageUrl())
@@ -76,7 +74,6 @@ public class HotelAdapter extends RecyclerView.Adapter<HotelAdapter.HotelViewHol
             holder.ivHotelImage.setVisibility(View.GONE);
         }
 
-        // Set up view on map button if coordinates are available
         if (hotel.getLatitude() != 0 && hotel.getLongitude() != 0) {
             holder.btnViewOnMap.setVisibility(View.VISIBLE);
             holder.btnViewOnMap.setOnClickListener(v -> {
@@ -85,11 +82,8 @@ public class HotelAdapter extends RecyclerView.Adapter<HotelAdapter.HotelViewHol
         } else {
             holder.btnViewOnMap.setVisibility(View.GONE);
         }
-
-        // Check if this hotel is in favorites and update the button
         checkAndUpdateFavoriteStatus(holder.btnFavoriteHotel, hotel);
 
-        // Set up favorite button
         holder.btnFavoriteHotel.setOnClickListener(v -> {
             if (FirebaseAuth.getInstance().getCurrentUser() == null) {
                 Toast.makeText(context, "Please sign in to save favorites", Toast.LENGTH_SHORT).show();
@@ -100,7 +94,6 @@ public class HotelAdapter extends RecyclerView.Adapter<HotelAdapter.HotelViewHol
                 @Override
                 public void onSuccess(Boolean isFavorite) {
                     if (isFavorite) {
-                        // Remove from favorites
                         favoriteManager.removeFavoriteHotel(hotel, new FavoriteManager.FavoriteCallback<Void>() {
                             @Override
                             public void onSuccess(Void result) {
@@ -114,7 +107,7 @@ public class HotelAdapter extends RecyclerView.Adapter<HotelAdapter.HotelViewHol
                             }
                         });
                     } else {
-                        // Add to favorites
+
                         favoriteManager.addFavoriteHotel(hotel, new FavoriteManager.FavoriteCallback<Void>() {
                             @Override
                             public void onSuccess(Void result) {

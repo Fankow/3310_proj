@@ -64,10 +64,9 @@ public class FavoriteManager {
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     if (!queryDocumentSnapshots.isEmpty()) {
-                        // Already a favorite, just return success
+                        // Already a favorite, just return successs
                         callback.onSuccess(null);
                     } else {
-                        // Add as a new favorite
                         Map<String, Object> favoriteHotel = new HashMap<>();
                         favoriteHotel.put("user_id", userId);
                         favoriteHotel.put("hotel_id", hotelId);

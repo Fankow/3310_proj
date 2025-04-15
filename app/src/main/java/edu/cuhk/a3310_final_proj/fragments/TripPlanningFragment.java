@@ -64,7 +64,6 @@ public class TripPlanningFragment extends Fragment implements PlacesAutocomplete
     private static final int PICK_DOCUMENT_REQUEST = 2;
     private static final String TAG = "TripPlanningFragment";
 
-    // UI components
     private TextInputEditText etTripName, etStartDate, etEndDate,
             etFlightNumber, etBudget, etNotes;
     private AutoCompleteTextView etDestination, dropdownCurrency;

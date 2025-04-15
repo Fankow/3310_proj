@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             selectedFragment = new FlightSearchFragment();
             getSupportActionBar().setTitle("Flight Search");
         }else if (itemId == R.id.nav_logout) {
-            // Handle logout
+
             confirmLogout();
             return true;
         }
@@ -107,8 +107,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     .replace(R.id.fragment_container, selectedFragment)
                     .commit();
         }
-
-        // close the drawer after selecting item
+        //close drawer
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -124,8 +123,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void performLogout() {
         FirebaseAuth.getInstance().signOut();
         Toast.makeText(this, "Logged out successfully", Toast.LENGTH_SHORT).show();
-        
-        // Redirect to login screen
+
         Intent intent = new Intent(this, LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
@@ -133,7 +131,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
     @Override
     public void onBackPressed() {
-        // press back will close the drawer
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {

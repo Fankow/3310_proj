@@ -39,7 +39,6 @@ public class LocationItineraryAdapter extends RecyclerView.Adapter<LocationItine
 
         holder.tvLocationName.setText(location.getName());
 
-        // Format and show time range if available
         String timeRange = "";
         if (location.getStartTime() != null && !location.getStartTime().isEmpty()) {
             timeRange = location.getStartTime();
@@ -71,15 +70,14 @@ public class LocationItineraryAdapter extends RecyclerView.Adapter<LocationItine
     }
 
     private void openInGoogleMaps(Location location) {
-        //  Coordinates checking
+
         if (location.getLatitude() != 0 && location.getLongitude() != 0) {
-            // Use coordinates
             Uri gmmIntentUri = Uri.parse("geo:" + location.getLatitude() + "," + location.getLongitude()
                     + "?q=" + location.getLatitude() + "," + location.getLongitude()
                     + "(" + Uri.encode(location.getName()) + ")");
             openMapsIntent(gmmIntentUri);
         } else {
-            // Use location name for search
+
             Uri gmmIntentUri = Uri.parse("geo:0,0?q=" + Uri.encode(location.getName()));
             openMapsIntent(gmmIntentUri);
         }
@@ -91,7 +89,6 @@ public class LocationItineraryAdapter extends RecyclerView.Adapter<LocationItine
         if (mapIntent.resolveActivity(context.getPackageManager()) != null) {
             context.startActivity(mapIntent);
         } else {
-            // open browser if Google Maps app is not installed,
             Uri browserUri = Uri.parse("https://www.google.com/maps/search/?api=1&query="
                     + Uri.encode(gmmIntentUri.getQueryParameter("q")));
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, browserUri);

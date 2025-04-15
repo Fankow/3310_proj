@@ -169,9 +169,8 @@ public class PlacesAutocompleteAdapter extends ArrayAdapter<AutocompletePredicti
         return new ArrayList<>();
     }
     public void shutdown() {
-        // No direct way to shut down PlacesClient, but we can clean up resources
         if (placesClient != null) {
-            // Release references
+
             placesClient = null;
         }
     }

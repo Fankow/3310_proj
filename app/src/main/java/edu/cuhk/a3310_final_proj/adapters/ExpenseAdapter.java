@@ -104,21 +104,21 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ExpenseV
         }
 
         public void bind(Expense expense, int position) {
-            // Format amount with currency
+
             String formattedAmount = String.format(Locale.getDefault(),
                     "%s %.2f", expense.getCurrency(), expense.getAmount());
             tvExpenseAmount.setText(formattedAmount);
 
             tvExpenseCategory.setText(expense.getCategory());
 
-            // Format date
+
             if (expense.getDate() != null) {
                 tvExpenseDate.setText(android.text.format.DateFormat.format("MMM dd, yyyy", expense.getDate()));
             } else {
                 tvExpenseDate.setText("No date");
             }
 
-            // Load receipt image thumbnail if available
+
             if (expense.getReceiptImageUrl() != null && !expense.getReceiptImageUrl().isEmpty()) {
                 Glide.with(context)
                         .load(expense.getReceiptImageUrl())
@@ -130,7 +130,6 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ExpenseV
                 ivReceiptImage.setVisibility(View.GONE);
             }
 
-            // Set click listeners
             btnView.setOnClickListener(v -> {
                 if (listener != null) {
                     listener.onViewExpense(expense, position);

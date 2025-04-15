@@ -54,7 +54,6 @@ public class Hotel {
         }
     }
 
-    // Inner class for hotel images
     public static class HotelImage {
 
         private String thumbnail;

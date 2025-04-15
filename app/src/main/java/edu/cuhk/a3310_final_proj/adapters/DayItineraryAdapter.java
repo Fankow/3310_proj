@@ -40,10 +40,7 @@ public class DayItineraryAdapter extends RecyclerView.Adapter<DayItineraryAdapte
     public void onBindViewHolder(@NonNull DayViewHolder holder, int position) {
         DayItineraryItem dayItem = dayItems.get(position);
 
-        // Set the day title
         holder.tvDayTitle.setText(dayItem.getDayTitle());
-
-        // Set the date if available
         if (dayItem.getDate() != null) {
             holder.tvDayDate.setText(dateFormat.format(dayItem.getDate()));
             holder.tvDayDate.setVisibility(View.VISIBLE);
@@ -51,7 +48,7 @@ public class DayItineraryAdapter extends RecyclerView.Adapter<DayItineraryAdapte
             holder.tvDayDate.setVisibility(View.GONE);
         }
 
-        // Set up the locations recycler view
+
         LocationItineraryAdapter adapter = new LocationItineraryAdapter(context, dayItem.getLocations());
         holder.rvLocations.setAdapter(adapter);
     }

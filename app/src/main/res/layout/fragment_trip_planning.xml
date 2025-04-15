@@ -22,7 +22,6 @@
             android:textColor="@color/black"
             android:layout_marginBottom="16dp"/>
 
-        <!-- image -->
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="200dp"
@@ -43,7 +42,6 @@
                 android:layout_gravity="center"/>
         </FrameLayout>
 
-        <!-- Trip Name -->
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -57,7 +55,6 @@
                 android:hint="Trip Name"/>
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Destination -->
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -76,14 +73,12 @@
                 android:imeOptions="actionNext" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Date Range Row -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginBottom="12dp">
 
-            <!-- Start  -->
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -100,7 +95,6 @@
                     android:inputType="none"/>
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- End  -->
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -118,7 +112,6 @@
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
-        <!-- Flight Number -->
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -132,14 +125,12 @@
                 android:hint="Flight Number (Optional)"/>
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Budget Row -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginBottom="12dp">
 
-            <!-- Budget Amount -->
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -155,7 +146,6 @@
                     android:inputType="numberDecimal"/>
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Currency -->
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -172,7 +162,6 @@
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
-        <!-- Notes -->
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -189,7 +178,6 @@
                 android:inputType="textMultiLine"/>
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Documents -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -199,7 +187,6 @@
             android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp"/>
 
-        <!-- Document picker -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -228,7 +215,6 @@
                 android:text="Add Document"/>
         </LinearLayout>
 
-        <!-- Documents List -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_documents"
             android:layout_width="match_parent"
@@ -237,7 +223,6 @@
             android:visibility="gone"
             android:nestedScrollingEnabled="false"/>
 
-        <!-- Itinerary Section -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -264,7 +249,6 @@
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_marginVertical="16dp"/>
 
-        <!-- Save Button -->
         <Button
             android:id="@+id/btn_save_trip"
             android:layout_width="match_parent"

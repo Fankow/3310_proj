@@ -20,7 +20,7 @@ public class MonitoredCurrencyAdapter extends RecyclerView.Adapter<MonitoredCurr
 
     private List<String> currencies;
     private Map<String, Double> rates;
-    private Map<String, Double> convertedValues; // Added to store converted values
+    private Map<String, Double> convertedValues;
     private Map<String, String> currencyNames;
     private Context context;
     private OnCurrencyRemoveListener removeListener;
@@ -34,7 +34,7 @@ public class MonitoredCurrencyAdapter extends RecyclerView.Adapter<MonitoredCurr
         this.context = context;
         this.currencies = currencies;
         this.rates = new HashMap<>();
-        this.convertedValues = new HashMap<>(); // Initialize the converted values map
+        this.convertedValues = new HashMap<>();
         this.removeListener = removeListener;
         initCurrencyNames();
     }
@@ -58,7 +58,6 @@ public class MonitoredCurrencyAdapter extends RecyclerView.Adapter<MonitoredCurr
         notifyDataSetChanged();
     }
 
-    // New method to update both rates and converted values
     public void updateRatesAndValues(Map<String, Double> rates, Map<String, Double> convertedValues) {
         this.rates = rates;
         this.convertedValues = convertedValues;
@@ -80,12 +79,11 @@ public class MonitoredCurrencyAdapter extends RecyclerView.Adapter<MonitoredCurr
         holder.currencyName.setText(currencyNames.containsKey(currency)
                 ? currencyNames.get(currency) : "Unknown Currency");
 
-        // Display rate or conversion rate depending on what's available
+
         if (convertedValues.containsKey(currency)) {
-            // If we have a converted value, show it
+
             holder.currencyRate.setText(String.format("%.2f", convertedValues.get(currency)));
         } else if (rates.containsKey(currency)) {
-            // Otherwise, just show the exchange rate
             holder.currencyRate.setText(String.format("%.4f", rates.get(currency)));
         } else {
             holder.currencyRate.setText("Loading...");

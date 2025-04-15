@@ -76,7 +76,6 @@ public class CurrencyConverter {
         return call;
     }
 
-    // Cached rate class
     private static class CachedRate {
 
         double rate;
@@ -88,7 +87,6 @@ public class CurrencyConverter {
         }
     }
 
-    // Response callback interface
     public interface Callback {
 
         void onSuccess(double result);
@@ -96,7 +94,6 @@ public class CurrencyConverter {
         void onFailure(String error);
     }
 
-    // Retrofit service interface
     public interface CurrencyService {
 
         @GET("{base}")

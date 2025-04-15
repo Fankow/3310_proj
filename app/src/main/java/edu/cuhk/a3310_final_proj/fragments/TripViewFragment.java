@@ -53,13 +53,11 @@ public class TripViewFragment extends Fragment {
 
             @Override
             public void onEditTrip(Trip trip) {
-                //go to trip planning fragment if edit option is click
                 openTripEditor(trip);
             }
 
             @Override
             public void onDeleteTrip(Trip trip) {
-                // show message for delete for trip
                 confirmDeleteTrip(trip);
             }
         });
@@ -71,9 +69,7 @@ public class TripViewFragment extends Fragment {
     }
 
     private void loadUserTrips() {
-        // Show loading indicator if you have one
 
-        // Log the attempt
         Log.d("TripViewFragment", "Loading trips for user");
 
         firestoreManager.getUserTrips(new FirestoreManager.DataCallback<List<Trip>>() {
@@ -115,12 +111,10 @@ public class TripViewFragment extends Fragment {
     private void showTripDetails(Trip trip) {
         Fragment tripDetailFragment = new TripDetailFragment();
 
-        // pass the trip ID as argument to show trip detail
         Bundle args = new Bundle();
         args.putString("trip_id", trip.getId());
         tripDetailFragment.setArguments(args);
 
-        // direct to the trip detail fragment
         getParentFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, tripDetailFragment)
                 .addToBackStack(null)
@@ -130,7 +124,7 @@ public class TripViewFragment extends Fragment {
     private void openTripEditor(Trip trip) {
         Fragment tripPlanningFragment = new TripPlanningFragment();
 
-        // use the trip ID as argument
+        //  trip ID as argument
         Bundle args = new Bundle();
         args.putString("trip_id", trip.getId());
         tripPlanningFragment.setArguments(args);
@@ -163,7 +157,7 @@ public class TripViewFragment extends Fragment {
                     tripList.remove(position);
                     tripAdapter.notifyItemRemoved(position);
 
-                    // show  no trips left
+                    // show  no trips
                     if (tripList.isEmpty()) {
                         showEmptyState(true);
                     }

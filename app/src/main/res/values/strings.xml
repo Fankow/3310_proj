@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">3310_final_proj</string>
+    <string name="app_name">Trip Planner</string>
     <string name="currency_converter">Currency Converter</string>
     <string name="todo">TODO</string>
     <string name="search_your_trips">Search your trips</string>

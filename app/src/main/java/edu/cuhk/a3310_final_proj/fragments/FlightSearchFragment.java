@@ -55,7 +55,6 @@ public class FlightSearchFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_flight_search, container, false);
 
-        // Initialize UI components
         etDepartureAirport = view.findViewById(R.id.et_departure_airport);
         etArrivalAirport = view.findViewById(R.id.et_arrival_airport);
         tvDepartureDate = view.findViewById(R.id.tv_departure_date);
@@ -87,10 +86,8 @@ public class FlightSearchFragment extends Fragment {
         returnAdapter = new FlightAdapter(requireContext(), returnFlights);
         rvReturnFlights.setAdapter(returnAdapter);
 
-        // Initialize client
         flightSearchClient = FlightSearchClient.getInstance();
 
-        // Set default dates (today for departure, tomorrow for return)
         returnDateCalendar.add(Calendar.DAY_OF_MONTH, 1);
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         tvDepartureDate.setText(dateFormat.format(departureDateCalendar.getTime()));
@@ -102,7 +99,7 @@ public class FlightSearchFragment extends Fragment {
     }
 
     private void setupDatePickers() {
-        // Date picker for departure date
+
         tvDepartureDate.setOnClickListener(v -> {
             DatePickerDialog datePickerDialog = new DatePickerDialog(
                     requireContext(),
@@ -113,8 +110,6 @@ public class FlightSearchFragment extends Fragment {
 
                         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
                         tvDepartureDate.setText(dateFormat.format(departureDateCalendar.getTime()));
-
-                        // If return date is before departure date, update it
                         if (returnDateCalendar.before(departureDateCalendar)) {
                             returnDateCalendar.setTime(departureDateCalendar.getTime());
                             returnDateCalendar.add(Calendar.DAY_OF_MONTH, 1);
@@ -129,7 +124,7 @@ public class FlightSearchFragment extends Fragment {
             datePickerDialog.show();
         });
 
-        // Date picker for return date
+
         tvReturnDate.setOnClickListener(v -> {
             DatePickerDialog datePickerDialog = new DatePickerDialog(
                     requireContext(),
@@ -151,7 +146,7 @@ public class FlightSearchFragment extends Fragment {
     }
 
     private void setupTripTypeSelection() {
-        // Trip type selection
+
         rgTripType.setOnCheckedChangeListener((group, checkedId) -> {
             if (checkedId == R.id.rb_one_way) {
                 tvReturnDate.setEnabled(false);
@@ -162,7 +157,7 @@ public class FlightSearchFragment extends Fragment {
             }
         });
 
-        // Default to one-way
+
         rbOneWay.setChecked(true);
         tvReturnDate.setEnabled(false);
         tvReturnDate.setAlpha(0.5f);
@@ -180,7 +175,7 @@ public class FlightSearchFragment extends Fragment {
                 return;
             }
 
-            // Clear previous results
+
             outboundFlights.clear();
             returnFlights.clear();
             outboundAdapter.notifyDataSetChanged();
@@ -189,7 +184,7 @@ public class FlightSearchFragment extends Fragment {
             showLoading(true);
 
             if (rbOneWay.isChecked()) {
-                // One-way search
+
                 flightSearchClient.searchFlights(
                         departureAirport.toUpperCase(),
                         arrivalAirport.toUpperCase(),
@@ -205,7 +200,6 @@ public class FlightSearchFragment extends Fragment {
                             outboundFlights.addAll(flights);
                             outboundAdapter.notifyDataSetChanged();
 
-                            // Show only outbound section
                             tvOutboundHeader.setVisibility(View.VISIBLE);
                             rvOutboundFlights.setVisibility(View.VISIBLE);
                             tvReturnHeader.setVisibility(View.GONE);
@@ -221,7 +215,6 @@ public class FlightSearchFragment extends Fragment {
                 }
                 );
             } else {
-                // Round-trip search
                 flightSearchClient.searchRoundTripFlights(
                         departureAirport.toUpperCase(),
                         arrivalAirport.toUpperCase(),

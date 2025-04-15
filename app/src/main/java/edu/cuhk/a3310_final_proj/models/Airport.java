@@ -12,11 +12,9 @@ public class Airport implements Serializable {
     private String terminal;
     private String gate;
 
-    // Default constructor
     public Airport() {
     }
 
-    // Constructor with basic fields
     public Airport(String id, String name, String time) {
         this.id = id;
         this.name = name;

@@ -27,16 +27,13 @@ public class FlightSearchClient {
     private final FlightSearchService service;
 
     private FlightSearchClient() {
-        // Create logging interceptor for debugging
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
-        // Create OkHttpClient with interceptor
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(loggingInterceptor)
                 .build();
 
-        // Build Retrofit instance
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .client(client)
@@ -144,7 +141,6 @@ public class FlightSearchClient {
                 if (bestFlight.getFlights() != null && !bestFlight.getFlights().isEmpty()) {
                     Log.d(TAG, "Found " + bestFlight.getFlights().size() + " flights in best_flight");
 
-                    // This is where the actual Flight objects are
                     for (Flight flight : bestFlight.getFlights()) {
                         // Log to check if flight number is present here
                         Log.d(TAG, "Extracted flight from best_flights: "

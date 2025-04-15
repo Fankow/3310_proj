@@ -14,7 +14,6 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
 
-        <!-- Airline logo -->
         <ImageView
             android:id="@+id/iv_airline_logo"
             android:layout_width="48dp"
@@ -24,7 +23,6 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@drawable/placeholder_image" />
 
-        <!-- Airline name and flight number -->
         <TextView
             android:id="@+id/tv_airline_name"
             android:layout_width="0dp"
@@ -48,7 +46,6 @@
             app:layout_constraintTop_toBottomOf="@id/tv_airline_name"
             tools:text="Flight UA123" />
 
-        <!-- Divider -->
         <View
             android:id="@+id/divider"
             android:layout_width="match_parent"
@@ -57,7 +54,6 @@
             android:background="@android:color/darker_gray"
             app:layout_constraintTop_toBottomOf="@id/iv_airline_logo" />
 
-        <!-- Departure information -->
         <TextView
             android:id="@+id/tv_departure_time"
             android:layout_width="wrap_content"
@@ -80,8 +76,6 @@
             tools:text="NRT" />
 
 
-
-        <!-- Flight duration -->
         <TextView
             android:id="@+id/tv_duration"
             android:layout_width="wrap_content"
@@ -114,7 +108,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/flight_line" />
 
-        <!-- Arrival information -->
         <TextView
             android:id="@+id/tv_arrival_time"
             android:layout_width="wrap_content"

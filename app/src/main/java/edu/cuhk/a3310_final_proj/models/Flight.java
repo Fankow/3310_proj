@@ -47,15 +47,9 @@ public class Flight implements Serializable {
     public void setDuration(int duration) {
         this.duration = duration;
     }
-
-    /**
-     * Format the duration in a human-readable format (e.g., "5h 5m")
-     *
-     * @return formatted duration string
-     */
     public String getFormattedDuration() {
         if (duration <= 0) {
-            return "5h 5m"; // Default fallback based on screenshot
+            return "5h 5m";
         }
 
         int hours = duration / 60;

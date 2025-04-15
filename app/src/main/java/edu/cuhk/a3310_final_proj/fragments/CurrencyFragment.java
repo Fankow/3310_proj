@@ -170,12 +170,12 @@ public class CurrencyFragment extends Fragment {
             return;
         }
 
-        // Cancel previous call if active
+
         if (activeCall != null) {
             activeCall.cancel();
         }
 
-        // Create Retrofit instance
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(CurrencyConverter.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -193,10 +193,10 @@ public class CurrencyFragment extends Fragment {
                     Log.d(TAG, "Rates received successfully");
                     currentRates = response.body().getRates();
 
-                    // Create a map to store the converted values
+
                     Map<String, Double> convertedValues = new HashMap<>();
 
-                    // Calculate converted values for each monitored currency
+
                     for (String currency : monitoredCurrencies) {
                         Double rate = currentRates.get(currency);
                         if (rate != null) {
@@ -205,10 +205,10 @@ public class CurrencyFragment extends Fragment {
                         }
                     }
 
-                    // Update the adapter with both rates and converted values
+
                     monitoredAdapter.updateRatesAndValues(currentRates, convertedValues);
 
-                    // Save this conversion to history
+
                     saveConversionToHistory(sourceCurrency, monitoredCurrencies, amount, convertedValues);
                 } else {
                     Log.e(TAG, "Failed to load rates: " + response.code());
@@ -236,7 +236,7 @@ public class CurrencyFragment extends Fragment {
         historyItem.put("amount", amount);
         historyItem.put("timestamp", System.currentTimeMillis());
 
-        // Save the list of target currencies and their converted values
+
         historyItem.put("toCurrencies", toList);
         historyItem.put("results", results);
 
@@ -251,7 +251,7 @@ public class CurrencyFragment extends Fragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setTitle("Add Currency to Monitor");
 
-        // Create a list of available currencies (excluding already monitored ones)
+
         List<String> availableCurrencies = new ArrayList<>(Arrays.asList(
                 "USD", "EUR", "GBP", "JPY", "AUD", "CAD", "CHF", "CNY", "HKD", "SGD"
         ));
@@ -295,7 +295,7 @@ public class CurrencyFragment extends Fragment {
             return;
         }
 
-        //check if the document exists
+
         db.collection("users").document(userId)
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
@@ -314,7 +314,7 @@ public class CurrencyFragment extends Fragment {
                                     Log.w(TAG, "Error saving monitored currencies", e);
                                 });
                     } else {
-                        //  create document it if doesn't exist
+
                         Map<String, Object> userData = new HashMap<>();
                         userData.put("preferences", preferences);
                         userData.put("email", FirebaseAuth.getInstance().getCurrentUser().getEmail());
